@@ -1,11 +1,11 @@
 ﻿
 namespace pacman_libs
 {
-    public class Pacman
+    public class Player : IPlayer
     {
         public IDirection Direction { get; set; }
         public Position Position { get; set; }
-        public Pacman()
+        public Player()
         {
             this.Direction = new Left();
             this.Position = new Position();

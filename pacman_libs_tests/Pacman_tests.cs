@@ -10,21 +10,21 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_has_a_direction()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             Assert.IsNotNull(pacman.Direction);
         }
 
         [TestMethod]
         public void Pacman_has_a_position()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             Assert.IsNotNull(pacman.Position);
         }
 
         [TestMethod]
         public void Pacman_can_move_to_the_left()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             var inital_place = pacman.Position;
             pacman.SetDirection(new Left());
             pacman.Move();
@@ -35,7 +35,7 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_move_to_the_right()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             var inital_place = pacman.Position;
             pacman.SetDirection(new Right());
             pacman.Move();
@@ -46,7 +46,7 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_move_upward()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             var inital_place = pacman.Position;
             pacman.SetDirection(new Up());
             pacman.Move();
@@ -57,7 +57,7 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_move_downward()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             var inital_place = pacman.Position;
             pacman.SetDirection(new Down());
             pacman.Move();
@@ -68,7 +68,7 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_stand_still()
         {
-            var pacman = new Pacman();
+            var pacman = new Player();
             var inital_place = pacman.Position;
             pacman.SetDirection(new StandStill());
             pacman.Move();

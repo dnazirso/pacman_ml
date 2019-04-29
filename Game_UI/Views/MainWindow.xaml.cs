@@ -24,8 +24,10 @@ namespace Game_UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        Pacman pacman = null;
+        IPlayer player = null;
         int pacmanWidth = 0;
+        int Heightlimit = 0;
+        int WidthLimit = 0;
         Position lastPostion;
 
         public MainWindow()
@@ -38,34 +40,12 @@ namespace Game_UI
         {
             var x = (double)pacmanSprite.GetValue(Canvas.LeftProperty);
             var y = (double)pacmanSprite.GetValue(Canvas.TopProperty);
+            Heightlimit = (int)canvasBorder.Height;
+            WidthLimit = (int)canvasBorder.Width;
             pacmanWidth = (int)pacmanSprite.Width;
-            pacman = new Pacman();
-            pacman.SetPosition((int)x, (int)y);
+            player = new Player();
+            player.SetPosition((int)x, (int)y);
         }
-
-        async void PacRun()
-        {
-            do
-            {
-                lastPostion = pacman.Position;
-                // Do something here.
-                LetItGo();
-                await Task.Run(() => playGround.Refresh());
-                await Task.Delay(10);
-            }
-            while (!lastPostion.Equals(pacman.Position));
-        }
-
-        void OnDirectionSet()
-        {
-            PacRun();
-        }
-
-        private void LetItGo()
-        {
-            CheckLimitsAndMove(pacman.Position.X, pacman.Position.Y, DirectionMapper.ToKey(pacman.Direction));
-        }
-
 
         private void WatchKeys(object sender, KeyEventArgs e)
         {
@@ -75,41 +55,54 @@ namespace Game_UI
                 case Key.Up:
                 case Key.Right:
                 case Key.Down:
-                    pacman.SetDirection(DirectionMapper.ToDirection(e.Key));
-                    OnDirectionSet();
+                    player.SetDirection(DirectionMapper.ToDirection(e.Key));
+                    OnDirectionSet(player);
                     break;
                 default:
                     break;
             }
         }
 
-        private void CheckLimitsAndMove(double top, double left, Key key)
+        async void OnDirectionSet(IPlayer p)
         {
-            var Heightlimit = canvasBorder.Height;
-            var WidthLimit = canvasBorder.Width;
-
-            if ((top < 0 && key == Key.Up)
-            || (top + pacmanWidth > Heightlimit && key == Key.Down)
-            || (left < 0 && key == Key.Left)
-            || (left + pacmanWidth > WidthLimit && key == Key.Right))
+            do
             {
-                return;
+                lastPostion = p.Position;
+                LetItGo(p);
+                await Task.Run(() => playGround.Refresh());
             }
-            ActMove(key);
+            while (!lastPostion.Equals(p.Position));
         }
 
-        private void ActMove(Key key)
+        private void LetItGo(IPlayer p)
         {
-            pacman.Move();
+            if (CheckLimits(p, DirectionMapper.ToKey(p.Direction))) Move(p, DirectionMapper.ToKey(p.Direction));
+        }
+
+        private bool CheckLimits(IPlayer p, Key key)
+        {
+            if ((p.Position.X < 0 && key == Key.Up)
+            || (p.Position.X + pacmanWidth > Heightlimit && key == Key.Down)
+            || (p.Position.Y < 0 && key == Key.Left)
+            || (p.Position.Y + pacmanWidth > WidthLimit && key == Key.Right))
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private void Move(IPlayer p, Key key)
+        {
+            p.Move();
             switch (key)
             {
                 case Key.Left:
                 case Key.Right:
-                    pacmanSprite.SetValue(LeftProperty, (double)pacman.Position.Y);
+                    pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
                     break;
                 case Key.Up:
                 case Key.Down:
-                    pacmanSprite.SetValue(TopProperty, (double)pacman.Position.X);
+                    pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
                     break;
                 default:
                     break;

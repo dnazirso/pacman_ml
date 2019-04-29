@@ -11,6 +11,5 @@ namespace Game_UI.Tools
         {
             uiElement.Dispatcher.Invoke(DispatcherPriority.Render, EmptyDelegate);
         }
-
     }
 }

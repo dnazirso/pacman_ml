@@ -8,6 +8,6 @@
         KeyDown="LaunchGame"
         Title="StartWindow" Height="450" Width="800">
     <Grid>
-        <Button Content="Button" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="LaunchGame"/>
+        <Button Content="Start" HorizontalAlignment="Center" VerticalAlignment="Center" Width="75" Click="LaunchGame"/>
     </Grid>
 </Window>
