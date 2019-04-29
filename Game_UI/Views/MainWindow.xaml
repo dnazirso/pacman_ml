@@ -1,0 +1,34 @@
+﻿<Window x:Class="Game_UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Game_UI"
+        xmlns:sprites="clr-namespace:Game_UI.Sprites"
+        mc:Ignorable="d"
+        
+        KeyDown="WatchKeys"
+        Title="MainWindow" Height="450" Width="800" Background="Black" WindowStartupLocation="CenterScreen">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="51"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="395*"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+            <ColumnDefinition Width="100"/>
+        </Grid.ColumnDefinitions>
+        <Border x:Name="canvasBorder"
+                Grid.Row="0" Grid.Column="0"
+                Height="300" Width="750"
+                Grid.ColumnSpan="4"
+                BorderThickness="1"
+                BorderBrush="White">
+            <Canvas Name="playGround">
+                <sprites:PacmanSprite Width="40" Height="40" x:Name="pacmanSprite" Canvas.Left="0" Canvas.Top="0"/>
+            </Canvas>
+        </Border>
+    </Grid>
+</Window>

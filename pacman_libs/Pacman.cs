@@ -12,5 +12,6 @@ namespace pacman_libs
         }
         public void Move() => Position = Direction.Move(Position);
         public void SetDirection(IDirection direction) => this.Direction = direction;
+        public void SetPosition(int x, int y) => Position = new Position() { X = x, Y = y };
     }
 }
