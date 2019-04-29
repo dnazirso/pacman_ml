@@ -24,11 +24,18 @@ namespace Game_UI.Views
             InitializeComponent();
         }
 
-        private void LaunchGame(object sender, RoutedEventArgs e)
+        private void LaunchGame()
         {
             Hide();
             new MainWindow().ShowDialog();
             Close();
+        }
+
+        private void LaunchGame(object sender, RoutedEventArgs e) => LaunchGame();
+
+        private void LaunchGame(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter) LaunchGame();
         }
     }
 }

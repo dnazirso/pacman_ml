@@ -26,11 +26,8 @@ namespace Game_UI
     {
         Pacman pacman = null;
         int pacmanWidth = 0;
-        // Step 6 (event ending part)
         Position lastPostion;
 
-        //Step 1
-        event EventHandler PacRunEvent;
         public MainWindow()
         {
             InitializeComponent();
@@ -44,29 +41,31 @@ namespace Game_UI
             pacmanWidth = (int)pacmanSprite.Width;
             pacman = new Pacman();
             pacman.SetPosition((int)x, (int)y);
-
-            // Step3
-            PacRunEvent += PacRun;
         }
 
-        // Step 2
-        void PacRun(object sender, EventArgs e)
+        async void PacRun()
         {
             do
             {
                 lastPostion = pacman.Position;
                 // Do something here.
                 LetItGo();
-                playGround.Refresh();
+                await Task.Run(() => playGround.Refresh());
+                await Task.Delay(10);
             }
             while (!lastPostion.Equals(pacman.Position));
         }
 
-        // Step 4
-        void OnDirectionSet(EventArgs e)
+        void OnDirectionSet()
         {
-            PacRunEvent?.Invoke(this, e);
+            PacRun();
         }
+
+        private void LetItGo()
+        {
+            CheckLimitsAndMove(pacman.Position.X, pacman.Position.Y, DirectionMapper.ToKey(pacman.Direction));
+        }
+
 
         private void WatchKeys(object sender, KeyEventArgs e)
         {
@@ -77,17 +76,11 @@ namespace Game_UI
                 case Key.Right:
                 case Key.Down:
                     pacman.SetDirection(DirectionMapper.ToDirection(e.Key));
-                    // Step 5
-                    OnDirectionSet(EventArgs.Empty);
+                    OnDirectionSet();
                     break;
                 default:
                     break;
             }
-        }
-
-        private void LetItGo()
-        {
-            CheckLimitsAndMove(pacman.Position.X, pacman.Position.Y, DirectionMapper.ToKey(pacman.Direction));
         }
 
         private void CheckLimitsAndMove(double top, double left, Key key)
