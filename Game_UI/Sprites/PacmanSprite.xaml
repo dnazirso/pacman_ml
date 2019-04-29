@@ -6,8 +6,17 @@
              xmlns:local="clr-namespace:Game_UI.Sprites"
              mc:Ignorable="d" 
              HorizontalAlignment="Center" VerticalAlignment="Center">
-    <Canvas Name="pacEllipse">
-        <Ellipse StrokeThickness="5" Stroke="Black" MinWidth="40" MinHeight="40" Fill="Yellow"/>
-        <Ellipse Fill="Yellow" Height="5" Canvas.Left="24" Stroke="Black" StrokeThickness="5" Canvas.Top="11" Width="5" RenderTransformOrigin="2,-0.667"/>
-    </Canvas>
+    <Image Width="20" Height="20">
+        <Image.Source>
+            <DrawingImage>
+                <DrawingImage.Drawing>
+                    <GeometryDrawing Brush="Yellow" Geometry="m 160.54954,138.5182 a 50,50 0 0 1 -50.64686,49.1231 50,50 0 0 1 -49.343617,-50.43204 50,50 0 0 1 50.216257,-49.5632 50,50 0 0 1 49.78184,49.99952 h -50 z">
+                        <GeometryDrawing.Pen>
+                            <Pen EndLineCap="Round" Brush="Black" Thickness="5" LineJoin="Round"/>
+                        </GeometryDrawing.Pen>
+                    </GeometryDrawing>
+                </DrawingImage.Drawing>
+            </DrawingImage>
+        </Image.Source>
+    </Image>
 </UserControl>

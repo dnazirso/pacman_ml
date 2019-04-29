@@ -15,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace Game_UI
 {
@@ -54,7 +55,9 @@ namespace Game_UI
             do
             {
                 lastPostion = pacman.Position;
+                // Do something here.
                 LetItGo();
+                playGround.Refresh();
             }
             while (!lastPostion.Equals(pacman.Position));
         }

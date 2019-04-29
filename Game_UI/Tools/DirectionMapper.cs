@@ -23,14 +23,6 @@ namespace Game_UI.Tools
         }
         internal static Key ToKey(IDirection direction)
         {
-            if (direction.GetType() == typeof(Left))
-            {
-                return Key.Right;
-            }
-            if (direction.GetType() == typeof(Up))
-            {
-                return Key.Down;
-            }
             if (direction.GetType() == typeof(Right))
             {
                 return Key.Left;
@@ -39,9 +31,13 @@ namespace Game_UI.Tools
             {
                 return Key.Up;
             }
-            if (direction.GetType() == typeof(Right))
+            if (direction.GetType() == typeof(Left))
             {
-                return Key.Left;
+                return Key.Right;
+            }
+            if (direction.GetType() == typeof(Up))
+            {
+                return Key.Down;
             }
             return Key.None;
         }
