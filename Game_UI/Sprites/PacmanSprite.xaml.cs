@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Game_UI.Tools;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,25 @@ namespace Game_UI.Sprites
         public PacmanSprite()
         {
             InitializeComponent();
+            PacmanNominalAnimation();
+        }
+
+        async void PacmanNominalAnimation()
+        {
+            bool toggle = false;
+            while (true)
+            {
+                if (toggle)
+                {
+                    pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(mouthOpened));
+                }
+                else
+                {
+                    pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(mouthClosed));
+                }
+                toggle = !toggle;
+                await Task.Run(() => pacBody.Refresh(200));
+            }
         }
     }
 }

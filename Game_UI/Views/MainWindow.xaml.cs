@@ -69,7 +69,7 @@ namespace Game_UI
             {
                 lastPostion = p.Position;
                 LetItGo(p);
-                await Task.Run(() => playGround.Refresh());
+                await Task.Run(() => playGround.Refresh(50));
             }
             while (!lastPostion.Equals(p.Position));
         }
