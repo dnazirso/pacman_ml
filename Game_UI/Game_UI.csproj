@@ -107,13 +107,13 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\pacmouthclose.svg" />
+    <None Include="Resources\pacmouthopen.svg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\pacman_libs\pacman_libs.csproj">
       <Project>{A7B44F5C-20A7-4003-9369-EFB0FDF512E2}</Project>
