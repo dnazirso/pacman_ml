@@ -1,19 +1,10 @@
-﻿using Game_UI.Tools;
+﻿using Game_UI.Sprites;
+using Game_UI.Tools;
 using pacman_libs;
 using System;
-using System.Linq;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Game_UI
@@ -25,9 +16,12 @@ namespace Game_UI
     {
         #region Private fields and properties
         IPlayer player = null;
+        PacmanSprite pacmanSprite = null;
         int pacmanWidth = 0;
         int Heightlimit = 0;
         int WidthLimit = 0;
+        int tickCounter = 0;
+        DispatcherTimer timer;
         private bool hasBegun;
         #endregion
 
@@ -38,6 +32,7 @@ namespace Game_UI
         {
             InitializeComponent();
             InitializeGame();
+            InitializePlayersSprites();
         }
 
         /// <summary>
@@ -45,13 +40,23 @@ namespace Game_UI
         /// </summary>
         private void InitializeGame()
         {
-            var x = (double)pacmanSprite.GetValue(Canvas.LeftProperty);
-            var y = (double)pacmanSprite.GetValue(Canvas.TopProperty);
             Heightlimit = (int)canvasBorder.Height;
             WidthLimit = (int)canvasBorder.Width;
-            pacmanWidth = (int)pacmanSprite.Width;
             player = new Player();
-            player.SetPosition((int)x, (int)y);
+            timer = new DispatcherTimer();
+            timer.Tick += new EventHandler(LetItGo);
+            timer.Interval = new TimeSpan(10000);
+        }
+
+        /// <summary>
+        /// Instanciate the player's sprite
+        /// </summary>
+        private void InitializePlayersSprites()
+        {
+            pacmanSprite = new Sprites.PacmanSprite(player);
+            pacmanWidth = 40;
+            playGround.Children.Add(pacmanSprite);
+            player.SetPosition(0, 0);
         }
 
         /// <summary>
@@ -70,6 +75,7 @@ namespace Game_UI
                     if (e.Key != DirectionMapper.ToKey(player.Direction))
                     {
                         player.SetDirection(DirectionMapper.ToDirection(e.Key));
+                        pacmanSprite.rotate();
                     }
                     break;
                 default:
@@ -78,7 +84,7 @@ namespace Game_UI
             if (hasBegun == false)
             {
                 hasBegun = true;
-                LetItGo(player);
+                timer.Start();
             }
         }
 
@@ -86,17 +92,20 @@ namespace Game_UI
         /// Allow a player to move if possible
         /// </summary>
         /// <param name="p">the player</param>
-        private async void LetItGo(IPlayer p)
+        private async void LetItGo(object sender, EventArgs e)
         {
-            do
+            var p = player;
+            if (CheckLimits(p, DirectionMapper.ToKey(p.Direction)))
             {
-                if (CheckLimits(p, DirectionMapper.ToKey(p.Direction)))
+                Move(p, DirectionMapper.ToKey(p.Direction));
+                if (tickCounter >= 20)
                 {
-                    Move(p, DirectionMapper.ToKey(p.Direction));
+                    pacmanSprite.NominalAnimation();
+                    tickCounter = 0;
                 }
-                await Task.Run(() => playGround.Refresh(20));
             }
-            while (true);
+            await Task.Run(() => playGround.Refresh());
+            tickCounter++;
         }
 
         /// <summary>

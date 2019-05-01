@@ -12,14 +12,13 @@ namespace Game_UI.Tools
     public static class ExtentionMethods
     {
         /// <summary>
-        /// Refresh a given portion af the user interface then pause during a time laps
+        /// Refresh immediately a given portion of the user interface
         /// </summary>
         /// <param name="uiElement">UI element needed to refresh</param>
         /// <param name="laps">pause time laps in "ms"</param>
-        public static void Refresh(this UIElement uiElement, int laps)
+        public static void Refresh(this UIElement uiElement)
         {
-            var actualTask = new Task(() => uiElement.UpdateLayout());
-            actualTask.Wait(laps);
+            new Task(() => uiElement.UpdateLayout());
         }
     }
 }
