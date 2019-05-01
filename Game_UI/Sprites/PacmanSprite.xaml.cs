@@ -46,7 +46,7 @@ namespace Game_UI.Sprites
         public async void rotate()
         {
             int dir = 0;
-            switch (DirectionMapper.ToKey(player.Direction))
+            switch (DirectionType.ToKey(player.Direction))
             {
                 case Key.Left:
                     dir = 180;

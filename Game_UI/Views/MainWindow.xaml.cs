@@ -72,9 +72,9 @@ namespace Game_UI
                 case Key.Up:
                 case Key.Right:
                 case Key.Down:
-                    if (e.Key != DirectionMapper.ToKey(player.Direction))
+                    if (e.Key != DirectionType.ToKey(player.Direction))
                     {
-                        player.SetDirection(DirectionMapper.ToDirection(e.Key));
+                        player.SetDirection(DirectionType.ToDirection(e.Key));
                         pacmanSprite.rotate();
                     }
                     break;
@@ -95,9 +95,9 @@ namespace Game_UI
         private async void LetItGo(object sender, EventArgs e)
         {
             var p = player;
-            if (CheckLimits(p, DirectionMapper.ToKey(p.Direction)))
+            if (CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
-                Move(p, DirectionMapper.ToKey(p.Direction));
+                Move(p, DirectionType.ToKey(p.Direction));
                 if (tickCounter >= 20)
                 {
                     pacmanSprite.NominalAnimation();

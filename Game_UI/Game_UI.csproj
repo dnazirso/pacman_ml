@@ -58,7 +58,7 @@
     <Compile Include="Sprites\PacmanSprite.xaml.cs">
       <DependentUpon>PacmanSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\DirectionMapper.cs" />
+    <Compile Include="Tools\DirectionType.cs" />
     <Compile Include="Tools\EnumerationBase.cs" />
     <Compile Include="Tools\ExtentionMethods.cs" />
     <Compile Include="Views\StartWindow.xaml.cs">
