@@ -17,6 +17,7 @@ namespace Game_UI
         #region Private fields and properties
         IPlayer player = null;
         PacmanSprite pacmanSprite = null;
+        Obstacle obstacle = null;
         int pacmanWidth = 0;
         int Heightlimit = 0;
         int WidthLimit = 0;
@@ -46,6 +47,9 @@ namespace Game_UI
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(LetItGo);
             timer.Interval = new TimeSpan(10000);
+
+            obstacle = new Obstacle();
+            playGround.Children.Add(obstacle);
         }
 
         /// <summary>
@@ -53,7 +57,7 @@ namespace Game_UI
         /// </summary>
         private void InitializePlayersSprites()
         {
-            pacmanSprite = new Sprites.PacmanSprite(player);
+            pacmanSprite = new PacmanSprite(player);
             pacmanWidth = 40;
             playGround.Children.Add(pacmanSprite);
             player.SetPosition(0, 0);
