@@ -10,7 +10,7 @@
         <Image.Source>
             <DrawingImage>
                 <DrawingImage.Drawing>
-                    <GeometryDrawing x:Name="pacMouth" Brush="Yellow">
+                    <GeometryDrawing x:Name="pacMouth" Brush="Yellow" Geometry="M 148.85938,169.78496 A 50,50 0 0 1 93.456152,184.63022 50,50 0 0 1 60.557159,137.64558 50,50 0 0 1 93.456152,90.660953 50,50 0 0 1 148.85938,105.5062 l -38.30222,32.13938 z">
                         <GeometryDrawing.Pen>
                             <Pen EndLineCap="Round" Brush="Black" Thickness="5" LineJoin="Round"/>
                         </GeometryDrawing.Pen>
