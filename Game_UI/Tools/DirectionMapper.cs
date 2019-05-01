@@ -3,8 +3,18 @@ using System.Windows.Input;
 
 namespace Game_UI.Tools
 {
+    /// <summary>
+    /// Static class responsible of key-direction mapping and revers
+    /// </summary>
     internal static class DirectionMapper
     {
+        // TODO : Think about an abstract Enumation class
+
+        /// <summary>
+        /// Give back a direction from a given key
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         internal static IDirection ToDirection(Key key)
         {
             switch (key)
@@ -21,6 +31,12 @@ namespace Game_UI.Tools
                     return new StandStill();
             }
         }
+
+        /// <summary>
+        /// Give back a key from a gien direction
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         internal static Key ToKey(IDirection direction)
         {
             if (direction.GetType() == typeof(Right))

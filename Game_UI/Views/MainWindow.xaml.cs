@@ -1,7 +1,6 @@
 ﻿using Game_UI.Tools;
 using pacman_libs;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -24,19 +23,27 @@ namespace Game_UI
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region Private fields and properties
         IPlayer player = null;
         int pacmanWidth = 0;
         int Heightlimit = 0;
         int WidthLimit = 0;
-        Position lastPostion;
+        private bool hasBegun;
+        #endregion
 
+        /// <summary>
+        /// MainWindow Constructor that initialize every needs
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
             InitializeGame();
         }
 
-        void InitializeGame()
+        /// <summary>
+        /// Initialize all needed fields and properties
+        /// </summary>
+        private void InitializeGame()
         {
             var x = (double)pacmanSprite.GetValue(Canvas.LeftProperty);
             var y = (double)pacmanSprite.GetValue(Canvas.TopProperty);
@@ -47,6 +54,11 @@ namespace Game_UI
             player.SetPosition((int)x, (int)y);
         }
 
+        /// <summary>
+        /// Keyboard event handler
+        /// </summary>
+        /// <param name="sender">object that sends the event</param>
+        /// <param name="e">the event iteself</param>
         private void WatchKeys(object sender, KeyEventArgs e)
         {
             switch (e.Key)
@@ -55,30 +67,44 @@ namespace Game_UI
                 case Key.Up:
                 case Key.Right:
                 case Key.Down:
-                    player.SetDirection(DirectionMapper.ToDirection(e.Key));
-                    OnDirectionSet(player);
+                    if (e.Key != DirectionMapper.ToKey(player.Direction))
+                    {
+                        player.SetDirection(DirectionMapper.ToDirection(e.Key));
+                    }
                     break;
                 default:
                     break;
             }
+            if (hasBegun == false)
+            {
+                hasBegun = true;
+                LetItGo(player);
+            }
         }
 
-        async void OnDirectionSet(IPlayer p)
+        /// <summary>
+        /// Allow a player to move if possible
+        /// </summary>
+        /// <param name="p">the player</param>
+        private async void LetItGo(IPlayer p)
         {
             do
             {
-                lastPostion = p.Position;
-                LetItGo(p);
-                await Task.Run(() => playGround.Refresh(50));
+                if (CheckLimits(p, DirectionMapper.ToKey(p.Direction)))
+                {
+                    Move(p, DirectionMapper.ToKey(p.Direction));
+                }
+                await Task.Run(() => playGround.Refresh(20));
             }
-            while (!lastPostion.Equals(p.Position));
+            while (true);
         }
 
-        private void LetItGo(IPlayer p)
-        {
-            if (CheckLimits(p, DirectionMapper.ToKey(p.Direction))) Move(p, DirectionMapper.ToKey(p.Direction));
-        }
-
+        /// <summary>
+        /// Check if the next step is possible depending on the direction taken
+        /// </summary>
+        /// <param name="p">the player</param>
+        /// <param name="key">the pressed key</param>
+        /// <returns>a boolean</returns>
         private bool CheckLimits(IPlayer p, Key key)
         {
             if ((p.Position.X < 0 && key == Key.Up)
@@ -91,6 +117,11 @@ namespace Game_UI
             return true;
         }
 
+        /// <summary>
+        /// Update the position of a player
+        /// </summary>
+        /// <param name="p">the player</param>
+        /// <param name="key">the pressed key</param>
         private void Move(IPlayer p, Key key)
         {
             p.Move();
