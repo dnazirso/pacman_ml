@@ -62,7 +62,7 @@ namespace Game_UI.Tools
             .FirstOrDefault().Key;
 
         /// <summary>
-        /// Convert a Direction into a Key
+        /// Convert a Direction into an int represanting an angle
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
