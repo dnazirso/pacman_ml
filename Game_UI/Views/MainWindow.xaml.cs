@@ -47,7 +47,6 @@ namespace Game_UI
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(LetItGo);
             timer.Interval = new TimeSpan(10000);
-
             obstacle = new Obstacle();
             playGround.Children.Add(obstacle);
         }
@@ -70,20 +69,11 @@ namespace Game_UI
         /// <param name="e">the event iteself</param>
         private void WatchKeys(object sender, KeyEventArgs e)
         {
-            switch (e.Key)
+
+            if (DirectionType.ExistsWhitin(e.Key) && e.Key != DirectionType.ToKey(player.Direction))
             {
-                case Key.Left:
-                case Key.Up:
-                case Key.Right:
-                case Key.Down:
-                    if (e.Key != DirectionType.ToKey(player.Direction))
-                    {
-                        player.SetDirection(DirectionType.ToDirection(e.Key));
-                        pacmanSprite.rotate();
-                    }
-                    break;
-                default:
-                    break;
+                player.SetDirection(DirectionType.ToDirection(e.Key));
+                pacmanSprite.rotate();
             }
             if (hasBegun == false)
             {
@@ -120,10 +110,10 @@ namespace Game_UI
         /// <returns>a boolean</returns>
         private bool CheckLimits(IPlayer p, Key key)
         {
-            if ((p.Position.X < 0 && key == Key.Up)
-            || (p.Position.X + pacmanWidth > Heightlimit && key == Key.Down)
-            || (p.Position.Y < 0 && key == Key.Left)
-            || (p.Position.Y + pacmanWidth > WidthLimit && key == Key.Right))
+            if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
+            || (p.Position.X + pacmanWidth > Heightlimit && key.Equals(DirectionType.Down.Key))
+            || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
+            || (p.Position.Y + pacmanWidth > WidthLimit && key.Equals(DirectionType.Right.Key)))
             {
                 return false;
             }
@@ -138,18 +128,14 @@ namespace Game_UI
         private void Move(IPlayer p, Key key)
         {
             p.Move();
-            switch (key)
+
+            if (key.Equals(DirectionType.Left.Key) || key.Equals(DirectionType.Right.Key))
             {
-                case Key.Left:
-                case Key.Right:
-                    pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
-                    break;
-                case Key.Up:
-                case Key.Down:
-                    pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
-                    break;
-                default:
-                    break;
+                pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
+            }
+            if (key.Equals(DirectionType.Up.Key) || key.Equals(DirectionType.Down.Key))
+            {
+                pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
             }
         }
     }

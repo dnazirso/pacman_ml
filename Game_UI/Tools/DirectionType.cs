@@ -17,18 +17,31 @@ namespace Game_UI.Tools
         private static readonly IDirection s = new StandStill();
         #endregion
         #region Enumerations
-        public static readonly DirectionType StandStill = new DirectionType(Key.None, s);
-        public static readonly DirectionType Up = new DirectionType(Key.Up, d);
-        public static readonly DirectionType Down = new DirectionType(Key.Down, u);
-        public static readonly DirectionType Left = new DirectionType(Key.Left, r);
-        public static readonly DirectionType Right = new DirectionType(Key.Right, l);
+        public static readonly DirectionType StandStill = new DirectionType(Key.None, s, 0);
+        public static readonly DirectionType Up = new DirectionType(Key.Up, d, 270);
+        public static readonly DirectionType Down = new DirectionType(Key.Down, u, 90);
+        public static readonly DirectionType Left = new DirectionType(Key.Left, r, 180);
+        public static readonly DirectionType Right = new DirectionType(Key.Right, l, 0);
         #endregion
         /// <summary>
         /// constructor that prepare enumarations
         /// </summary>
         /// <param name="Key"></param>
         /// <param name="Direction"></param>
-        internal DirectionType(Key Key, IDirection Direction) : base(Key, Direction) { }
+        /// <param name="Angle"></param>
+        internal DirectionType(Key Key, IDirection Direction, int Angle) : base(Key, Direction, Angle) { }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
+        internal static bool ExistsWhitin(Key key) => GetAll<DirectionType>()
+            .ToList()
+            .Exists(x => x.Key.Equals(key));
+        internal static bool ExistsWhitin(IDirection direction) => GetAll<DirectionType>()
+            .ToList()
+            .Exists(x => x.Direction.Equals(direction));
 
         /// <summary>
         /// Convert a Key into a Direction
@@ -47,5 +60,14 @@ namespace Game_UI.Tools
         internal static Key ToKey(IDirection direction) => GetAll<DirectionType>()
             .Where(k => k.Direction.GetType().Equals(direction.GetType()))
             .FirstOrDefault().Key;
+
+        /// <summary>
+        /// Convert a Direction into a Key
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
+        internal static int ToAngle(IDirection direction) => GetAll<DirectionType>()
+            .Where(k => k.Direction.GetType().Equals(direction.GetType()))
+            .FirstOrDefault().Angle;
     }
 }

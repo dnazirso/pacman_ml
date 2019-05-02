@@ -43,25 +43,7 @@ namespace Game_UI.Sprites
 
         public async void rotate()
         {
-            int dir = 0;
-            switch (DirectionType.ToKey(player.Direction))
-            {
-                case Key.Left:
-                    dir = 180;
-                    break;
-                case Key.Up:
-                    dir = 270;
-                    break;
-                case Key.Right:
-                    dir = 0;
-                    break;
-                case Key.Down:
-                    dir = 90;
-                    break;
-                default:
-                    break;
-            }
-            pacBody.RenderTransform = new RotateTransform(dir, 10, 10);
+            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(player.Direction), 10, 10);
             await Task.Run(() => pacBody.Refresh());
         }
     }

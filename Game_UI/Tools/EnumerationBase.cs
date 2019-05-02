@@ -16,10 +16,13 @@ namespace Game_UI.Tools
 
         public Key Key { get; private set; }
 
-        protected EnumerationBase(Key Key, IDirection Direction)
+        public int Angle { get; private set; }
+
+        protected EnumerationBase(Key Key, IDirection Direction, int Angle)
         {
             this.Key = Key;
             this.Direction = Direction;
+            this.Angle = Angle;
         }
 
         public override string ToString() => nameof(Direction);
