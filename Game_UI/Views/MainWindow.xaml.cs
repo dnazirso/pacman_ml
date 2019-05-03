@@ -2,6 +2,8 @@
 using Game_UI.Tools;
 using pacman_libs;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
@@ -17,13 +19,13 @@ namespace Game_UI
         #region Private fields and properties
         IPlayer player = null;
         PacmanSprite pacmanSprite = null;
-        Obstacle obstacle = null;
+        List<Obstacle> obstacles = null;
         int pacmanWidth = 0;
         int Heightlimit = 0;
         int WidthLimit = 0;
         int tickCounter = 0;
         DispatcherTimer timer;
-        private bool hasBegun;
+        bool hasBegun;
         #endregion
 
         /// <summary>
@@ -47,8 +49,9 @@ namespace Game_UI
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(LetItGo);
             timer.Interval = new TimeSpan(10000);
-            obstacle = new Obstacle();
-            playGround.Children.Add(obstacle);
+            obstacles = new List<Obstacle>();
+            obstacles.Add(new Obstacle());
+            obstacles.ForEach(obstacle => playGround.Children.Add(obstacle));
         }
 
         /// <summary>
@@ -69,6 +72,11 @@ namespace Game_UI
         /// <param name="e">the event iteself</param>
         private void WatchKeys(object sender, KeyEventArgs e)
         {
+            if (e.Key.Equals(Key.F5))
+            {
+                System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
+                Application.Current.Shutdown();
+            }
 
             if (DirectionType.ExistsWhitin(e.Key) && e.Key != DirectionType.ToKey(player.Direction))
             {
@@ -117,6 +125,10 @@ namespace Game_UI
             {
                 return false;
             }
+            if (obstacles.Exists(x => x.HasCollide(player)))
+            {
+                return false;
+            }
             return true;
         }
 
@@ -137,6 +149,7 @@ namespace Game_UI
             {
                 pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
             }
+            debbug.Text = $"X : {player.Position.X} \nY : {player.Position.Y}";
         }
     }
 }
