@@ -76,8 +76,8 @@ namespace Game_UI
                     switch (letter)
                     {
                         case 'c':
-                            player.SetPosition(top - 50, left + 20);
-                            pacmanSprite.SetValue(TopProperty, (double)top - 50);
+                            player.SetPosition(top + 10, left + 20);
+                            pacmanSprite.SetValue(TopProperty, (double)top + 10);
                             pacmanSprite.SetValue(LeftProperty, (double)left + 20);
                             block = new Blank(top, left, 20, false);
                             break;
