@@ -24,9 +24,7 @@
                 Grid.ColumnSpan="4"
                 BorderThickness="1"
                 BorderBrush="White">
-            <Canvas Name="playGround">
-                <!--<TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="35"/>-->
-            </Canvas>
+            <Canvas Name="playGround"/>
         </Border>
     </Grid>
 </Window>
