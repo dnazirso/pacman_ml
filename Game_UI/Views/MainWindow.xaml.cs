@@ -35,6 +35,7 @@ namespace Game_UI
         {
             InitializeComponent();
             InitializeGame();
+            InitializeMaze();
             InitializePlayersSprites();
         }
 
@@ -45,10 +46,13 @@ namespace Game_UI
         {
             Heightlimit = (int)canvasBorder.Height;
             WidthLimit = (int)canvasBorder.Width;
-            player = new Player();
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(LetItGo);
             timer.Interval = new TimeSpan(10000);
+        }
+
+        private void InitializeMaze()
+        {
             obstacles = new List<Obstacle>();
             obstacles.Add(new Obstacle());
             obstacles.ForEach(obstacle => playGround.Children.Add(obstacle));
@@ -59,6 +63,7 @@ namespace Game_UI
         /// </summary>
         private void InitializePlayersSprites()
         {
+            player = new Player();
             pacmanSprite = new PacmanSprite(player);
             pacmanWidth = 40;
             playGround.Children.Add(pacmanSprite);
@@ -125,7 +130,7 @@ namespace Game_UI
             {
                 return false;
             }
-            if (obstacles.Exists(x => x.HasCollide(player)))
+            if (obstacles.Exists(x => x.WillCollide(player)))
             {
                 return false;
             }

@@ -1,114 +1,55 @@
-﻿using Game_UI.Tools;
-using pacman_libs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using pacman_libs;
 
 namespace Game_UI.Models
 {
     public class Area
     {
-        IPosition UpperLeft { get; }
-        IPosition UpperRight { get; }
-        IPosition BottomLeft { get; }
-        IPosition BottomRight { get; }
-        public bool IsForbidden { get; set; } = true;
+        int Xmin { get; set; }
+        int Xmax { get; set; }
+        int Ymin { get; set; }
+        int Ymax { get; set; }
 
-        private Area(IPosition UpperLeft, IPosition UpperRight, IPosition BottomLeft, IPosition BotomRight)
+        private Area(int xmin, int xmax, int ymin, int ymax)
         {
-            this.UpperLeft = UpperLeft;
-            this.UpperRight = UpperRight;
-            this.BottomLeft = BottomLeft;
-            this.BottomRight = BotomRight;
+            Xmin = xmin;
+            Xmax = xmax;
+            Ymin = ymin;
+            Ymax = ymax;
         }
 
         public static Area SetPositions(IPosition upperLeft, int width, int height)
         {
-            Position upperRight = new Position { X = upperLeft.X + width, Y = upperLeft.Y };
-            Position bottomLeft = new Position { X = upperLeft.X, Y = upperLeft.Y + height };
-            Position bottomRight = new Position { X = upperLeft.X + width, Y = upperLeft.Y + height };
+            int Xmin = upperLeft.X;
+            int Xmax = upperLeft.X + width;
+            int Ymin = upperLeft.Y;
+            int Ymax = upperLeft.Y + height;
 
-            return new Area(upperLeft, upperRight, bottomLeft, bottomRight);
+            return new Area(Xmin, Xmax, Ymin, Ymax);
         }
 
-        public IPosition GetPosition(string corner)
+        public bool WillCollide(IPlayer p)
         {
-            if (corner == "UL") return UpperLeft;
-            if (corner == "UR") return UpperRight;
-            if (corner == "BL") return BottomLeft;
-            if (corner == "BR") return BottomRight;
-            return UpperLeft;
-        }
-
-        public bool HasCollide(IPlayer p)
-        {
-            if (HasCollideOnLeft(p) || HasCollideOnRight(p) || HasCollideOnBottom(p) || HasCollideOnTop(p))
-                return true;
-            return false;
-        }
-
-        bool HasCollideOnLeft(IPlayer p)
-        {
-            if (
-            p.Direction.Equals(DirectionType.Right.Direction)
-            && p.Position.X + 10 > UpperLeft.X
-            && p.Position.Y + 10 < UpperLeft.Y
-            && p.Position.X + 10 < BottomLeft.X
-            && p.Position.Y + 10 < BottomLeft.Y
-            )
+            IPlayer newPlayer = new Player
             {
-                return true;
-            }
-            return false;
+                Direction = p.Direction,
+                Position = new pacman_libs.Position
+                {
+                    X = p.Position.X,
+                    Y = p.Position.Y
+                }
+            };
+            newPlayer.Move();
+            return DoesCollide(newPlayer.Position);
         }
 
-        bool HasCollideOnRight(IPlayer p)
+        public bool HasCollide(IPlayer p) => DoesCollide(p.Position);
+
+        private bool DoesCollide(IPosition position)
         {
-            if (
-            p.Direction.Equals(DirectionType.Left.Direction)
-            && p.Position.X - 10 > UpperRight.X
-            && p.Position.Y - 10 > UpperRight.Y
-            && p.Position.X - 10 < BottomRight.X
-            && p.Position.Y - 10 > BottomRight.Y
-            )
-            {
-                return true;
-            }
-            return false;
-        }
-
-        bool HasCollideOnBottom(IPlayer p)
-        {
-            if (
-            p.Direction.Equals(DirectionType.Up.Direction)
-            && p.Position.X - 10 < BottomLeft.X
-            && p.Position.Y - 10 > BottomLeft.Y
-            && p.Position.X - 10 < BottomRight.X
-            && p.Position.Y - 10 < BottomRight.Y
-            )
-            {
-                return true;
-            }
-            return false;
-
-        }
-
-        bool HasCollideOnTop(IPlayer p)
-        {
-            if (
-            p.Direction.Equals(DirectionType.Down.Direction)
-            && p.Position.X + 10 > UpperLeft.X
-            && p.Position.Y + 10 > UpperLeft.Y
-            && p.Position.X + 10 > UpperRight.X
-            && p.Position.Y + 10 < UpperRight.Y
-            )
-            {
-                return true;
-            }
-            return false;
-
+            return (position.X < Xmax + 10
+             && position.X > Xmin - 10
+             && position.Y < Ymax + 10
+             && position.Y > Ymin - 10);
         }
     }
 }
