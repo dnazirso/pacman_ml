@@ -25,7 +25,7 @@
                 BorderThickness="1"
                 BorderBrush="White">
             <Canvas Name="playGround">
-                <TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="35"/>
+                <!--<TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="35"/>-->
             </Canvas>
         </Border>
     </Grid>

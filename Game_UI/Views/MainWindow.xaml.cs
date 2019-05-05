@@ -7,7 +7,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Game_UI
@@ -22,12 +24,12 @@ namespace Game_UI
         Board board = null;
         PacmanSprite pacmanSprite = null;
         List<IBlock> obstacles = null;
-        int pacmanWidth = 0;
         int Heightlimit = 0;
         int WidthLimit = 0;
         int tickCounter = 0;
         DispatcherTimer timer;
         bool hasBegun;
+        DebbugPac debbug = null;
         #endregion
         #region init
         /// <summary>
@@ -38,7 +40,17 @@ namespace Game_UI
             InitializeComponent();
             InitializeTimer();
             InitializeMaze();
+            InitializeDebbugMode();
+        }
 
+        /// <summary>
+        /// Add debbug content
+        /// </summary>
+        private void InitializeDebbugMode()
+        {
+            //<!--<TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="35"/>-->
+            debbug = new DebbugPac();
+            playGround.Children.Add(debbug);
         }
 
         /// <summary>
@@ -62,7 +74,6 @@ namespace Game_UI
             player = new Player();
 
             pacmanSprite = new PacmanSprite(player);
-            pacmanWidth = 40;
             playGround.Children.Add(pacmanSprite);
 
             var top = 0;
@@ -178,6 +189,8 @@ namespace Game_UI
         {
             p.Move();
 
+            DoesWarp(p);
+
             if (key.Equals(DirectionType.Left.Key) || key.Equals(DirectionType.Right.Key))
             {
                 pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
@@ -186,7 +199,22 @@ namespace Game_UI
             {
                 pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
             }
-            debbug.Text = $"X : {player.Position.X} \nY : {player.Position.Y}";
+            if (debbug != null)
+            {
+                debbug.debbug.Text = $"X : {player.Position.X} \nY : {player.Position.Y}";
+            }
+        }
+
+        private void DoesWarp(IPlayer p)
+        {
+            if (p.Position.Y > WidthLimit)
+            {
+                p.SetPosition(p.Position.X, 0);
+            }
+            if (p.Position.Y < 0)
+            {
+                p.SetPosition(p.Position.X, WidthLimit);
+            }
         }
         #endregion
     }

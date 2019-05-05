@@ -60,6 +60,9 @@
     <Compile Include="Sprites\Blank.xaml.cs">
       <DependentUpon>Blank.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sprites\DebbugPac.xaml.cs">
+      <DependentUpon>DebbugPac.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Sprites\IBlock.cs" />
     <Compile Include="Sprites\Obstacle.xaml.cs">
       <DependentUpon>Obstacle.xaml</DependentUpon>
@@ -74,6 +77,10 @@
       <DependentUpon>StartWindow.xaml</DependentUpon>
     </Compile>
     <Page Include="Sprites\Blank.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sprites\DebbugPac.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
