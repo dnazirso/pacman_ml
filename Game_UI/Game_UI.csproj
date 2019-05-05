@@ -57,6 +57,10 @@
     </ApplicationDefinition>
     <Compile Include="Models\Area.cs" />
     <Compile Include="Models\Position.cs" />
+    <Compile Include="Sprites\Blank.xaml.cs">
+      <DependentUpon>Blank.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sprites\IBlock.cs" />
     <Compile Include="Sprites\Obstacle.xaml.cs">
       <DependentUpon>Obstacle.xaml</DependentUpon>
     </Compile>
@@ -69,6 +73,10 @@
     <Compile Include="Views\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Sprites\Blank.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Sprites\Obstacle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -124,6 +132,10 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <ProjectReference Include="..\board_libs\board_libs.csproj">
+      <Project>{816BE275-6729-4BE8-867A-C256535D7F84}</Project>
+      <Name>board_libs</Name>
+    </ProjectReference>
     <ProjectReference Include="..\pacman_libs\pacman_libs.csproj">
       <Project>{A7B44F5C-20A7-4003-9369-EFB0FDF512E2}</Project>
       <Name>pacman_libs</Name>

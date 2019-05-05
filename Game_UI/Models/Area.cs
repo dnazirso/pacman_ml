@@ -8,23 +8,25 @@ namespace Game_UI.Models
         int Xmax { get; set; }
         int Ymin { get; set; }
         int Ymax { get; set; }
+        bool IsBlocking { get; set; }
 
-        private Area(int xmin, int xmax, int ymin, int ymax)
+        private Area(int xmin, int xmax, int ymin, int ymax, bool isblocking)
         {
             Xmin = xmin;
             Xmax = xmax;
             Ymin = ymin;
             Ymax = ymax;
+            IsBlocking = isblocking;
         }
 
-        public static Area SetPositions(IPosition upperLeft, int width, int height)
+        public static Area SetPositions(IPosition upperLeft, int width, int height, bool isBlocking = false)
         {
             int Xmin = upperLeft.X;
             int Xmax = upperLeft.X + width;
             int Ymin = upperLeft.Y;
             int Ymax = upperLeft.Y + height;
 
-            return new Area(Xmin, Xmax, Ymin, Ymax);
+            return new Area(Xmin, Xmax, Ymin, Ymax, isBlocking);
         }
 
         public bool WillCollide(IPlayer p)
@@ -46,6 +48,10 @@ namespace Game_UI.Models
 
         private bool DoesCollide(IPosition position)
         {
+            if (IsBlocking == false)
+            {
+                return false;
+            }
             return (position.X < Xmax + 10
              && position.X > Xmin - 10
              && position.Y < Ymax + 10

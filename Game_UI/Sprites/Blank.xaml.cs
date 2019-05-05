@@ -6,12 +6,12 @@ using System.Windows.Media;
 namespace Game_UI.Sprites
 {
     /// <summary>
-    /// Interaction logic for Obstable.xaml
+    /// Interaction logic for Blank.xaml
     /// </summary>
-    public partial class Obstacle : UserControl, IBlock
+    public partial class Blank : UserControl, IBlock
     {
         Area area { get; set; }
-        public Obstacle(int top, int left, int size, bool isBlocking)
+        public Blank(int top, int left, int size, bool isBlocking)
         {
             InitializeComponent();
             SetArea(top, left, size, isBlocking);

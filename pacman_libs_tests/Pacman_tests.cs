@@ -29,7 +29,7 @@ namespace pacman_libs_tests
             pacman.SetDirection(new Left());
             pacman.Move();
             var reached_place = pacman.Position;
-            Assert.IsTrue(reached_place.Y == inital_place.Y + 1);
+            Assert.IsTrue(reached_place.Y == inital_place.Y - 1);
         }
 
         [TestMethod]
@@ -40,7 +40,7 @@ namespace pacman_libs_tests
             pacman.SetDirection(new Right());
             pacman.Move();
             var reached_place = pacman.Position;
-            Assert.IsTrue(reached_place.Y == inital_place.Y - 1);
+            Assert.IsTrue(reached_place.Y == inital_place.Y + 1);
         }
 
         [TestMethod]
@@ -51,7 +51,7 @@ namespace pacman_libs_tests
             pacman.SetDirection(new Up());
             pacman.Move();
             var reached_place = pacman.Position;
-            Assert.IsTrue(reached_place.X == inital_place.X + 1);
+            Assert.IsTrue(reached_place.X == inital_place.X - 1);
         }
 
         [TestMethod]
@@ -62,7 +62,7 @@ namespace pacman_libs_tests
             pacman.SetDirection(new Down());
             pacman.Move();
             var reached_place = pacman.Position;
-            Assert.IsTrue(reached_place.X == inital_place.X - 1);
+            Assert.IsTrue(reached_place.X == inital_place.X + 1);
         }
 
         [TestMethod]

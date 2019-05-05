@@ -1,4 +1,5 @@
-﻿using Game_UI.Sprites;
+﻿using board_libs;
+using Game_UI.Sprites;
 using Game_UI.Tools;
 using pacman_libs;
 using System;
@@ -18,8 +19,9 @@ namespace Game_UI
     {
         #region Private fields and properties
         IPlayer player = null;
+        Board board = null;
         PacmanSprite pacmanSprite = null;
-        List<Obstacle> obstacles = null;
+        List<IBlock> obstacles = null;
         int pacmanWidth = 0;
         int Heightlimit = 0;
         int WidthLimit = 0;
@@ -27,7 +29,7 @@ namespace Game_UI
         DispatcherTimer timer;
         bool hasBegun;
         #endregion
-
+        #region init
         /// <summary>
         /// MainWindow Constructor that initialize every needs
         /// </summary>
@@ -36,7 +38,7 @@ namespace Game_UI
             InitializeComponent();
             InitializeTimer();
             InitializeMaze();
-            InitializePlayersSprites();
+
         }
 
         /// <summary>
@@ -54,25 +56,63 @@ namespace Game_UI
         /// </summary>
         private void InitializeMaze()
         {
-            Heightlimit = (int)canvasBorder.Height;
-            WidthLimit = (int)canvasBorder.Width;
-            obstacles = new List<Obstacle>();
-            obstacles.Add(new Obstacle(200, 100, 20));
-            obstacles.ForEach(obstacle => playGround.Children.Add(obstacle));
-        }
 
-        /// <summary>
-        /// Instanciate the player's sprite
-        /// </summary>
-        private void InitializePlayersSprites()
-        {
+            board = new Board("D:\\repos\\perso\\pacman_ml\\board_libs\\maze0.txt");
+            obstacles = new List<IBlock>();
             player = new Player();
+
             pacmanSprite = new PacmanSprite(player);
             pacmanWidth = 40;
             playGround.Children.Add(pacmanSprite);
-            player.SetPosition(0, 0);
-        }
 
+            var top = 0;
+            var left = 0;
+            foreach (List<char> line in board.Grid)
+            {
+                left = 0;
+                foreach (char letter in line)
+                {
+                    IBlock block = null;
+                    switch (letter)
+                    {
+                        case 'c':
+                            player.SetPosition(top - 50, left + 20);
+                            pacmanSprite.SetValue(TopProperty, (double)top);
+                            pacmanSprite.SetValue(LeftProperty, (double)left);
+                            block = new Blank(left, top, 20, false);
+                            break;
+                        case '#':
+                            block = new Obstacle(left, top, 20, true);
+                            break;
+                        default:
+                            block = new Blank(left, top, 20, false);
+                            break;
+                    }
+                    obstacles.Add(block);
+                    left += 20;
+                }
+                top += 20;
+            }
+
+            Heightlimit = top;
+            WidthLimit = left;
+            this.SetValue(HeightProperty, (double)top);
+            this.SetValue(WidthProperty, (double)left);
+
+            //playGround.SetValue(HeightProperty, (double)top);
+            //playGround.SetValue(WidthProperty, (double)left);
+            //playGround.SetValue(TopProperty, (double)top + 20);
+            //playGround.SetValue(LeftProperty, (double)left + 20);
+
+            canvasBorder.SetValue(HeightProperty, (double)top);
+            canvasBorder.SetValue(WidthProperty, (double)left);
+            canvasBorder.SetValue(TopProperty, (double)top - 20);
+            canvasBorder.SetValue(LeftProperty, (double)left - 20);
+
+            obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
+        }
+        #endregion
+        #region gamedesign
         /// <summary>
         /// Keyboard event handler
         /// </summary>
@@ -133,11 +173,7 @@ namespace Game_UI
             {
                 return false;
             }
-            if (obstacles.Exists(x => x.WillCollide(player)))
-            {
-                return false;
-            }
-            return true;
+            return !obstacles.Exists(x => x.WillCollide(player));
         }
 
         /// <summary>
@@ -159,5 +195,6 @@ namespace Game_UI
             }
             debbug.Text = $"X : {player.Position.X} \nY : {player.Position.Y}";
         }
+        #endregion
     }
 }
