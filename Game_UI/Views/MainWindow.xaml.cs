@@ -77,15 +77,15 @@ namespace Game_UI
                     {
                         case 'c':
                             player.SetPosition(top - 50, left + 20);
-                            pacmanSprite.SetValue(TopProperty, (double)top);
-                            pacmanSprite.SetValue(LeftProperty, (double)left);
-                            block = new Blank(left, top, 20, false);
+                            pacmanSprite.SetValue(TopProperty, (double)top - 50);
+                            pacmanSprite.SetValue(LeftProperty, (double)left + 20);
+                            block = new Blank(top, left, 20, false);
                             break;
                         case '#':
-                            block = new Obstacle(left, top, 20, true);
+                            block = new Obstacle(top, left, 20, true);
                             break;
                         default:
-                            block = new Blank(left, top, 20, false);
+                            block = new Blank(top, left, 20, false);
                             break;
                     }
                     obstacles.Add(block);
