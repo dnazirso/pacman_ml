@@ -34,7 +34,7 @@ namespace Game_UI
         public MainWindow()
         {
             InitializeComponent();
-            InitializeGame();
+            InitializeTimer();
             InitializeMaze();
             InitializePlayersSprites();
         }
@@ -42,19 +42,22 @@ namespace Game_UI
         /// <summary>
         /// Initialize all needed fields and properties
         /// </summary>
-        private void InitializeGame()
+        private void InitializeTimer()
         {
-            Heightlimit = (int)canvasBorder.Height;
-            WidthLimit = (int)canvasBorder.Width;
             timer = new DispatcherTimer();
             timer.Tick += new EventHandler(LetItGo);
             timer.Interval = new TimeSpan(10000);
         }
 
+        /// <summary>
+        /// Initialize maze properties, such as obstacles border limits and so forth.
+        /// </summary>
         private void InitializeMaze()
         {
+            Heightlimit = (int)canvasBorder.Height;
+            WidthLimit = (int)canvasBorder.Width;
             obstacles = new List<Obstacle>();
-            obstacles.Add(new Obstacle());
+            obstacles.Add(new Obstacle(200, 100, 20));
             obstacles.ForEach(obstacle => playGround.Children.Add(obstacle));
         }
 
