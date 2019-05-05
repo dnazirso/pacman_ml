@@ -18,10 +18,10 @@ namespace Game_UI.Tools
         #endregion
         #region Enumerations
         public static readonly DirectionType StandStill = new DirectionType(Key.None, s, 0);
-        public static readonly DirectionType Up = new DirectionType(Key.Up, d, 270);
-        public static readonly DirectionType Down = new DirectionType(Key.Down, u, 90);
-        public static readonly DirectionType Left = new DirectionType(Key.Left, r, 180);
-        public static readonly DirectionType Right = new DirectionType(Key.Right, l, 0);
+        public static readonly DirectionType Up = new DirectionType(Key.Up, u, 270);
+        public static readonly DirectionType Down = new DirectionType(Key.Down, d, 90);
+        public static readonly DirectionType Left = new DirectionType(Key.Left, l, 180);
+        public static readonly DirectionType Right = new DirectionType(Key.Right, r, 0);
         #endregion
         /// <summary>
         /// constructor that prepare enumarations
@@ -32,13 +32,19 @@ namespace Game_UI.Tools
         internal DirectionType(Key Key, IDirection Direction, int Angle) : base(Key, Direction, Angle) { }
 
         /// <summary>
-        /// 
+        /// Checks if the given key is included to the enumerated ones
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         internal static bool ExistsWhitin(Key key) => GetAll<DirectionType>()
             .ToList()
             .Exists(x => x.Key.Equals(key));
+
+        /// <summary>
+        /// Checks if the given direction is included to the enumerated ones
+        /// </summary>
+        /// <param name="direction"></param>
+        /// <returns></returns>
         internal static bool ExistsWhitin(IDirection direction) => GetAll<DirectionType>()
             .ToList()
             .Exists(x => x.Direction.Equals(direction));

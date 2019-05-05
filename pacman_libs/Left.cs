@@ -4,7 +4,7 @@
     {
         public Position Move(Position position)
         {
-            position.Y++;
+            position.Y--;
             return position;
         }
     }

@@ -1,5 +1,4 @@
-﻿
-namespace pacman_libs
+﻿namespace pacman_libs
 {
     public class Player : IPlayer
     {
