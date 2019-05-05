@@ -15,7 +15,9 @@ namespace Game_UI
     {
         private void Application_Startup(object sender, StartupEventArgs e)
         {
-            new Views.StartWindow().ShowDialog();
+            var intro = new Views.StartWindow();
+            intro.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+            intro.ShowDialog();
         }
     }
 }

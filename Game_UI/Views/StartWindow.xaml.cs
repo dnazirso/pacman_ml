@@ -33,7 +33,8 @@ namespace Game_UI.Views
         private void LaunchGame()
         {
             Hide();
-            new MainWindow().ShowDialog();
+            var maze = new MainWindow();
+            maze.ShowDialog();
             Close();
         }
 
