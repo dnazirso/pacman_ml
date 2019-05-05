@@ -188,17 +188,11 @@ namespace Game_UI
         private void Move(IPlayer p, Key key)
         {
             p.Move();
-
             DoesWarp(p);
 
-            if (key.Equals(DirectionType.Left.Key) || key.Equals(DirectionType.Right.Key))
-            {
-                pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
-            }
-            if (key.Equals(DirectionType.Up.Key) || key.Equals(DirectionType.Down.Key))
-            {
-                pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
-            }
+            pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
+            pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
+
             if (debbug != null)
             {
                 debbug.debbug.Text = $"X : {player.Position.X} \nY : {player.Position.Y}";
