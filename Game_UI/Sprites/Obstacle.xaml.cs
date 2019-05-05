@@ -25,13 +25,7 @@ namespace Game_UI.Sprites
             RenderTransform = new TranslateTransform(size, size);
             area = Area.SetPositions(new Models.Position { X = (int)Canvas.GetTop(this), Y = (int)Canvas.GetLeft(this) }, size, size);
         }
-        public bool HasCollide(IPlayer p)
-        {
-            return area.HasCollide(p);
-        }
-        public bool WillCollide(IPlayer p)
-        {
-            return area.WillCollide(p);
-        }
+        public bool HasCollide(IPlayer p) => area.HasCollide(p);
+        public bool WillCollide(IPlayer p) => area.WillCollide(p);
     }
 }
