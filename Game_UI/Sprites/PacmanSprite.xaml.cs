@@ -24,7 +24,8 @@ namespace Game_UI.Sprites
             SetValue(Canvas.TopProperty, (double)0);
 
             InitializeComponent();
-            NominalAnimation();
+
+            RenderTransform = new TranslateTransform(-20, -20);
         }
 
         public async void NominalAnimation()

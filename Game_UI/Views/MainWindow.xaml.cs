@@ -96,18 +96,11 @@ namespace Game_UI
 
             Heightlimit = top;
             WidthLimit = left;
-            this.SetValue(HeightProperty, (double)top);
-            this.SetValue(WidthProperty, (double)left);
-
-            //playGround.SetValue(HeightProperty, (double)top);
-            //playGround.SetValue(WidthProperty, (double)left);
-            //playGround.SetValue(TopProperty, (double)top + 20);
-            //playGround.SetValue(LeftProperty, (double)left + 20);
+            this.SetValue(HeightProperty, (double)top + 150);
+            this.SetValue(WidthProperty, (double)left + 150);
 
             canvasBorder.SetValue(HeightProperty, (double)top);
             canvasBorder.SetValue(WidthProperty, (double)left);
-            canvasBorder.SetValue(TopProperty, (double)top - 20);
-            canvasBorder.SetValue(LeftProperty, (double)left - 20);
 
             obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }
@@ -167,9 +160,9 @@ namespace Game_UI
         private bool CheckLimits(IPlayer p, Key key)
         {
             if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
-            || (p.Position.X + pacmanWidth > Heightlimit && key.Equals(DirectionType.Down.Key))
+            || (p.Position.X > Heightlimit && key.Equals(DirectionType.Down.Key))
             || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
-            || (p.Position.Y + pacmanWidth > WidthLimit && key.Equals(DirectionType.Right.Key)))
+            || (p.Position.Y > WidthLimit && key.Equals(DirectionType.Right.Key)))
             {
                 return false;
             }

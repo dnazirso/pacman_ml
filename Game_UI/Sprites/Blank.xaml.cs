@@ -22,7 +22,6 @@ namespace Game_UI.Sprites
             SetValue(Canvas.TopProperty, (double)top);
             SetValue(Canvas.WidthProperty, (double)size);
             SetValue(Canvas.HeightProperty, (double)size);
-            RenderTransform = new TranslateTransform(size, size);
             area = Area.SetPositions(new Models.Position { X = (int)Canvas.GetTop(this), Y = (int)Canvas.GetLeft(this) }, size, size, isblocking);
         }
         public bool HasCollide(IPlayer p) => area.HasCollide(p);
