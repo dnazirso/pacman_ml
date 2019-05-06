@@ -69,7 +69,7 @@ namespace Game_UI
         private void InitializeMaze()
         {
 
-            board = new Board("D:\\repos\\perso\\pacman_ml\\board_libs\\maze0.txt");
+            board = new Board("C:\\TFS\\GitRepositories\\pacman_ml\\board_libs\\maze0.txt");
             obstacles = new List<IBlock>();
             player = new Player();
 
@@ -132,8 +132,20 @@ namespace Game_UI
 
             if (DirectionType.ExistsWhitin(e.Key) && e.Key != DirectionType.ToKey(player.Direction))
             {
-                player.SetDirection(DirectionType.ToDirection(e.Key));
-                pacmanSprite.rotate();
+                IPlayer testPlayer = new Player
+                {
+                    Direction = DirectionType.ToDirection(e.Key),
+                    Position = new Position
+                    {
+                        X = player.Position.X,
+                        Y = player.Position.Y
+                    }
+                };
+                if (!obstacles.Exists(x => x.WillCollide(testPlayer)))
+                {
+                    player.SetDirection(DirectionType.ToDirection(e.Key));
+                    pacmanSprite.rotate();
+                }
             }
             if (hasBegun == false)
             {
