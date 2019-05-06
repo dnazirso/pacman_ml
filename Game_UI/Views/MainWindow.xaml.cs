@@ -132,20 +132,7 @@ namespace Game_UI
 
             if (DirectionType.ExistsWhitin(e.Key) && e.Key != DirectionType.ToKey(player.Direction))
             {
-                IPlayer testPlayer = new Player
-                {
-                    Direction = DirectionType.ToDirection(e.Key),
-                    Position = new Position
-                    {
-                        X = player.Position.X,
-                        Y = player.Position.Y
-                    }
-                };
-                if (!obstacles.Exists(x => x.WillCollide(testPlayer)))
-                {
-                    player.SetDirection(DirectionType.ToDirection(e.Key));
-                    pacmanSprite.rotate();
-                }
+                SetDirection(DirectionType.ToDirection(e.Key));
             }
             if (hasBegun == false)
             {
@@ -155,9 +142,31 @@ namespace Game_UI
         }
 
         /// <summary>
+        /// Set the direction to the player
+        /// </summary>
+        /// <param name="direction">the wanted </param>
+        private void SetDirection(IDirection direction)
+        {
+            IPlayer testPlayer = new Player
+            {
+                Direction = direction,
+                Position = new Position
+                {
+                    X = player.Position.X,
+                    Y = player.Position.Y
+                }
+            };
+            if (!obstacles.Exists(x => x.WillCollide(testPlayer)))
+            {
+                player.SetDirection(direction);
+                pacmanSprite.rotate();
+            }
+        }
+
+        /// <summary>
         /// Allow a player to move if possible
         /// </summary>
-        /// <param name="p">the player</param>
+        /// <param name="p">the pressed key</param>
         private async void LetItGo(object sender, EventArgs e)
         {
             var p = player;
