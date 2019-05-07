@@ -27,6 +27,8 @@ namespace Game_UI
         int Heightlimit = 0;
         int WidthLimit = 0;
         int tickCounter = 0;
+        IDirection wantedDirection = DirectionType.StandStill.Direction;
+        int tickRotateCounter = 0;
         DispatcherTimer timer;
         bool hasBegun;
         DebbugPac debbug = null;
@@ -160,6 +162,12 @@ namespace Game_UI
             {
                 player.SetDirection(direction);
                 pacmanSprite.rotate();
+                wantedDirection = DirectionType.StandStill.Direction;
+                tickRotateCounter = 0;
+            }
+            else
+            {
+                wantedDirection = direction;
             }
         }
 
@@ -170,6 +178,13 @@ namespace Game_UI
         private async void LetItGo(object sender, EventArgs e)
         {
             var p = player;
+
+            if (tickRotateCounter < 20 && !wantedDirection.Equals(DirectionType.StandStill.Direction))
+            {
+                tickRotateCounter++;
+                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(wantedDirection)));
+            }
+
             if (CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
                 Move(p, DirectionType.ToKey(p.Direction));
