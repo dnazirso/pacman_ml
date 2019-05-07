@@ -21,9 +21,7 @@
         <Border x:Name="canvasBorder"
                 Grid.Row="0" Grid.Column="0"
                 Height="300" Width="750"
-                Grid.ColumnSpan="4"
-                BorderThickness="1"
-                BorderBrush="White">
+                Grid.ColumnSpan="4">
             <Canvas Name="playGround"/>
         </Border>
     </Grid>
