@@ -1,14 +1,25 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 
 namespace board_libs
 {
     public class Board
     {
+        /// <summary>
+        /// Dots in the maze
+        /// </summary>
         public int DotsLeft = 0;
 
+        /// <summary>
+        /// Represents the maze structure
+        /// </summary>
         public List<List<char>> Grid { get; private set; }
 
+        /// <summary>
+        /// Constructor that check if the given path exists
+        /// </summary>
+        /// <param name="pathToFile"></param>
         public Board(string pathToFile)
         {
             if (File.Exists(pathToFile))
@@ -17,26 +28,13 @@ namespace board_libs
             }
         }
 
+        /// <summary>
+        /// Read a file in order to retreive a maze structure
+        /// </summary>
+        /// <param name="pathToFile"></param>
         private void CreateBoard(string pathToFile)
         {
-            Grid = new List<List<char>>();
-            using (StreamReader Sr = File.OpenText(pathToFile))
-            {
-                string s;
-                while ((s = Sr.ReadLine()) != null)
-                {
-                    var list = new List<char>();
-                    foreach (char c in s)
-                    {
-                        switch (c)
-                        {
-                            case '.': DotsLeft++; break;
-                        }
-                        list.Add(c);
-                    }
-                    Grid.Add(list);
-                }
-            }
+            Grid = File.ReadLines(pathToFile).Select(l => l.ToCharArray().ToList()).ToList();
         }
     }
 }
