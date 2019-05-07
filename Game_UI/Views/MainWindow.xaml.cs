@@ -131,16 +131,17 @@ namespace Game_UI
                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                 Application.Current.Shutdown();
             }
-
-            if (DirectionType.ExistsWhitin(e.Key) && e.Key != DirectionType.ToKey(player.Direction))
-            {
-                SetDirection(DirectionType.ToDirection(e.Key));
-            }
-            if (hasBegun == false)
+            if (!DirectionType.ExistsWhitin(e.Key)) return;
+            if (!hasBegun
+                && DirectionType.ToDirection(e.Key).Equals(DirectionType.Left.Direction)
+                || DirectionType.ToDirection(e.Key).Equals(DirectionType.Right.Direction))
             {
                 hasBegun = true;
                 timer.Start();
+                SetDirection(DirectionType.ToDirection(e.Key));
             }
+
+            SetDirection(DirectionType.ToDirection(e.Key));
         }
 
         /// <summary>
@@ -235,6 +236,10 @@ namespace Game_UI
             }
         }
 
+        /// <summary>
+        /// When reaching an edge, teleport to the other side
+        /// </summary>
+        /// <param name="p"></param>
         private void DoesWarp(IPlayer p)
         {
             if (p.Position.Y > WidthLimit)
