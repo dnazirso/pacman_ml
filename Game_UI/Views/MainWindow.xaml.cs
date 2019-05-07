@@ -68,8 +68,8 @@ namespace Game_UI
         /// </summary>
         private void InitializeMaze()
         {
-
-            board = new Board("C:\\TFS\\GitRepositories\\pacman_ml\\board_libs\\maze0.txt");
+            var resourceName = ".\\maze0.txt";
+            board = new Board(resourceName);
             obstacles = new List<IBlock>();
             player = new Player();
 
