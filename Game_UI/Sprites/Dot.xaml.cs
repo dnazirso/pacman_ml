@@ -5,12 +5,13 @@ using System.Windows.Controls;
 namespace Game_UI.Sprites
 {
     /// <summary>
-    /// Interaction logic for Blank.xaml
+    /// Interaction logic for Dot.xaml
     /// </summary>
-    public partial class Blank : UserControl, IBlock
+    public partial class Dot : UserControl, IBlock
     {
         Area area { get; set; }
-        public Blank(int top, int left, int size, bool isBlocking)
+
+        public Dot(int top, int left, int size, bool isBlocking)
         {
             InitializeComponent();
             SetArea(top, left, size, isBlocking);

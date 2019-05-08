@@ -37,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -63,6 +65,9 @@
     <Compile Include="Sprites\DebbugPac.xaml.cs">
       <DependentUpon>DebbugPac.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sprites\Dot.xaml.cs">
+      <DependentUpon>Dot.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Sprites\IBlock.cs" />
     <Compile Include="Sprites\Obstacle.xaml.cs">
       <DependentUpon>Obstacle.xaml</DependentUpon>
@@ -87,6 +92,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Sprites\DebbugPac.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sprites\Dot.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -120,6 +120,7 @@ namespace Game_UI
                 case '║': return new PipeStraight(top, left, 20, true, 0);
                 case '═': return new PipeStraight(top, left, 20, true, 90);
                 case '-': return new Blank(top, left, 20, true);
+                case '·': return new Dot(top, left, 20, false);
                 default: return new Blank(top, left, 20, false);
             }
         }
@@ -255,7 +256,7 @@ namespace Game_UI
             }
             if (p.Position.Y < 0)
             {
-                p.SetPosition(p.Position.X, limits.X);
+                p.SetPosition(p.Position.X, limits.Y);
             }
         }
         #endregion
