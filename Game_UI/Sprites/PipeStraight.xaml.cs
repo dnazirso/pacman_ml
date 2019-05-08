@@ -25,7 +25,7 @@ namespace Game_UI.Sprites
             SetValue(Canvas.HeightProperty, (double)size);
             area = Area.SetPositions(new Models.Position { X = (int)Canvas.GetTop(this), Y = (int)Canvas.GetLeft(this) }, size, isblocking);
         }
-        public bool HasCollide(IPlayer p) => area.HasCollide(p);
+        public bool HasCollide(IPlayer p) => area.HasCollide(p.Position);
         public bool WillCollide(IPlayer p) => area.WillCollide(p);
     }
 }

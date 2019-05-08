@@ -41,12 +41,10 @@ namespace Game_UI.Models
                 }
             };
             newPlayer.Move();
-            return DoesCollide(newPlayer.Position);
+            return CouldCollide(newPlayer.Position);
         }
 
-        public bool HasCollide(IPlayer p) => DoesCollide(p.Position);
-
-        private bool DoesCollide(IPosition position)
+        private bool CouldCollide(IPosition position)
         {
             if (IsBlocking == false)
             {
@@ -56,6 +54,14 @@ namespace Game_UI.Models
              && position.X > Xmin - 10
              && position.Y < Ymax + 10
              && position.Y > Ymin - 10);
+        }
+
+        public bool HasCollide(IPosition position)
+        {
+            return (position.X < Xmax
+             && position.X > Xmin
+             && position.Y < Ymax
+             && position.Y > Ymin);
         }
     }
 }

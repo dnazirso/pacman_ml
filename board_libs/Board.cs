@@ -9,7 +9,7 @@ namespace board_libs
         /// <summary>
         /// Dots in the maze
         /// </summary>
-        public int DotsLeft = 0;
+        public int DotsLeft { get; set; }
 
         /// <summary>
         /// Represents the maze structure

@@ -23,6 +23,7 @@ namespace Game_UI
         Position limits;
         IDirection wantedDirection;
         List<IBlock> obstacles;
+        List<Dot> dots;
         DispatcherTimer timer;
         DebbugPac debbug;
         bool hasBegun;
@@ -70,6 +71,7 @@ namespace Game_UI
             var resourceName = ".\\maze1.txt";
             board = new Board(resourceName);
             obstacles = new List<IBlock>();
+            dots = new List<Dot>();
             player = new Player();
 
             pacmanSprite = new PacmanSprite(player);
@@ -82,7 +84,13 @@ namespace Game_UI
                 left = 0;
                 foreach (char letter in line)
                 {
-                    obstacles.Add(Placeblock(top, left, letter));
+                    var block = Placeblock(top, left, letter);
+                    if (letter.Equals('·'))
+                    {
+                        dots.Add((Dot)block);
+                        board.DotsLeft++;
+                    }
+                    obstacles.Add(block);
                     left += 20;
                 }
                 top += 20;
@@ -120,7 +128,7 @@ namespace Game_UI
                 case '║': return new PipeStraight(top, left, 20, true, 0);
                 case '═': return new PipeStraight(top, left, 20, true, 90);
                 case '-': return new Blank(top, left, 20, true);
-                case '·': return new Dot(top, left, 20, false);
+                case '·': return new Dot(top, left, 20, false, board);
                 default: return new Blank(top, left, 20, false);
             }
         }
@@ -193,7 +201,6 @@ namespace Game_UI
                 tickRotateCounter++;
                 SetDirection(DirectionType.ToDirection(DirectionType.ToKey(wantedDirection)));
             }
-
             if (CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
                 Move(p, DirectionType.ToKey(p.Direction));
