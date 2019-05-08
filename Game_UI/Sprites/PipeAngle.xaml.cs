@@ -1,20 +1,33 @@
 ﻿using Game_UI.Models;
 using pacman_libs;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
 
 namespace Game_UI.Sprites
 {
     /// <summary>
-    /// Interaction logic for Obstable.xaml
+    /// Interaction logic for PipeAngle.xaml
     /// </summary>
-    public partial class Obstacle : UserControl, IBlock
+    public partial class PipeAngle : UserControl, IBlock
     {
         Area area { get; set; }
-        public Obstacle(int top, int left, int size, bool isBlocking)
+        public PipeAngle(int top, int left, int size, bool isBlocking, int angle)
         {
             InitializeComponent();
             SetArea(top, left, size, isBlocking);
+            pipe_obstacle.RenderTransform = new RotateTransform(angle, 10, 10);
         }
         private void SetArea(int top, int left, int size, bool isblocking)
         {

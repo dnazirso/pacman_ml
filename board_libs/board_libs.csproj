@@ -45,6 +45,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="maze1.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="maze0.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

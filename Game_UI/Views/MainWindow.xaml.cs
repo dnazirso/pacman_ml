@@ -70,7 +70,7 @@ namespace Game_UI
         /// </summary>
         private void InitializeMaze()
         {
-            var resourceName = ".\\maze0.txt";
+            var resourceName = ".\\maze1.txt";
             board = new Board(resourceName);
             obstacles = new List<IBlock>();
             player = new Player();
@@ -85,23 +85,7 @@ namespace Game_UI
                 left = 0;
                 foreach (char letter in line)
                 {
-                    IBlock block = null;
-                    switch (letter)
-                    {
-                        case 'c':
-                            player.SetPosition(top + 10, left + 20);
-                            pacmanSprite.SetValue(TopProperty, (double)top + 10);
-                            pacmanSprite.SetValue(LeftProperty, (double)left + 20);
-                            block = new Blank(top, left, 20, false);
-                            break;
-                        case '#':
-                            block = new Obstacle(top, left, 20, true);
-                            break;
-                        default:
-                            block = new Blank(top, left, 20, false);
-                            break;
-                    }
-                    obstacles.Add(block);
+                    BuildMaze(top, left, letter);
                     left += 20;
                 }
                 top += 20;
@@ -116,6 +100,48 @@ namespace Game_UI
             canvasBorder.SetValue(WidthProperty, (double)left);
 
             obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
+        }
+
+        private void BuildMaze(int top, int left, char letter)
+        {
+            IBlock block;
+            switch (letter)
+            {
+                case 'c':
+                    player.SetPosition(top + 10, left + 20);
+                    pacmanSprite.SetValue(TopProperty, (double)top + 10);
+                    pacmanSprite.SetValue(LeftProperty, (double)left + 20);
+                    block = new Blank(top, left, 20, false);
+                    break;
+                case '╔':
+                    block = new PipeAngle(top, left, 20, true, 0);
+                    break;
+                case '╗':
+                    block = new PipeAngle(top, left, 20, true, 90);
+                    break;
+                case '╝':
+                    block = new PipeAngle(top, left, 20, true, 180);
+                    break;
+                case '╚':
+                    block = new PipeAngle(top, left, 20, true, 270);
+                    break;
+                case '#':
+                    block = new Obstacle(top, left, 20, true);
+                    break;
+                case '║':
+                    block = new PipeStraight(top, left, 20, true, 0);
+                    break;
+                case '═':
+                    block = new PipeStraight(top, left, 20, true, 90);
+                    break;
+                case '-':
+                    block = new Blank(top, left, 20, true);
+                    break;
+                default:
+                    block = new Blank(top, left, 20, false);
+                    break;
+            }
+            obstacles.Add(block);
         }
         #endregion
         #region gamedesign

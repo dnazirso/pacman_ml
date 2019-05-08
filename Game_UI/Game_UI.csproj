@@ -70,6 +70,12 @@
     <Compile Include="Sprites\PacmanSprite.xaml.cs">
       <DependentUpon>PacmanSprite.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sprites\PipeAngle.xaml.cs">
+      <DependentUpon>PipeAngle.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Sprites\PipeStraight.xaml.cs">
+      <DependentUpon>PipeStraight.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Tools\DirectionType.cs" />
     <Compile Include="Tools\EnumerationBase.cs" />
     <Compile Include="Tools\ExtentionMethods.cs" />
@@ -89,6 +95,14 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Sprites\PacmanSprite.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sprites\PipeAngle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sprites\PipeStraight.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -133,6 +147,7 @@
     </None>
     <None Include="Resources\pacmouthclose.svg" />
     <None Include="Resources\pacmouthopen.svg" />
+    <None Include="Resources\pipeangle.svg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

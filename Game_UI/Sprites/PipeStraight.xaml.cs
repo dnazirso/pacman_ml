@@ -6,15 +6,16 @@ using System.Windows.Media;
 namespace Game_UI.Sprites
 {
     /// <summary>
-    /// Interaction logic for Obstable.xaml
+    /// Interaction logic for PipeStraight.xaml
     /// </summary>
-    public partial class Obstacle : UserControl, IBlock
+    public partial class PipeStraight : UserControl, IBlock
     {
         Area area { get; set; }
-        public Obstacle(int top, int left, int size, bool isBlocking)
+        public PipeStraight(int top, int left, int size, bool isBlocking, int angle)
         {
             InitializeComponent();
             SetArea(top, left, size, isBlocking);
+            pipe_obstacle.RenderTransform = new RotateTransform(angle, 10, 10);
         }
         private void SetArea(int top, int left, int size, bool isblocking)
         {

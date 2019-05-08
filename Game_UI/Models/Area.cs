@@ -4,11 +4,11 @@ namespace Game_UI.Models
 {
     public class Area
     {
-        int Xmin { get; set; }
-        int Xmax { get; set; }
-        int Ymin { get; set; }
-        int Ymax { get; set; }
-        bool IsBlocking { get; set; }
+        int Xmin { get; }
+        int Xmax { get; }
+        int Ymin { get; }
+        int Ymax { get; }
+        bool IsBlocking { get; }
 
         private Area(int xmin, int xmax, int ymin, int ymax, bool isblocking)
         {
@@ -19,12 +19,12 @@ namespace Game_UI.Models
             IsBlocking = isblocking;
         }
 
-        public static Area SetPositions(IPosition upperLeft, int width, int height, bool isBlocking = false)
+        public static Area SetPositions(IPosition upperLeft, int width, bool isBlocking)
         {
             int Xmin = upperLeft.X;
             int Xmax = upperLeft.X + width;
             int Ymin = upperLeft.Y;
-            int Ymax = upperLeft.Y + height;
+            int Ymax = upperLeft.Y + width;
 
             return new Area(Xmin, Xmax, Ymin, Ymax, isBlocking);
         }
