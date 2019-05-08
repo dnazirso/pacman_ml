@@ -4,12 +4,9 @@ using Game_UI.Tools;
 using pacman_libs;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Threading;
 
 namespace Game_UI
@@ -19,20 +16,20 @@ namespace Game_UI
     /// </summary>
     public partial class MainWindow : Window
     {
-        #region Private fields and properties
-        IPlayer player = null;
-        Board board = null;
-        PacmanSprite pacmanSprite = null;
-        List<IBlock> obstacles = null;
-        int Heightlimit = 0;
-        int WidthLimit = 0;
-        int tickCounter = 0;
-        IDirection wantedDirection = DirectionType.StandStill.Direction;
-        int tickRotateCounter = 0;
+        #region Private fields
+        IPlayer player;
+        Board board;
+        PacmanSprite pacmanSprite;
+        Position limits;
+        IDirection wantedDirection;
+        List<IBlock> obstacles;
         DispatcherTimer timer;
+        DebbugPac debbug;
         bool hasBegun;
-        DebbugPac debbug = null;
+        int tickCounter;
+        int tickRotateCounter;
         #endregion
+
         #region init
         /// <summary>
         /// MainWindow Constructor that initialize every needs
@@ -50,7 +47,6 @@ namespace Game_UI
         /// </summary>
         private void InitializeDebbugMode()
         {
-            //<!--<TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="35"/>-->
             debbug = new DebbugPac();
             playGround.Children.Add(debbug);
         }
@@ -66,7 +62,8 @@ namespace Game_UI
         }
 
         /// <summary>
-        /// Initialize maze properties, such as obstacles border limits and so forth.
+        /// Initialize maze properties and elements such as 
+        /// players, obstacles, border, limits and so forth.
         /// </summary>
         private void InitializeMaze()
         {
@@ -85,14 +82,12 @@ namespace Game_UI
                 left = 0;
                 foreach (char letter in line)
                 {
-                    BuildMaze(top, left, letter);
+                    obstacles.Add(Placeblock(top, left, letter));
                     left += 20;
                 }
                 top += 20;
             }
-
-            Heightlimit = top;
-            WidthLimit = left;
+            limits = new Position { X = top, Y = left };
             this.SetValue(HeightProperty, (double)top + 150);
             this.SetValue(WidthProperty, (double)left + 150);
 
@@ -102,48 +97,34 @@ namespace Game_UI
             obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }
 
-        private void BuildMaze(int top, int left, char letter)
+        /// <summary>
+        /// Puts in place each block
+        /// </summary>
+        /// <param name="top"></param>
+        /// <param name="left"></param>
+        /// <param name="letter"></param>
+        private IBlock Placeblock(int top, int left, char letter)
         {
-            IBlock block;
             switch (letter)
             {
                 case 'c':
                     player.SetPosition(top + 10, left + 20);
                     pacmanSprite.SetValue(TopProperty, (double)top + 10);
                     pacmanSprite.SetValue(LeftProperty, (double)left + 20);
-                    block = new Blank(top, left, 20, false);
-                    break;
-                case '╔':
-                    block = new PipeAngle(top, left, 20, true, 0);
-                    break;
-                case '╗':
-                    block = new PipeAngle(top, left, 20, true, 90);
-                    break;
-                case '╝':
-                    block = new PipeAngle(top, left, 20, true, 180);
-                    break;
-                case '╚':
-                    block = new PipeAngle(top, left, 20, true, 270);
-                    break;
-                case '#':
-                    block = new Obstacle(top, left, 20, true);
-                    break;
-                case '║':
-                    block = new PipeStraight(top, left, 20, true, 0);
-                    break;
-                case '═':
-                    block = new PipeStraight(top, left, 20, true, 90);
-                    break;
-                case '-':
-                    block = new Blank(top, left, 20, true);
-                    break;
-                default:
-                    block = new Blank(top, left, 20, false);
-                    break;
+                    return new Blank(top, left, 20, false);
+                case '╔': return new PipeAngle(top, left, 20, true, 0);
+                case '╗': return new PipeAngle(top, left, 20, true, 90);
+                case '╝': return new PipeAngle(top, left, 20, true, 180);
+                case '╚': return new PipeAngle(top, left, 20, true, 270);
+                case '#': return new Obstacle(top, left, 20, true);
+                case '║': return new PipeStraight(top, left, 20, true, 0);
+                case '═': return new PipeStraight(top, left, 20, true, 90);
+                case '-': return new Blank(top, left, 20, true);
+                default: return new Blank(top, left, 20, false);
             }
-            obstacles.Add(block);
         }
         #endregion
+
         #region gamedesign
         /// <summary>
         /// Keyboard event handler
@@ -159,8 +140,8 @@ namespace Game_UI
             }
             if (!DirectionType.ExistsWhitin(e.Key)) return;
             if (!hasBegun
-                && DirectionType.ToDirection(e.Key).Equals(DirectionType.Left.Direction)
-                || DirectionType.ToDirection(e.Key).Equals(DirectionType.Right.Direction))
+                && (DirectionType.ToDirection(e.Key).Equals(DirectionType.Left.Direction)
+                || DirectionType.ToDirection(e.Key).Equals(DirectionType.Right.Direction)))
             {
                 hasBegun = true;
                 timer.Start();
@@ -234,9 +215,9 @@ namespace Game_UI
         private bool CheckLimits(IPlayer p, Key key)
         {
             if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
-            || (p.Position.X > Heightlimit && key.Equals(DirectionType.Down.Key))
+            || (p.Position.X > limits.X && key.Equals(DirectionType.Down.Key))
             || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
-            || (p.Position.Y > WidthLimit && key.Equals(DirectionType.Right.Key)))
+            || (p.Position.Y > limits.Y && key.Equals(DirectionType.Right.Key)))
             {
                 return false;
             }
@@ -268,13 +249,13 @@ namespace Game_UI
         /// <param name="p"></param>
         private void DoesWarp(IPlayer p)
         {
-            if (p.Position.Y > WidthLimit)
+            if (p.Position.Y > limits.Y)
             {
                 p.SetPosition(p.Position.X, 0);
             }
             if (p.Position.Y < 0)
             {
-                p.SetPosition(p.Position.X, WidthLimit);
+                p.SetPosition(p.Position.X, limits.X);
             }
         }
         #endregion
