@@ -9,19 +9,12 @@ namespace Game_UI.Tools
     /// </summary>
     internal class DirectionType : EnumerationBase
     {
-        #region Ready steady directions
-        private static readonly IDirection u = new Up();
-        private static readonly IDirection d = new Down();
-        private static readonly IDirection l = new Left();
-        private static readonly IDirection r = new Right();
-        private static readonly IDirection s = new StandStill();
-        #endregion
         #region Enumerations
-        public static readonly DirectionType StandStill = new DirectionType(Key.None, s, 0);
-        public static readonly DirectionType Up = new DirectionType(Key.Up, u, 270);
-        public static readonly DirectionType Down = new DirectionType(Key.Down, d, 90);
-        public static readonly DirectionType Left = new DirectionType(Key.Left, l, 180);
-        public static readonly DirectionType Right = new DirectionType(Key.Right, r, 0);
+        public static readonly DirectionType StandStill = new DirectionType(Key.None, new StandStill(), 0);
+        public static readonly DirectionType Up = new DirectionType(Key.Up, new Up(), 270);
+        public static readonly DirectionType Down = new DirectionType(Key.Down, new Down(), 90);
+        public static readonly DirectionType Left = new DirectionType(Key.Left, new Left(), 180);
+        public static readonly DirectionType Right = new DirectionType(Key.Right, new Right(), 0);
         #endregion
         /// <summary>
         /// constructor that prepare enumarations
