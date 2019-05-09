@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "board_libs", "board_libs\bo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Game_UI", "Game_UI\Game_UI.csproj", "{312735BB-4F81-45DB-AF08-020BE6E6EC0C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ghost_libs", "ghost_libs\ghost_libs.csproj", "{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{312735BB-4F81-45DB-AF08-020BE6E6EC0C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{312735BB-4F81-45DB-AF08-020BE6E6EC0C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{312735BB-4F81-45DB-AF08-020BE6E6EC0C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
