@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using pacman_libs;
+using utils_libs.Directions;
 
 namespace pacman_libs_tests
 {
@@ -25,7 +26,7 @@ namespace pacman_libs_tests
         public void Pacman_can_move_to_the_left()
         {
             var pacman = new Player();
-            var inital_place = pacman.Position;
+            var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Left());
             pacman.Move();
             var reached_place = pacman.Position;
@@ -36,7 +37,7 @@ namespace pacman_libs_tests
         public void Pacman_can_move_to_the_right()
         {
             var pacman = new Player();
-            var inital_place = pacman.Position;
+            var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Right());
             pacman.Move();
             var reached_place = pacman.Position;
@@ -47,7 +48,7 @@ namespace pacman_libs_tests
         public void Pacman_can_move_upward()
         {
             var pacman = new Player();
-            var inital_place = pacman.Position;
+            var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Up());
             pacman.Move();
             var reached_place = pacman.Position;
@@ -58,7 +59,7 @@ namespace pacman_libs_tests
         public void Pacman_can_move_downward()
         {
             var pacman = new Player();
-            var inital_place = pacman.Position;
+            var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Down());
             pacman.Move();
             var reached_place = pacman.Position;
@@ -69,7 +70,7 @@ namespace pacman_libs_tests
         public void Pacman_can_stand_still()
         {
             var pacman = new Player();
-            var inital_place = pacman.Position;
+            var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new StandStill());
             pacman.Move();
             var reached_place = pacman.Position;

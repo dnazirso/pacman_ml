@@ -1,4 +1,5 @@
 ﻿using board_libs;
+using board_libs.Models;
 using Game_UI.Sprites;
 using Game_UI.Tools;
 using pacman_libs;
@@ -8,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
+using utils_libs.Abstractions;
+using utils_libs.Tools;
 
 namespace Game_UI
 {
@@ -17,18 +20,17 @@ namespace Game_UI
     public partial class MainWindow : Window
     {
         #region Private fields
-        IPlayer player;
-        Board board;
-        PacmanSprite pacmanSprite;
-        Position limits;
-        IDirection wantedDirection;
-        List<IBlock> obstacles;
-        List<Dot> dots;
-        DispatcherTimer timer;
-        DebbugPac debbug;
-        bool hasBegun;
-        int tickCounter;
-        int tickRotateCounter;
+        IPlayer _player;
+        Board _board;
+        PacmanSprite _pacmanSprite;
+        IDirection _wantedDirection;
+        List<IBlock> _obstacles;
+        List<IBlock> _dots;
+        DispatcherTimer _timer;
+        DebbugPac _debbug;
+        bool _hasBegun;
+        int _tickMoveCounter;
+        int _tickRotateCounter;
         #endregion
 
         #region init
@@ -48,8 +50,8 @@ namespace Game_UI
         /// </summary>
         private void InitializeDebbugMode()
         {
-            debbug = new DebbugPac();
-            playGround.Children.Add(debbug);
+            _debbug = new DebbugPac();
+            playGround.Children.Add(_debbug);
         }
 
         /// <summary>
@@ -57,9 +59,9 @@ namespace Game_UI
         /// </summary>
         private void InitializeTimer()
         {
-            timer = new DispatcherTimer();
-            timer.Tick += new EventHandler(LetItGo);
-            timer.Interval = new TimeSpan(10000);
+            _timer = new DispatcherTimer();
+            _timer.Tick += new EventHandler(LetItGo);
+            _timer.Interval = new TimeSpan(10000);
         }
 
         /// <summary>
@@ -69,40 +71,36 @@ namespace Game_UI
         private void InitializeMaze()
         {
             var resourceName = ".\\maze1.txt";
-            board = new Board(resourceName);
-            obstacles = new List<IBlock>();
-            dots = new List<Dot>();
-            player = new Player();
+            _board = new Board(resourceName);
+            _obstacles = new List<IBlock>();
+            _dots = new List<IBlock>();
+            _player = new pacman_libs.Player();
 
-            pacmanSprite = new PacmanSprite(player);
-            playGround.Children.Add(pacmanSprite);
+            _pacmanSprite = new PacmanSprite(_player);
+            playGround.Children.Add(_pacmanSprite);
 
-            var top = 0;
-            var left = 0;
-            foreach (List<char> line in board.Grid)
+            foreach (Area block in _board.Maze)
             {
-                left = 0;
-                foreach (char letter in line)
+                var placedBlock = Placeblock(block);
+                if (block.Shape.Equals('c'))
                 {
-                    var block = Placeblock(top, left, letter);
-                    if (letter.Equals('·'))
-                    {
-                        dots.Add((Dot)block);
-                        board.DotsLeft++;
-                    }
-                    obstacles.Add(block);
-                    left += 20;
+                    _player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
+                    _pacmanSprite.SetValue(TopProperty, (double)_player.Position.X);
+                    _pacmanSprite.SetValue(LeftProperty, (double)_player.Position.Y);
                 }
-                top += 20;
+                if (block.Shape.Equals('·'))
+                {
+                    _dots.Add(placedBlock);
+                }
+                _obstacles.Add(placedBlock);
             }
-            limits = new Position { X = top, Y = left };
-            this.SetValue(HeightProperty, (double)top + 150);
-            this.SetValue(WidthProperty, (double)left + 150);
+            this.SetValue(HeightProperty, (double)_board.Limits.X + 40);
+            this.SetValue(WidthProperty, (double)_board.Limits.Y + 40);
 
-            canvasBorder.SetValue(HeightProperty, (double)top);
-            canvasBorder.SetValue(WidthProperty, (double)left);
+            canvasBorder.SetValue(HeightProperty, (double)_board.Limits.X);
+            canvasBorder.SetValue(WidthProperty, (double)_board.Limits.Y);
 
-            obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
+            _obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }
 
         /// <summary>
@@ -111,25 +109,27 @@ namespace Game_UI
         /// <param name="top"></param>
         /// <param name="left"></param>
         /// <param name="letter"></param>
-        private IBlock Placeblock(int top, int left, char letter)
+        private IBlock Placeblock(Area block)
         {
-            switch (letter)
+            switch (block.Shape)
             {
-                case 'c':
-                    player.SetPosition(top + 10, left + 20);
-                    pacmanSprite.SetValue(TopProperty, (double)top + 10);
-                    pacmanSprite.SetValue(LeftProperty, (double)left + 20);
-                    return new Blank(top, left, 20, false);
-                case '╔': return new PipeAngle(top, left, 20, true, 0);
-                case '╗': return new PipeAngle(top, left, 20, true, 90);
-                case '╝': return new PipeAngle(top, left, 20, true, 180);
-                case '╚': return new PipeAngle(top, left, 20, true, 270);
-                case '#': return new Obstacle(top, left, 20, true);
-                case '║': return new PipeStraight(top, left, 20, true, 0);
-                case '═': return new PipeStraight(top, left, 20, true, 90);
-                case '-': return new Blank(top, left, 20, true);
-                case '·': return new Dot(top, left, 20, false, board);
-                default: return new Blank(top, left, 20, false);
+                case 'c': return new Blank(block);
+
+                case '╔':
+                case '╗':
+                case '╝':
+                case '╚': return new PipeAngle(block);
+
+                case '#': return new Obstacle(block);
+
+                case '║':
+                case '═': return new PipeStraight(block);
+
+                case '-': return new Blank(block);
+
+                case '·': return new Dot(block);
+
+                default: return new Blank(block);
             }
         }
         #endregion
@@ -148,12 +148,12 @@ namespace Game_UI
                 Application.Current.Shutdown();
             }
             if (!DirectionType.ExistsWhitin(e.Key)) return;
-            if (!hasBegun
+            if (!_hasBegun
                 && (DirectionType.ToDirection(e.Key).Equals(DirectionType.Left.Direction)
                 || DirectionType.ToDirection(e.Key).Equals(DirectionType.Right.Direction)))
             {
-                hasBegun = true;
-                timer.Start();
+                _hasBegun = true;
+                _timer.Start();
                 SetDirection(DirectionType.ToDirection(e.Key));
             }
 
@@ -166,25 +166,25 @@ namespace Game_UI
         /// <param name="direction">the wanted </param>
         private void SetDirection(IDirection direction)
         {
-            IPlayer testPlayer = new Player
+            IPlayer testPlayer = new board_libs.Models.Player
             {
                 Direction = direction,
-                Position = new Position
+                Position = new board_libs.Models.Position
                 {
-                    X = player.Position.X,
-                    Y = player.Position.Y
+                    X = _player.Position.X,
+                    Y = _player.Position.Y
                 }
             };
-            if (!obstacles.Exists(x => x.WillCollide(testPlayer)))
+            if (!_obstacles.Exists(x => x.WillCollide(testPlayer)))
             {
-                player.SetDirection(direction);
-                pacmanSprite.rotate();
-                wantedDirection = DirectionType.StandStill.Direction;
-                tickRotateCounter = 0;
+                _player.SetDirection(direction);
+                _pacmanSprite.rotate();
+                _wantedDirection = DirectionType.StandStill.Direction;
+                _tickRotateCounter = 0;
             }
             else
             {
-                wantedDirection = direction;
+                _wantedDirection = direction;
             }
         }
 
@@ -194,24 +194,24 @@ namespace Game_UI
         /// <param name="p">the pressed key</param>
         private async void LetItGo(object sender, EventArgs e)
         {
-            var p = player;
+            var p = _player;
 
-            if (tickRotateCounter < 20 && !wantedDirection.Equals(DirectionType.StandStill.Direction))
+            if (_tickRotateCounter < 20 && !_wantedDirection.Equals(DirectionType.StandStill.Direction))
             {
-                tickRotateCounter++;
-                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(wantedDirection)));
+                _tickRotateCounter++;
+                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(_wantedDirection)));
             }
             if (CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
-                Move(p, DirectionType.ToKey(p.Direction));
-                if (tickCounter >= 20)
+                Move(p);
+                if (_tickMoveCounter >= 20)
                 {
-                    pacmanSprite.NominalAnimation();
-                    tickCounter = 0;
+                    _pacmanSprite.NominalAnimation();
+                    _tickMoveCounter = 0;
                 }
             }
             await Task.Run(() => playGround.Refresh());
-            tickCounter++;
+            _tickMoveCounter++;
         }
 
         /// <summary>
@@ -223,13 +223,17 @@ namespace Game_UI
         private bool CheckLimits(IPlayer p, Key key)
         {
             if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
-            || (p.Position.X > limits.X && key.Equals(DirectionType.Down.Key))
+            || (p.Position.X > _board.Limits.X && key.Equals(DirectionType.Down.Key))
             || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
-            || (p.Position.Y > limits.Y && key.Equals(DirectionType.Right.Key)))
+            || (p.Position.Y > _board.Limits.Y && key.Equals(DirectionType.Right.Key)))
             {
                 return false;
             }
-            return !obstacles.Exists(x => x.WillCollide(player));
+            return !_obstacles.Exists(x =>
+            {
+                var wlcld = x.WillCollide(p);
+                return wlcld;
+            });
         }
 
         /// <summary>
@@ -237,17 +241,17 @@ namespace Game_UI
         /// </summary>
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
-        private void Move(IPlayer p, Key key)
+        private void Move(IPlayer p)
         {
             p.Move();
             DoesWarp(p);
 
-            pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
-            pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
+            _pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
+            _pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
 
-            if (debbug != null)
+            if (_debbug != null)
             {
-                debbug.debbug.Text = $"X : {player.Position.X} \nY : {player.Position.Y}";
+                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y}";
             }
         }
 
@@ -257,13 +261,13 @@ namespace Game_UI
         /// <param name="p"></param>
         private void DoesWarp(IPlayer p)
         {
-            if (p.Position.Y > limits.Y)
+            if (p.Position.Y > _board.Limits.Y)
             {
                 p.SetPosition(p.Position.X, 0);
             }
             if (p.Position.Y < 0)
             {
-                p.SetPosition(p.Position.X, limits.Y);
+                p.SetPosition(p.Position.X, _board.Limits.Y);
             }
         }
         #endregion

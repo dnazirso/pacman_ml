@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}</ProjectGuid>
+    <ProjectGuid>{D293B926-728F-4114-8588-9C89CDDD0754}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ghost_libs</RootNamespace>
-    <AssemblyName>ghost_libs</AssemblyName>
+    <RootNamespace>utils_libs</RootNamespace>
+    <AssemblyName>utils_libs</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
@@ -39,21 +39,21 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Ghost.cs" />
-    <Compile Include="Position.cs" />
+    <Compile Include="Abstractions\IBlock.cs" />
+    <Compile Include="Abstractions\IDirection.cs" />
+    <Compile Include="Abstractions\IPlayer.cs" />
+    <Compile Include="Abstractions\IPosition.cs" />
+    <Compile Include="Directions\Down.cs" />
+    <Compile Include="Directions\Left.cs" />
+    <Compile Include="Directions\Right.cs" />
+    <Compile Include="Directions\StandStill.cs" />
+    <Compile Include="Directions\Up.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\pacman_libs\pacman_libs.csproj">
-      <Project>{A7B44F5C-20A7-4003-9369-EFB0FDF512E2}</Project>
-      <Name>pacman_libs</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\utils_libs\utils_libs.csproj">
-      <Project>{D293B926-728F-4114-8588-9C89CDDD0754}</Project>
-      <Name>utils_libs</Name>
-    </ProjectReference>
+    <Compile Include="Tools\DirectionType.cs" />
+    <Compile Include="Tools\EnumerationBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

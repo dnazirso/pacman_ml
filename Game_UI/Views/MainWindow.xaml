@@ -4,22 +4,10 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        
         KeyDown="WatchKeys"
-        Title="MainWindow" Height="450" Width="800" Background="Black" WindowStartupLocation="CenterScreen">
+        Title="MainWindow" Background="Black" WindowStartupLocation="CenterScreen">
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="51"/>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="395*"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-            <ColumnDefinition Width="100"/>
-        </Grid.ColumnDefinitions>
         <Border x:Name="canvasBorder"
-                Grid.Row="0" Grid.Column="0"
                 Height="300" Width="750"
                 Grid.ColumnSpan="4">
             <Canvas Name="playGround"/>

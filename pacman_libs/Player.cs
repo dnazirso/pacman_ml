@@ -1,9 +1,12 @@
-﻿namespace pacman_libs
+﻿using utils_libs.Abstractions;
+using utils_libs.Directions;
+
+namespace pacman_libs
 {
     public class Player : IPlayer
     {
         public IDirection Direction { get; set; }
-        public Position Position { get; set; }
+        public IPosition Position { get; set; }
         public Player()
         {
             this.Direction = new Left();

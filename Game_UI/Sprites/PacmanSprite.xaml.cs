@@ -1,9 +1,9 @@
 ﻿using Game_UI.Tools;
-using pacman_libs;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using System.Windows.Input;
 using System.Windows.Media;
+using utils_libs.Abstractions;
+using utils_libs.Tools;
 
 namespace Game_UI.Sprites
 {

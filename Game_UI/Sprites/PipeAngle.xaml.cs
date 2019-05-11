@@ -1,19 +1,7 @@
-﻿using Game_UI.Models;
-using pacman_libs;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using board_libs.Models;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using utils_libs.Abstractions;
 
 namespace Game_UI.Sprites
 {
@@ -23,21 +11,26 @@ namespace Game_UI.Sprites
     public partial class PipeAngle : UserControl, IBlock
     {
         Area area { get; set; }
-        public PipeAngle(int top, int left, int size, bool isBlocking, int angle)
+        public PipeAngle(Area area)
         {
             InitializeComponent();
-            SetArea(top, left, size, isBlocking);
+            this.area = area;
+            int angle;
+            switch (area.Shape)
+            {
+                case '╗': angle = 90; break;
+                case '╝': angle = 180; break;
+                case '╚': angle = 270; break;
+                case '╔':
+                default: angle = 0; break;
+            }
             pipe_obstacle.RenderTransform = new RotateTransform(angle, 10, 10);
+            SetValue(Canvas.LeftProperty, (double)area.Min.Y);
+            SetValue(Canvas.TopProperty, (double)area.Min.X);
+            SetValue(Canvas.WidthProperty, (double)area.Size);
+            SetValue(Canvas.HeightProperty, (double)area.Size);
         }
-        private void SetArea(int top, int left, int size, bool isblocking)
-        {
-            SetValue(Canvas.LeftProperty, (double)left);
-            SetValue(Canvas.TopProperty, (double)top);
-            SetValue(Canvas.WidthProperty, (double)size);
-            SetValue(Canvas.HeightProperty, (double)size);
-            area = Area.SetPositions(new Models.Position { X = (int)Canvas.GetTop(this), Y = (int)Canvas.GetLeft(this) }, size, isblocking);
-        }
-        public bool HasCollide(IPlayer p) => area.HasCollide(p.Position);
+        public bool Collide(IPlayer p) => area.Collide(p);
         public bool WillCollide(IPlayer p) => area.WillCollide(p);
     }
 }

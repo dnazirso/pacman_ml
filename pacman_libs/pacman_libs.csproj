@@ -41,18 +41,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IPlayer.cs" />
-    <Compile Include="IPosition.cs" />
-    <Compile Include="Right.cs" />
-    <Compile Include="IDirection.cs" />
     <Compile Include="Position.cs" />
-    <Compile Include="Left.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="StandStill.cs" />
-    <Compile Include="Down.cs" />
-    <Compile Include="Up.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Utils_libs\Utils_libs.csproj">
+      <Project>{D293B926-728F-4114-8588-9C89CDDD0754}</Project>
+      <Name>Utils_libs</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

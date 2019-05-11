@@ -1,6 +1,6 @@
-﻿using pacman_libs;
+﻿using utils_libs.Abstractions;
 
-namespace Game_UI.Models
+namespace ghost_libs
 {
     public struct Position : IPosition
     {

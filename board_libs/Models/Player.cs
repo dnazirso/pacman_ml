@@ -1,13 +1,13 @@
 ﻿using utils_libs.Abstractions;
 using utils_libs.Directions;
 
-namespace ghost_libs
+namespace board_libs.Models
 {
-    public class Ghost : IPlayer
+    public class Player : IPlayer
     {
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
-        public Ghost()
+        public Player()
         {
             this.Direction = new Left();
             this.Position = new Position();

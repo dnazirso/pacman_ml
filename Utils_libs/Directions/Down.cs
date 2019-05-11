@@ -1,8 +1,10 @@
-﻿namespace pacman_libs
+﻿using utils_libs.Abstractions;
+
+namespace utils_libs.Directions
 {
     public class Down : IDirection
     {
-        public Position Move(Position position)
+        public IPosition Move(IPosition position)
         {
             position.X++;
             return position;

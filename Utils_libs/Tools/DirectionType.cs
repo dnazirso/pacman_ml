@@ -1,13 +1,14 @@
-﻿using pacman_libs;
-using System.Linq;
+﻿using System.Linq;
 using System.Windows.Input;
+using utils_libs.Abstractions;
+using utils_libs.Directions;
 
-namespace Game_UI.Tools
+namespace utils_libs.Tools
 {
     /// <summary>
     /// Static class responsible of key-direction mapping and revers
     /// </summary>
-    internal class DirectionType : EnumerationBase
+    public class DirectionType : EnumerationBase
     {
         #region Enumerations
         public static readonly DirectionType StandStill = new DirectionType(Key.None, new StandStill(), 0);
@@ -22,14 +23,14 @@ namespace Game_UI.Tools
         /// <param name="Key"></param>
         /// <param name="Direction"></param>
         /// <param name="Angle"></param>
-        internal DirectionType(Key Key, IDirection Direction, int Angle) : base(Key, Direction, Angle) { }
+        public DirectionType(Key Key, IDirection Direction, int Angle) : base(Key, Direction, Angle) { }
 
         /// <summary>
         /// Checks if the given key is included to the enumerated ones
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        internal static bool ExistsWhitin(Key key) => GetAll<DirectionType>()
+        public static bool ExistsWhitin(Key key) => GetAll<DirectionType>()
             .ToList()
             .Exists(x => x.Key.Equals(key));
 
@@ -38,7 +39,7 @@ namespace Game_UI.Tools
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
-        internal static bool ExistsWhitin(IDirection direction) => GetAll<DirectionType>()
+        public static bool ExistsWhitin(IDirection direction) => GetAll<DirectionType>()
             .ToList()
             .Exists(x => x.Direction.Equals(direction));
 
@@ -47,7 +48,7 @@ namespace Game_UI.Tools
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        internal static IDirection ToDirection(Key key) => GetAll<DirectionType>()
+        public static IDirection ToDirection(Key key) => GetAll<DirectionType>()
             .Where(k => k.Key.Equals(key))
             .FirstOrDefault().Direction;
 
@@ -56,7 +57,7 @@ namespace Game_UI.Tools
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
-        internal static Key ToKey(IDirection direction) => GetAll<DirectionType>()
+        public static Key ToKey(IDirection direction) => GetAll<DirectionType>()
             .Where(k => k.Direction.GetType().Equals(direction.GetType()))
             .FirstOrDefault().Key;
 
@@ -65,7 +66,7 @@ namespace Game_UI.Tools
         /// </summary>
         /// <param name="direction"></param>
         /// <returns></returns>
-        internal static int ToAngle(IDirection direction) => GetAll<DirectionType>()
+        public static int ToAngle(IDirection direction) => GetAll<DirectionType>()
             .Where(k => k.Direction.GetType().Equals(direction.GetType()))
             .FirstOrDefault().Angle;
     }

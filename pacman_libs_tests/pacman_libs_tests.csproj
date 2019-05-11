@@ -65,6 +65,10 @@
       <Project>{A7B44F5C-20A7-4003-9369-EFB0FDF512E2}</Project>
       <Name>pacman_libs</Name>
     </ProjectReference>
+    <ProjectReference Include="..\utils_libs\utils_libs.csproj">
+      <Project>{D293B926-728F-4114-8588-9C89CDDD0754}</Project>
+      <Name>utils_libs</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -1,6 +1,6 @@
 ﻿using utils_libs.Abstractions;
 
-namespace pacman_libs
+namespace board_libs.Models
 {
     public struct Position : IPosition
     {

@@ -1,4 +1,5 @@
-﻿namespace pacman_libs
+﻿namespace utils_libs.Abstractions
+
 {
     public interface IPosition
     {

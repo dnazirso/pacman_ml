@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using board_libs.Models;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using utils_libs.Abstractions;
 
 namespace board_libs
 {
@@ -15,6 +17,18 @@ namespace board_libs
         /// Represents the maze structure
         /// </summary>
         public List<List<char>> Grid { get; private set; }
+
+        /// <summary>
+        /// Represents the maze structure
+        /// </summary>
+        public List<IBlock> Maze { get; private set; }
+
+        /// <summary>
+        /// Represents the farest corner position 
+        /// in order to know X max and Y max of the 
+        /// board admiting X min and Y min are 0,0
+        /// </summary>
+        public Position Limits { get; private set; }
 
         /// <summary>
         /// Constructor that check if the given path exists
@@ -35,6 +49,47 @@ namespace board_libs
         private void CreateBoard(string pathToFile)
         {
             Grid = File.ReadLines(pathToFile).Select(l => l.ToCharArray().ToList()).ToList();
+            DotsLeft = Grid.Sum(l => l.Sum(c => c.Equals('·') || c.Equals('.') ? 1 : 0));
+
+            Maze = new List<IBlock>();
+            int top = 0;
+            int left = 0;
+            foreach (List<char> line in Grid)
+            {
+                left = 0;
+                foreach (char c in line)
+                {
+                    Maze.Add(Placeblock(new Position { X = top, Y = left }, 20, c));
+                    left += 20;
+                }
+                top += 20;
+            }
+            Limits = new Position { X = top, Y = left };
+        }
+
+        /// <summary>
+        /// Place an Area on the Maze
+        /// </summary>
+        /// <param name="position"></param>
+        /// <param name="size"></param>
+        /// <param name="letter"></param>
+        /// <returns></returns>
+        private IBlock Placeblock(IPosition position, int size, char letter)
+        {
+            switch (letter)
+            {
+                //case '╔': return Area.CreateNew(position, size, false, letter);
+                //case '╗': return Area.CreateNew(position, size, false, letter);
+                //case '╝': return Area.CreateNew(position, size, false, letter);
+                //case '╚': return Area.CreateNew(position, size, false, letter);
+                //case '#': return Area.CreateNew(position, size, false, letter);
+                //case '║': return Area.CreateNew(position, size, false, letter);
+                //case '═': return Area.CreateNew(position, size, false, letter);
+                case 'c': return Area.CreateNew(position, size, false, letter);
+                case '·': return Area.CreateNew(position, size, false, letter);
+                case ' ': return Area.CreateNew(position, size, false, letter);
+                default: return Area.CreateNew(position, size, true, letter);
+            }
         }
     }
 }

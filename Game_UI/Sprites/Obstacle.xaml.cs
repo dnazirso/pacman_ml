@@ -1,7 +1,6 @@
-﻿using Game_UI.Models;
-using pacman_libs;
+﻿using board_libs.Models;
 using System.Windows.Controls;
-using System.Windows.Media;
+using utils_libs.Abstractions;
 
 namespace Game_UI.Sprites
 {
@@ -11,20 +10,16 @@ namespace Game_UI.Sprites
     public partial class Obstacle : UserControl, IBlock
     {
         Area area { get; set; }
-        public Obstacle(int top, int left, int size, bool isBlocking)
+        public Obstacle(Area area)
         {
             InitializeComponent();
-            SetArea(top, left, size, isBlocking);
+            this.area = area;
+            SetValue(Canvas.LeftProperty, (double)area.Min.Y);
+            SetValue(Canvas.TopProperty, (double)area.Min.X);
+            SetValue(Canvas.WidthProperty, (double)area.Size);
+            SetValue(Canvas.HeightProperty, (double)area.Size);
         }
-        private void SetArea(int top, int left, int size, bool isblocking)
-        {
-            SetValue(Canvas.LeftProperty, (double)left);
-            SetValue(Canvas.TopProperty, (double)top);
-            SetValue(Canvas.WidthProperty, (double)size);
-            SetValue(Canvas.HeightProperty, (double)size);
-            area = Area.SetPositions(new Models.Position { X = (int)Canvas.GetTop(this), Y = (int)Canvas.GetLeft(this) }, size, isblocking);
-        }
-        public bool HasCollide(IPlayer p) => area.HasCollide(p.Position);
+        public bool Collide(IPlayer p) => area.Collide(p);
         public bool WillCollide(IPlayer p) => area.WillCollide(p);
     }
 }

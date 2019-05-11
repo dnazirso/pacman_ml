@@ -1,11 +1,11 @@
-﻿using pacman_libs;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Windows.Input;
+using utils_libs.Abstractions;
 
-namespace Game_UI.Tools
+namespace utils_libs.Tools
 {
     /// <summary>
     /// Enumaration abstraction class instead of Enums

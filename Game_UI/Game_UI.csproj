@@ -57,8 +57,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Models\Area.cs" />
-    <Compile Include="Models\Position.cs" />
     <Compile Include="Sprites\Blank.xaml.cs">
       <DependentUpon>Blank.xaml</DependentUpon>
     </Compile>
@@ -68,7 +66,6 @@
     <Compile Include="Sprites\Dot.xaml.cs">
       <DependentUpon>Dot.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Sprites\IBlock.cs" />
     <Compile Include="Sprites\Obstacle.xaml.cs">
       <DependentUpon>Obstacle.xaml</DependentUpon>
     </Compile>
@@ -81,8 +78,6 @@
     <Compile Include="Sprites\PipeStraight.xaml.cs">
       <DependentUpon>PipeStraight.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Tools\DirectionType.cs" />
-    <Compile Include="Tools\EnumerationBase.cs" />
     <Compile Include="Tools\ExtentionMethods.cs" />
     <Compile Include="Views\StartWindow.xaml.cs">
       <DependentUpon>StartWindow.xaml</DependentUpon>
@@ -170,6 +165,10 @@
     <ProjectReference Include="..\pacman_libs\pacman_libs.csproj">
       <Project>{A7B44F5C-20A7-4003-9369-EFB0FDF512E2}</Project>
       <Name>pacman_libs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\utils_libs\utils_libs.csproj">
+      <Project>{D293B926-728F-4114-8588-9C89CDDD0754}</Project>
+      <Name>utils_libs</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
