@@ -1,8 +1,10 @@
 ﻿using board_libs.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Threading;
 using utils_libs.Abstractions;
 using utils_libs.Tools;
 
@@ -11,6 +13,8 @@ namespace board_libs
     public class Board
     {
         private int _tickRotateCounter;
+        DispatcherTimer _timer;
+        private bool _hasBegun;
 
         /// <summary>
         /// Dots in the maze
@@ -44,6 +48,36 @@ namespace board_libs
             {
                 CreateBoard(pathToFile);
             }
+        }
+
+        /// <summary>
+        /// Manage key pressed events
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="key"></param>
+        public void KeyPressedEvents(IPlayer p ,Key key)
+        {
+            if (!DirectionType.ExistsWhitin(key)) return;
+            if (!_hasBegun
+                && (DirectionType.ToDirection(key).Equals(DirectionType.Left.Direction)
+                || DirectionType.ToDirection(key).Equals(DirectionType.Right.Direction)))
+            {
+                _hasBegun = true;
+                _timer.Start();
+                SetDirection(p, DirectionType.ToDirection(key));
+            }
+
+            SetDirection(p, DirectionType.ToDirection(key));
+        }
+
+        /// <summary>
+        /// Initialize all needed fields and properties
+        /// </summary>
+        public void InitializeTimer(EventHandler eventHandler)
+        {
+            _timer = new DispatcherTimer();
+            _timer.Tick += eventHandler;
+            _timer.Interval = new TimeSpan(10000);
         }
 
         /// <summary>

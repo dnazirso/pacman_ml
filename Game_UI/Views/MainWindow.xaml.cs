@@ -2,15 +2,12 @@
 using board_libs.Models;
 using Game_UI.Sprites;
 using Game_UI.Tools;
-using pacman_libs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using utils_libs.Abstractions;
-using utils_libs.Tools;
 
 namespace Game_UI
 {
@@ -24,10 +21,7 @@ namespace Game_UI
         Board _board;
         PacmanSprite _pacmanSprite;
         List<IBlock> _obstacles;
-        DispatcherTimer _timer;
         DebbugPac _debbug;
-        bool _hasBegun;
-        int _tickRotateCounter;
         #endregion
 
         #region init
@@ -37,7 +31,6 @@ namespace Game_UI
         public MainWindow()
         {
             InitializeComponent();
-            InitializeTimer();
             InitializeMaze();
             InitializeDebbugMode();
         }
@@ -52,16 +45,6 @@ namespace Game_UI
         }
 
         /// <summary>
-        /// Initialize all needed fields and properties
-        /// </summary>
-        private void InitializeTimer()
-        {
-            _timer = new DispatcherTimer();
-            _timer.Tick += new EventHandler(LetItGo);
-            _timer.Interval = new TimeSpan(10000);
-        }
-
-        /// <summary>
         /// Initialize maze properties and elements such as 
         /// players, obstacles, border, limits and so forth.
         /// </summary>
@@ -69,6 +52,7 @@ namespace Game_UI
         {
             var resourceName = ".\\maze1.txt";
             _board = new Board(resourceName);
+            _board.InitializeTimer(LetItGo);
             _obstacles = new List<IBlock>();
             _player = new pacman_libs.Player();
 
@@ -139,19 +123,8 @@ namespace Game_UI
                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                 Application.Current.Shutdown();
             }
-            if (!DirectionType.ExistsWhitin(e.Key)) return;
-            if (!_hasBegun
-                && (DirectionType.ToDirection(e.Key).Equals(DirectionType.Left.Direction)
-                || DirectionType.ToDirection(e.Key).Equals(DirectionType.Right.Direction)))
-            {
-                _hasBegun = true;
-                _timer.Start();
-                _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
-            }
-
-            _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
+            _board.KeyPressedEvents(_player, e.Key);
         }
-
 
         /// <summary>
         /// Allow a player to move if possible
@@ -162,7 +135,6 @@ namespace Game_UI
             _board.RetrySetDirectionAndMove(_player);
             await Render(_player);
         }
-
 
         /// <summary>
         /// Update the position of a player
