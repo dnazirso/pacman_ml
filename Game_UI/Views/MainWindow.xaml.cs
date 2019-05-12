@@ -52,9 +52,9 @@ namespace Game_UI
         {
             var resourceName = ".\\maze1.txt";
             _board = new Board(resourceName);
-            _board.InitializeTimer(LetItGo);
             _obstacles = new List<IBlock>();
             _player = new pacman_libs.Player();
+            _board.InitializeTimer((sender, e) => LetItGo(_player));
 
             _pacmanSprite = new PacmanSprite(_player);
             playGround.Children.Add(_pacmanSprite);
@@ -130,10 +130,10 @@ namespace Game_UI
         /// Allow a player to move if possible
         /// </summary>
         /// <param name="p">the pressed key</param>
-        private async void LetItGo(object sender, EventArgs e)
+        private async void LetItGo(IPlayer p)
         {
-            _board.RetrySetDirectionAndMove(_player);
-            await Render(_player);
+            _board.RetrySetDirectionAndMove(p);
+            await Render(p);
         }
 
         /// <summary>
