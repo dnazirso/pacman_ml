@@ -8,7 +8,7 @@ namespace board_libs.Models
         public IPosition Max { get; }
         public int Size { get; }
         public bool IsBlocking { get; }
-        public char Shape { get; }
+        public char Shape { get; private set; }
 
         private Area(int xmin, int xmax, int ymin, int ymax, int size, bool isblocking, char shape)
         {
@@ -55,6 +55,10 @@ namespace board_libs.Models
 
         public bool Collide(IPlayer p)
         {
+            if (Shape.Equals('·'))
+            {
+                Shape = ' ';
+            }
             return (p.Position.X < Max.X + 10
              && p.Position.X > Min.X - 10
              && p.Position.Y < Max.Y + 10

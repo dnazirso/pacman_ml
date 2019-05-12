@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Windows.Input;
 using utils_libs.Abstractions;
+using utils_libs.Tools;
 
 namespace board_libs
 {
@@ -89,6 +91,41 @@ namespace board_libs
                 case '·': return Area.CreateNew(position, size, false, letter);
                 case ' ': return Area.CreateNew(position, size, false, letter);
                 default: return Area.CreateNew(position, size, true, letter);
+            }
+        }
+
+        /// <summary>
+        /// Check if the next step is possible depending on the direction taken
+        /// </summary>
+        /// <param name="p">the player</param>
+        /// <param name="key">the pressed key</param>
+        /// <returns>a boolean</returns>
+        public bool CheckLimits(IPlayer p, Key key)
+        {
+            if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
+            || (p.Position.X > Limits.X && key.Equals(DirectionType.Down.Key))
+            || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
+            || (p.Position.Y > Limits.Y && key.Equals(DirectionType.Right.Key)))
+            {
+                return false;
+            }
+            return !Maze.Exists(x => x.WillCollide(p));
+        }
+
+
+        /// <summary>
+        /// When reaching an edge, teleport to the other side
+        /// </summary>
+        /// <param name="p"></param>
+        public void DoesWarp(IPlayer p)
+        {
+            if (p.Position.Y > Limits.Y)
+            {
+                p.SetPosition(p.Position.X, 0);
+            }
+            if (p.Position.Y < 0)
+            {
+                p.SetPosition(p.Position.X, Limits.Y);
             }
         }
     }

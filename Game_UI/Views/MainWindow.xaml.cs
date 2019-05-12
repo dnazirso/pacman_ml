@@ -25,7 +25,6 @@ namespace Game_UI
         PacmanSprite _pacmanSprite;
         IDirection _wantedDirection;
         List<IBlock> _obstacles;
-        List<IBlock> _dots;
         DispatcherTimer _timer;
         DebbugPac _debbug;
         bool _hasBegun;
@@ -73,7 +72,6 @@ namespace Game_UI
             var resourceName = ".\\maze1.txt";
             _board = new Board(resourceName);
             _obstacles = new List<IBlock>();
-            _dots = new List<IBlock>();
             _player = new pacman_libs.Player();
 
             _pacmanSprite = new PacmanSprite(_player);
@@ -85,12 +83,6 @@ namespace Game_UI
                 if (block.Shape.Equals('c'))
                 {
                     _player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
-                    _pacmanSprite.SetValue(TopProperty, (double)_player.Position.X);
-                    _pacmanSprite.SetValue(LeftProperty, (double)_player.Position.Y);
-                }
-                if (block.Shape.Equals('·'))
-                {
-                    _dots.Add(placedBlock);
                 }
                 _obstacles.Add(placedBlock);
             }
@@ -99,6 +91,8 @@ namespace Game_UI
 
             canvasBorder.SetValue(HeightProperty, (double)_board.Limits.X);
             canvasBorder.SetValue(WidthProperty, (double)_board.Limits.Y);
+
+            _pacmanSprite.UpdatePosition();
 
             _obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }
@@ -154,30 +148,30 @@ namespace Game_UI
             {
                 _hasBegun = true;
                 _timer.Start();
-                SetDirection(DirectionType.ToDirection(e.Key));
+                SetDirection(_player, DirectionType.ToDirection(e.Key));
             }
 
-            SetDirection(DirectionType.ToDirection(e.Key));
+            SetDirection(_player, DirectionType.ToDirection(e.Key));
         }
 
         /// <summary>
         /// Set the direction to the player
         /// </summary>
         /// <param name="direction">the wanted </param>
-        private void SetDirection(IDirection direction)
+        private void SetDirection(IPlayer p, IDirection direction)
         {
             IPlayer testPlayer = new board_libs.Models.Player
             {
                 Direction = direction,
                 Position = new board_libs.Models.Position
                 {
-                    X = _player.Position.X,
-                    Y = _player.Position.Y
+                    X = p.Position.X,
+                    Y = p.Position.Y
                 }
             };
             if (!_obstacles.Exists(x => x.WillCollide(testPlayer)))
             {
-                _player.SetDirection(direction);
+                p.SetDirection(direction);
                 _pacmanSprite.rotate();
                 _wantedDirection = DirectionType.StandStill.Direction;
                 _tickRotateCounter = 0;
@@ -194,14 +188,17 @@ namespace Game_UI
         /// <param name="p">the pressed key</param>
         private async void LetItGo(object sender, EventArgs e)
         {
-            var p = _player;
+            await LetSGo(_player);
+        }
 
+        private async Task LetSGo(IPlayer p)
+        {
             if (_tickRotateCounter < 20 && !_wantedDirection.Equals(DirectionType.StandStill.Direction))
             {
                 _tickRotateCounter++;
-                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(_wantedDirection)));
+                SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(_wantedDirection)));
             }
-            if (CheckLimits(p, DirectionType.ToKey(p.Direction)))
+            if (_board.CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
                 Move(p);
                 if (_tickMoveCounter >= 20)
@@ -215,28 +212,6 @@ namespace Game_UI
         }
 
         /// <summary>
-        /// Check if the next step is possible depending on the direction taken
-        /// </summary>
-        /// <param name="p">the player</param>
-        /// <param name="key">the pressed key</param>
-        /// <returns>a boolean</returns>
-        private bool CheckLimits(IPlayer p, Key key)
-        {
-            if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
-            || (p.Position.X > _board.Limits.X && key.Equals(DirectionType.Down.Key))
-            || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
-            || (p.Position.Y > _board.Limits.Y && key.Equals(DirectionType.Right.Key)))
-            {
-                return false;
-            }
-            return !_obstacles.Exists(x =>
-            {
-                var wlcld = x.WillCollide(p);
-                return wlcld;
-            });
-        }
-
-        /// <summary>
         /// Update the position of a player
         /// </summary>
         /// <param name="p">the player</param>
@@ -244,30 +219,13 @@ namespace Game_UI
         private void Move(IPlayer p)
         {
             p.Move();
-            DoesWarp(p);
-
-            _pacmanSprite.SetValue(LeftProperty, (double)p.Position.Y);
-            _pacmanSprite.SetValue(TopProperty, (double)p.Position.X);
+            _board.DoesWarp(p);
+ 
+            _pacmanSprite.UpdatePosition();
 
             if (_debbug != null)
             {
                 _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y}";
-            }
-        }
-
-        /// <summary>
-        /// When reaching an edge, teleport to the other side
-        /// </summary>
-        /// <param name="p"></param>
-        private void DoesWarp(IPlayer p)
-        {
-            if (p.Position.Y > _board.Limits.Y)
-            {
-                p.SetPosition(p.Position.X, 0);
-            }
-            if (p.Position.Y < 0)
-            {
-                p.SetPosition(p.Position.X, _board.Limits.Y);
             }
         }
         #endregion

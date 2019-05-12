@@ -20,12 +20,16 @@ namespace Game_UI.Sprites
             this.player = player;
             SetValue(WidthProperty, (double)40);
             SetValue(HeightProperty, (double)40);
-            SetValue(Canvas.LeftProperty, (double)0);
-            SetValue(Canvas.TopProperty, (double)0);
 
             InitializeComponent();
 
             RenderTransform = new TranslateTransform(-20, -20);
+        }
+
+        public void UpdatePosition()
+        {
+            SetValue(Canvas.TopProperty, (double)player.Position.X);
+            SetValue(Canvas.LeftProperty, (double)player.Position.Y);
         }
 
         public async void NominalAnimation()
