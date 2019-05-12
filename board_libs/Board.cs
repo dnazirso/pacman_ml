@@ -80,13 +80,6 @@ namespace board_libs
         {
             switch (letter)
             {
-                //case '╔': return Area.CreateNew(position, size, false, letter);
-                //case '╗': return Area.CreateNew(position, size, false, letter);
-                //case '╝': return Area.CreateNew(position, size, false, letter);
-                //case '╚': return Area.CreateNew(position, size, false, letter);
-                //case '#': return Area.CreateNew(position, size, false, letter);
-                //case '║': return Area.CreateNew(position, size, false, letter);
-                //case '═': return Area.CreateNew(position, size, false, letter);
                 case 'c': return Area.CreateNew(position, size, false, letter);
                 case '·': return Area.CreateNew(position, size, false, letter);
                 case ' ': return Area.CreateNew(position, size, false, letter);

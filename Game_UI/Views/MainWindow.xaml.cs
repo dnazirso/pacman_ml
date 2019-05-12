@@ -148,30 +148,30 @@ namespace Game_UI
             {
                 _hasBegun = true;
                 _timer.Start();
-                SetDirection(_player, DirectionType.ToDirection(e.Key));
+                SetDirection(DirectionType.ToDirection(e.Key));
             }
 
-            SetDirection(_player, DirectionType.ToDirection(e.Key));
+            SetDirection(DirectionType.ToDirection(e.Key));
         }
 
         /// <summary>
         /// Set the direction to the player
         /// </summary>
         /// <param name="direction">the wanted </param>
-        private void SetDirection(IPlayer p, IDirection direction)
+        private void SetDirection(IDirection direction)
         {
             IPlayer testPlayer = new board_libs.Models.Player
             {
                 Direction = direction,
                 Position = new board_libs.Models.Position
                 {
-                    X = p.Position.X,
-                    Y = p.Position.Y
+                    X = _player.Position.X,
+                    Y = _player.Position.Y
                 }
             };
             if (!_obstacles.Exists(x => x.WillCollide(testPlayer)))
             {
-                p.SetDirection(direction);
+                _player.SetDirection(direction);
                 _pacmanSprite.rotate();
                 _wantedDirection = DirectionType.StandStill.Direction;
                 _tickRotateCounter = 0;
@@ -196,7 +196,7 @@ namespace Game_UI
             if (_tickRotateCounter < 20 && !_wantedDirection.Equals(DirectionType.StandStill.Direction))
             {
                 _tickRotateCounter++;
-                SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(_wantedDirection)));
+                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(_wantedDirection)));
             }
             if (_board.CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
