@@ -173,12 +173,12 @@ namespace Game_UI
             {
                 _player.SetDirection(direction);
                 _pacmanSprite.rotate();
-                _wantedDirection = DirectionType.StandStill.Direction;
+                _player.UnsetWantedDirection();
                 _tickRotateCounter = 0;
             }
             else
             {
-                _wantedDirection = direction;
+                _player.SetWantedDirection(direction);
             }
         }
 
@@ -193,19 +193,18 @@ namespace Game_UI
 
         private async Task LetSGo(IPlayer p)
         {
-            if (_tickRotateCounter < 20 && !_wantedDirection.Equals(DirectionType.StandStill.Direction))
+            if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
             {
                 _tickRotateCounter++;
-                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(_wantedDirection)));
+                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
             }
             if (_board.CheckLimits(p, DirectionType.ToKey(p.Direction)))
             {
-                Move(p);
-                if (_tickMoveCounter >= 20)
-                {
-                    _pacmanSprite.NominalAnimation();
-                    _tickMoveCounter = 0;
-                }
+                p.Move();
+                _board.DoesWarp(p);
+
+                Render(p);
+
             }
             await Task.Run(() => playGround.Refresh());
             _tickMoveCounter++;
@@ -216,12 +215,15 @@ namespace Game_UI
         /// </summary>
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
-        private void Move(IPlayer p)
+        private void Render(IPlayer p)
         {
-            p.Move();
-            _board.DoesWarp(p);
- 
             _pacmanSprite.UpdatePosition();
+
+            if (_tickMoveCounter >= 20)
+            {
+                _pacmanSprite.NominalAnimation();
+                _tickMoveCounter = 0;
+            }
 
             if (_debbug != null)
             {
