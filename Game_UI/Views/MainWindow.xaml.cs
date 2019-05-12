@@ -146,38 +146,12 @@ namespace Game_UI
             {
                 _hasBegun = true;
                 _timer.Start();
-                SetDirection(_player, DirectionType.ToDirection(e.Key));
+                _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
             }
 
-            SetDirection(_player, DirectionType.ToDirection(e.Key));
+            _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
         }
 
-        /// <summary>
-        /// Set the direction to the player
-        /// </summary>
-        /// <param name="direction">the wanted </param>
-        private void SetDirection(IPlayer p, IDirection direction)
-        {
-            IPlayer testPlayer = new board_libs.Models.Player
-            {
-                Direction = direction,
-                Position = new board_libs.Models.Position
-                {
-                    X = p.Position.X,
-                    Y = p.Position.Y
-                }
-            };
-            if (!_obstacles.Exists(x => x.WillCollide(testPlayer)))
-            {
-                p.SetDirection(direction);
-                p.UnsetWantedDirection();
-                _tickRotateCounter = 0;
-            }
-            else
-            {
-                p.SetWantedDirection(direction);
-            }
-        }
 
         /// <summary>
         /// Allow a player to move if possible
@@ -185,20 +159,10 @@ namespace Game_UI
         /// <param name="p">the pressed key</param>
         private async void LetItGo(object sender, EventArgs e)
         {
-            LetSGo(_player);
+            _board.RetrySetDirectionAndMove(_player);
             await Render(_player);
         }
 
-        private void LetSGo(IPlayer p)
-        {
-            if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
-            {
-                _tickRotateCounter++;
-                SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
-            }
-
-            _board.CheckLimitsAndMove(p, DirectionType.ToKey(p.Direction));
-        }
 
         /// <summary>
         /// Update the position of a player

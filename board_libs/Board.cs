@@ -10,6 +10,8 @@ namespace board_libs
 {
     public class Board
     {
+        private int _tickRotateCounter;
+
         /// <summary>
         /// Dots in the maze
         /// </summary>
@@ -87,6 +89,47 @@ namespace board_libs
             }
         }
 
+        /// <summary>
+        /// Set the direction to the player
+        /// </summary>
+        /// <param name="direction">the wanted </param>
+        public void SetDirection(IPlayer p, IDirection direction)
+        {
+            IPlayer testPlayer = new Player
+            {
+                Direction = direction,
+                Position = new Position
+                {
+                    X = p.Position.X,
+                    Y = p.Position.Y
+                }
+            };
+            if (!Maze.Exists(x => x.WillCollide(testPlayer)))
+            {
+                p.SetDirection(direction);
+                p.UnsetWantedDirection();
+                _tickRotateCounter = 0;
+            }
+            else
+            {
+                p.SetWantedDirection(direction);
+            }
+        }
+
+        /// <summary>
+        /// Retry to SetDirection if failed before and move
+        /// </summary>
+        /// <param name="p"></param>
+        public void RetrySetDirectionAndMove(IPlayer p)
+        {
+            if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
+            {
+                _tickRotateCounter++;
+                SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
+            }
+
+            CheckLimitsAndMove(p, DirectionType.ToKey(p.Direction));
+        }
         /// <summary>
         /// Check if the next step is possible depending on the direction taken
         /// </summary>
