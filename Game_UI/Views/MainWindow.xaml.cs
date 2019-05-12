@@ -1,8 +1,6 @@
 ﻿using board_libs;
-using board_libs.Models;
 using Game_UI.Sprites;
 using Game_UI.Tools;
-using pacman_libs;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -27,7 +25,6 @@ namespace Game_UI
         DispatcherTimer _timer;
         DebbugPac _debbug;
         bool _hasBegun;
-        int _tickRotateCounter;
         #endregion
 
         #region init
@@ -75,7 +72,7 @@ namespace Game_UI
             _pacmanSprite = new PacmanSprite(_player);
             playGround.Children.Add(_pacmanSprite);
 
-            foreach (Area block in _board.Maze)
+            foreach (board_libs.Models.Area block in _board.Maze)
             {
                 var placedBlock = Placeblock(block);
                 if (block.Shape.Equals('c'))
@@ -101,7 +98,7 @@ namespace Game_UI
         /// <param name="top"></param>
         /// <param name="left"></param>
         /// <param name="letter"></param>
-        private IBlock Placeblock(Area block)
+        private IBlock Placeblock(board_libs.Models.Area block)
         {
             switch (block.Shape)
             {
@@ -152,7 +149,6 @@ namespace Game_UI
             _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
         }
 
-
         /// <summary>
         /// Allow a player to move if possible
         /// </summary>
@@ -162,7 +158,6 @@ namespace Game_UI
             _board.RetrySetDirectionAndMove(_player);
             await Render(_player);
         }
-
 
         /// <summary>
         /// Update the position of a player
