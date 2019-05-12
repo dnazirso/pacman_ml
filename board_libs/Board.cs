@@ -12,7 +12,6 @@ namespace board_libs
 {
     public class Board
     {
-        private int _tickRotateCounter;
         DispatcherTimer _timer;
         private bool _hasBegun;
 
@@ -55,7 +54,7 @@ namespace board_libs
         /// </summary>
         /// <param name="p"></param>
         /// <param name="key"></param>
-        public void KeyPressedEvents(IPlayer p ,Key key)
+        public void KeyPressedEvents(IPlayer p, Key key)
         {
             if (!DirectionType.ExistsWhitin(key)) return;
             if (!_hasBegun
@@ -142,7 +141,7 @@ namespace board_libs
             {
                 p.SetDirection(direction);
                 p.UnsetWantedDirection();
-                _tickRotateCounter = 0;
+                p.TickCounter = 0;
             }
             else
             {
@@ -156,9 +155,9 @@ namespace board_libs
         /// <param name="p"></param>
         public void RetrySetDirectionAndMove(IPlayer p)
         {
-            if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
+            if (p.TickCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
             {
-                _tickRotateCounter++;
+                p.TickCounter++;
                 SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
             }
 

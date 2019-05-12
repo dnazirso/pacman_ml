@@ -9,6 +9,7 @@ namespace pacman_libs
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
         public IDirection WantedDirection { get; set; }
+        public int TickCounter { get; set; }
 
         public Player()
         {

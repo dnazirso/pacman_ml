@@ -5,6 +5,7 @@
         IDirection Direction { get; set; }
         IDirection WantedDirection { get; set; }
         IPosition Position { get; set; }
+        int TickCounter { get; set; }
 
         void Move();
         void SetDirection(IDirection direction);
