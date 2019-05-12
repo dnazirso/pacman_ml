@@ -23,12 +23,10 @@ namespace Game_UI
         IPlayer _player;
         Board _board;
         PacmanSprite _pacmanSprite;
-        IDirection _wantedDirection;
         List<IBlock> _obstacles;
         DispatcherTimer _timer;
         DebbugPac _debbug;
         bool _hasBegun;
-        int _tickMoveCounter;
         int _tickRotateCounter;
         #endregion
 
@@ -172,7 +170,6 @@ namespace Game_UI
             if (!_obstacles.Exists(x => x.WillCollide(testPlayer)))
             {
                 _player.SetDirection(direction);
-                _pacmanSprite.rotate();
                 _player.UnsetWantedDirection();
                 _tickRotateCounter = 0;
             }
@@ -188,26 +185,19 @@ namespace Game_UI
         /// <param name="p">the pressed key</param>
         private async void LetItGo(object sender, EventArgs e)
         {
-            await LetSGo(_player);
+            LetSGo(_player);
+            await Render(_player);
         }
 
-        private async Task LetSGo(IPlayer p)
+        private void LetSGo(IPlayer p)
         {
             if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
             {
                 _tickRotateCounter++;
                 SetDirection(DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
             }
-            if (_board.CheckLimits(p, DirectionType.ToKey(p.Direction)))
-            {
-                p.Move();
-                _board.DoesWarp(p);
 
-                Render(p);
-
-            }
-            await Task.Run(() => playGround.Refresh());
-            _tickMoveCounter++;
+            _board.CheckLimitsAndMove(p, DirectionType.ToKey(p.Direction));
         }
 
         /// <summary>
@@ -215,20 +205,19 @@ namespace Game_UI
         /// </summary>
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
-        private void Render(IPlayer p)
+        private async Task Render(IPlayer p)
         {
-            _pacmanSprite.UpdatePosition();
-
-            if (_tickMoveCounter >= 20)
+            if (p.Position.X != _pacmanSprite.lastPosition.X || p.Position.Y != _pacmanSprite.lastPosition.Y)
             {
-                _pacmanSprite.NominalAnimation();
-                _tickMoveCounter = 0;
+                _pacmanSprite.UpdatePosition();
             }
 
             if (_debbug != null)
             {
                 _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y}";
             }
+
+            await Task.Run(() => playGround.Refresh());
         }
         #endregion
     }

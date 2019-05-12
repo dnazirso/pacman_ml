@@ -93,16 +93,17 @@ namespace board_libs
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
         /// <returns>a boolean</returns>
-        public bool CheckLimits(IPlayer p, Key key)
+        public void CheckLimitsAndMove(IPlayer p, Key key)
         {
-            if ((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
+            if (!((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
             || (p.Position.X > Limits.X && key.Equals(DirectionType.Down.Key))
             || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
             || (p.Position.Y > Limits.Y && key.Equals(DirectionType.Right.Key)))
+            && !Maze.Exists(x => x.WillCollide(p)))
             {
-                return false;
+                p.Move();
+                DoesWarp(p);
             }
-            return !Maze.Exists(x => x.WillCollide(p));
         }
 
 

@@ -12,7 +12,7 @@ namespace pacman_libs
 
         public Player()
         {
-            this.Direction = new Left();
+            this.Direction = new Right();
             this.Position = new Position();
         }
         public void Move() => Position = Direction.Move(Position);

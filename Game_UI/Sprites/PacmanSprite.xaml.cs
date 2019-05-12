@@ -12,7 +12,9 @@ namespace Game_UI.Sprites
     /// </summary>
     public partial class PacmanSprite : UserControl
     {
-        bool toggle = false;
+        bool _toggle;
+        int _tickMoveCounter;
+        public IPosition lastPosition { get; private set; }
 
         IPlayer player { get; }
         public PacmanSprite(IPlayer player)
@@ -28,13 +30,22 @@ namespace Game_UI.Sprites
 
         public void UpdatePosition()
         {
+            lastPosition = new Position { X = player.Position.X, Y = player.Position.Y };
+            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(player.Direction), 10, 10);
             SetValue(Canvas.TopProperty, (double)player.Position.X);
             SetValue(Canvas.LeftProperty, (double)player.Position.Y);
+
+            _tickMoveCounter++;
+            if (_tickMoveCounter >= 20)
+            {
+                NominalAnimation();
+                _tickMoveCounter = 0;
+            }
         }
 
         public async void NominalAnimation()
         {
-            if (toggle)
+            if (_toggle)
             {
                 pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(Properties.Resources.mouthOpen));
             }
@@ -42,13 +53,7 @@ namespace Game_UI.Sprites
             {
                 pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(Properties.Resources.mouthClose));
             }
-            toggle = !toggle;
-            await Task.Run(() => pacBody.Refresh());
-        }
-
-        public async void rotate()
-        {
-            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(player.Direction), 10, 10);
+            _toggle = !_toggle;
             await Task.Run(() => pacBody.Refresh());
         }
     }
