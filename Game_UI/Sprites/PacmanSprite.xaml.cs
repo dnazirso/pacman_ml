@@ -36,7 +36,7 @@ namespace Game_UI.Sprites
             SetValue(Canvas.LeftProperty, (double)player.Position.Y);
 
             _tickMoveCounter++;
-            if (_tickMoveCounter >= 20)
+            if (_tickMoveCounter >= 5)
             {
                 NominalAnimation();
                 _tickMoveCounter = 0;

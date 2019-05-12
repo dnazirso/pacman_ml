@@ -146,36 +146,36 @@ namespace Game_UI
             {
                 _hasBegun = true;
                 _timer.Start();
-                SetDirection(DirectionType.ToDirection(e.Key));
+                SetDirection(_player, DirectionType.ToDirection(e.Key));
             }
 
-            SetDirection(DirectionType.ToDirection(e.Key));
+            SetDirection(_player, DirectionType.ToDirection(e.Key));
         }
 
         /// <summary>
         /// Set the direction to the player
         /// </summary>
         /// <param name="direction">the wanted </param>
-        private void SetDirection(IDirection direction)
+        private void SetDirection(IPlayer p, IDirection direction)
         {
             IPlayer testPlayer = new board_libs.Models.Player
             {
                 Direction = direction,
                 Position = new board_libs.Models.Position
                 {
-                    X = _player.Position.X,
-                    Y = _player.Position.Y
+                    X = p.Position.X,
+                    Y = p.Position.Y
                 }
             };
             if (!_obstacles.Exists(x => x.WillCollide(testPlayer)))
             {
-                _player.SetDirection(direction);
-                _player.UnsetWantedDirection();
+                p.SetDirection(direction);
+                p.UnsetWantedDirection();
                 _tickRotateCounter = 0;
             }
             else
             {
-                _player.SetWantedDirection(direction);
+                p.SetWantedDirection(direction);
             }
         }
 
@@ -194,7 +194,7 @@ namespace Game_UI
             if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
             {
                 _tickRotateCounter++;
-                SetDirection(DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
+                SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
             }
 
             _board.CheckLimitsAndMove(p, DirectionType.ToKey(p.Direction));
