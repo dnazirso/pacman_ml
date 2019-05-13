@@ -18,7 +18,7 @@ namespace board_libs
         /// <summary>
         /// Dots in the maze
         /// </summary>
-        public int DotsLeft { get; set; }
+        public int DotsLeft { get; private set; }
 
         /// <summary>
         /// Represents the maze structure
@@ -28,7 +28,7 @@ namespace board_libs
         /// <summary>
         /// Represents the maze structure
         /// </summary>
-        public List<IBlock> Maze { get; private set; }
+        public List<Area> Maze { get; private set; }
 
         /// <summary>
         /// Represents the farest corner position 
@@ -86,9 +86,8 @@ namespace board_libs
         private void CreateBoard(string pathToFile)
         {
             Grid = File.ReadLines(pathToFile).Select(l => l.ToCharArray().ToList()).ToList();
-            DotsLeft = Grid.Sum(l => l.Sum(c => c.Equals('·') || c.Equals('.') ? 1 : 0));
 
-            Maze = new List<IBlock>();
+            Maze = new List<Area>();
             int top = 0;
             int left = 0;
             foreach (List<char> line in Grid)
@@ -96,6 +95,7 @@ namespace board_libs
                 left = 0;
                 foreach (char c in line)
                 {
+                    if (c.Equals('·')) DotsLeft++;
                     Maze.Add(Placeblock(new Position { X = top, Y = left }, 20, c));
                     left += 20;
                 }
@@ -111,7 +111,7 @@ namespace board_libs
         /// <param name="size"></param>
         /// <param name="letter"></param>
         /// <returns></returns>
-        private IBlock Placeblock(IPosition position, int size, char letter)
+        private Area Placeblock(IPosition position, int size, char letter)
         {
             switch (letter)
             {
@@ -181,7 +181,6 @@ namespace board_libs
                 DoesWarp(p);
             }
         }
-
 
         /// <summary>
         /// When reaching an edge, teleport to the other side

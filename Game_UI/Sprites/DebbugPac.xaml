@@ -6,5 +6,5 @@
              xmlns:local="clr-namespace:Game_UI.Sprites"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="35"/>
+    <TextBox Name="debbug" Background="Transparent" Foreground="White" TextWrapping="Wrap" Canvas.Left="33" Canvas.Top="29" Width="103" Height="54"/>
 </UserControl>

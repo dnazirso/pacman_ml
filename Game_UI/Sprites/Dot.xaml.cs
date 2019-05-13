@@ -1,5 +1,7 @@
 ﻿using board_libs;
 using board_libs.Models;
+using Game_UI.Tools;
+using System.Threading.Tasks;
 using System.Windows.Controls;
 using utils_libs.Abstractions;
 
@@ -29,11 +31,12 @@ namespace Game_UI.Sprites
             };
             return area.WillCollide(p);
         }
-        public void EreaseDot()
+        public async void EreaseDot()
         {
             if (dot.Children.Count > 0)
             {
                 dot.Children.Remove(dott);
+                await Task.Run(() => dot.Refresh());
             }
         }
     }

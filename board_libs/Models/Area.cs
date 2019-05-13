@@ -50,19 +50,23 @@ namespace board_libs.Models
             {
                 return false;
             }
-            return Collide(p);
-        }
-
-        public bool Collide(IPlayer p)
-        {
-            if (Shape.Equals('·'))
-            {
-                Shape = ' ';
-            }
             return (p.Position.X < Max.X + 10
              && p.Position.X > Min.X - 10
              && p.Position.Y < Max.Y + 10
              && p.Position.Y > Min.Y - 10);
+        }
+
+        public bool Collide(IPlayer p)
+        {
+            bool collide = (p.Position.X < Max.X
+             && p.Position.X > Min.X
+             && p.Position.Y < Max.Y
+             && p.Position.Y > Min.Y);
+            if (Shape.Equals('·') && collide)
+            {
+                Shape = ' ';
+            }
+            return collide;
         }
     }
 }

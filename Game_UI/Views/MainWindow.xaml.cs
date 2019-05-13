@@ -142,6 +142,8 @@ namespace Game_UI
         /// <param name="key">the pressed key</param>
         private async Task Render(IPlayer p)
         {
+            _obstacles.ForEach(x => x.WillCollide(p));
+
             if (p.Position.X != _pacmanSprite.lastPosition.X || p.Position.Y != _pacmanSprite.lastPosition.Y)
             {
                 _pacmanSprite.UpdatePosition();
@@ -149,7 +151,7 @@ namespace Game_UI
 
             if (_debbug != null)
             {
-                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y}";
+                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y} \nDots Left : {_board.DotsLeft}";
             }
 
             await Task.Run(() => playGround.Refresh());
