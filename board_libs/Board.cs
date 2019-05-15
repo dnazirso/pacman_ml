@@ -1,10 +1,8 @@
 ﻿using board_libs.Models;
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
-using System.Windows.Threading;
 using utils_libs.Abstractions;
 using utils_libs.Tools;
 
@@ -57,6 +55,11 @@ namespace board_libs
             SetDirection(p, DirectionType.ToDirection(key));
         }
 
+        /// <summary>
+        /// First keyboard event that lauch the game
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="key"></param>
         public void FirstEntry(IPlayer p, Key key)
         {
             if ((DirectionType.ToDirection(key).Equals(DirectionType.Left.Direction)

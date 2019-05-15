@@ -65,6 +65,7 @@ namespace board_libs.Models
             if (Shape.Equals('·') && collide)
             {
                 Shape = ' ';
+                p.DotsEaten++;
             }
             return collide;
         }

@@ -162,7 +162,7 @@ namespace Game_UI
 
             if (_debbug != null)
             {
-                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y} \nDots Left : {_board.DotsLeft}";
+                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y} \nLeft:{_board.DotsLeft}|Eaten:{p.DotsEaten}";
             }
 
             await Task.Run(() => playGround.Refresh());

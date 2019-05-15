@@ -10,6 +10,7 @@ namespace board_libs.Models
         public IPosition Position { get; set; }
         public IDirection WantedDirection { get; set; }
         public int TickCounter { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public int DotsEaten { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         public Player()
         {

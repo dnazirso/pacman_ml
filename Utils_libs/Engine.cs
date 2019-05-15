@@ -3,8 +3,14 @@ using System.Windows.Threading;
 
 namespace utils_libs
 {
+    /// <summary>
+    /// the game general event handler and timer
+    /// </summary>
     public class Engine
     {
+        /// <summary>
+        /// timer ruling the game ticks
+        /// </summary>
         private DispatcherTimer _timer;
         public bool HasBegun { get; set; }
 

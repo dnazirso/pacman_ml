@@ -9,6 +9,7 @@ namespace ghost_libs
         public IPosition Position { get; set; }
         public IDirection WantedDirection { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public int TickCounter { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public int DotsEaten { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
 
         public Ghost()
         {
