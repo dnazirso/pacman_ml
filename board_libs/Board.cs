@@ -12,9 +12,6 @@ namespace board_libs
 {
     public class Board
     {
-        DispatcherTimer _timer;
-        private bool _hasBegun;
-
         /// <summary>
         /// Dots in the maze
         /// </summary>
@@ -57,26 +54,16 @@ namespace board_libs
         public void KeyPressedEvents(IPlayer p, Key key)
         {
             if (!DirectionType.ExistsWhitin(key)) return;
-            if (!_hasBegun
-                && (DirectionType.ToDirection(key).Equals(DirectionType.Left.Direction)
-                || DirectionType.ToDirection(key).Equals(DirectionType.Right.Direction)))
-            {
-                _hasBegun = true;
-                _timer.Start();
-                SetDirection(p, DirectionType.ToDirection(key));
-            }
-
             SetDirection(p, DirectionType.ToDirection(key));
         }
 
-        /// <summary>
-        /// Initialize all needed fields and properties
-        /// </summary>
-        public void InitializeTimer(EventHandler eventHandler)
+        public void FirstEntry(IPlayer p, Key key)
         {
-            _timer = new DispatcherTimer();
-            _timer.Tick += eventHandler;
-            _timer.Interval = new TimeSpan(10000);
+            if ((DirectionType.ToDirection(key).Equals(DirectionType.Left.Direction)
+                || DirectionType.ToDirection(key).Equals(DirectionType.Right.Direction)))
+            {
+                SetDirection(p, DirectionType.ToDirection(key));
+            }
         }
 
         /// <summary>

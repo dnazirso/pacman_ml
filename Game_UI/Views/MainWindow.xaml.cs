@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
+using utils_libs;
 using utils_libs.Abstractions;
 
 namespace Game_UI
@@ -16,6 +17,7 @@ namespace Game_UI
     public partial class MainWindow : Window
     {
         #region Private fields
+        Engine engine;
         IPlayer _player;
         Board _board;
         PacmanSprite _pacmanSprite;
@@ -53,7 +55,8 @@ namespace Game_UI
             _board = new Board(resourceName);
             _obstacles = new List<IBlock>();
             _player = new pacman_libs.Player();
-            _board.InitializeTimer((sender, e) => LetItGo(_player));
+            engine = new Engine();
+            engine.SubscribeEvent((sender, e) => LetItGo(_player));
 
             _pacmanSprite = new PacmanSprite(_player);
             playGround.Children.Add(_pacmanSprite);
@@ -122,6 +125,14 @@ namespace Game_UI
                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                 Application.Current.Shutdown();
             }
+
+            if (!engine.HasBegun)
+            {
+                engine.HasBegun = true;
+                engine.Launch();
+                _board.FirstEntry(_player, e.Key);
+            }
+
             _board.KeyPressedEvents(_player, e.Key);
         }
 
