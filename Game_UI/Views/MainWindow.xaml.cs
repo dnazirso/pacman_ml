@@ -1,14 +1,12 @@
 ﻿using board_libs;
+using board_libs.Models;
 using Game_UI.Sprites;
 using Game_UI.Tools;
-using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Threading;
 using utils_libs.Abstractions;
-using utils_libs.Tools;
 
 namespace Game_UI
 {
@@ -22,9 +20,7 @@ namespace Game_UI
         Board _board;
         PacmanSprite _pacmanSprite;
         List<IBlock> _obstacles;
-        DispatcherTimer _timer;
         DebbugPac _debbug;
-        bool _hasBegun;
         #endregion
 
         #region init
@@ -34,7 +30,6 @@ namespace Game_UI
         public MainWindow()
         {
             InitializeComponent();
-            InitializeTimer();
             InitializeMaze();
             InitializeDebbugMode();
         }
@@ -49,16 +44,6 @@ namespace Game_UI
         }
 
         /// <summary>
-        /// Initialize all needed fields and properties
-        /// </summary>
-        private void InitializeTimer()
-        {
-            _timer = new DispatcherTimer();
-            _timer.Tick += new EventHandler(LetItGo);
-            _timer.Interval = new TimeSpan(10000);
-        }
-
-        /// <summary>
         /// Initialize maze properties and elements such as 
         /// players, obstacles, border, limits and so forth.
         /// </summary>
@@ -68,11 +53,12 @@ namespace Game_UI
             _board = new Board(resourceName);
             _obstacles = new List<IBlock>();
             _player = new pacman_libs.Player();
+            _board.InitializeTimer((sender, e) => LetItGo(_player));
 
             _pacmanSprite = new PacmanSprite(_player);
             playGround.Children.Add(_pacmanSprite);
 
-            foreach (board_libs.Models.Area block in _board.Maze)
+            foreach (Area block in _board.Maze)
             {
                 var placedBlock = Placeblock(block);
                 if (block.Shape.Equals('c'))
@@ -98,7 +84,7 @@ namespace Game_UI
         /// <param name="top"></param>
         /// <param name="left"></param>
         /// <param name="letter"></param>
-        private IBlock Placeblock(board_libs.Models.Area block)
+        private IBlock Placeblock(Area block)
         {
             switch (block.Shape)
             {
@@ -136,27 +122,17 @@ namespace Game_UI
                 System.Diagnostics.Process.Start(Application.ResourceAssembly.Location);
                 Application.Current.Shutdown();
             }
-            if (!DirectionType.ExistsWhitin(e.Key)) return;
-            if (!_hasBegun
-                && (DirectionType.ToDirection(e.Key).Equals(DirectionType.Left.Direction)
-                || DirectionType.ToDirection(e.Key).Equals(DirectionType.Right.Direction)))
-            {
-                _hasBegun = true;
-                _timer.Start();
-                _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
-            }
-
-            _board.SetDirection(_player, DirectionType.ToDirection(e.Key));
+            _board.KeyPressedEvents(_player, e.Key);
         }
 
         /// <summary>
         /// Allow a player to move if possible
         /// </summary>
         /// <param name="p">the pressed key</param>
-        private async void LetItGo(object sender, EventArgs e)
+        private async void LetItGo(IPlayer p)
         {
-            _board.RetrySetDirectionAndMove(_player);
-            await Render(_player);
+            _board.RetrySetDirectionAndMove(p);
+            await Render(p);
         }
 
         /// <summary>
@@ -166,6 +142,8 @@ namespace Game_UI
         /// <param name="key">the pressed key</param>
         private async Task Render(IPlayer p)
         {
+            _obstacles.ForEach(x => x.WillCollide(p));
+
             if (p.Position.X != _pacmanSprite.lastPosition.X || p.Position.Y != _pacmanSprite.lastPosition.Y)
             {
                 _pacmanSprite.UpdatePosition();
@@ -173,7 +151,7 @@ namespace Game_UI
 
             if (_debbug != null)
             {
-                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y}";
+                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y} \nDots Left : {_board.DotsLeft}";
             }
 
             await Task.Run(() => playGround.Refresh());

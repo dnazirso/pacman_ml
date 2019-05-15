@@ -1,8 +1,10 @@
 ﻿using board_libs.Models;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows.Input;
+using System.Windows.Threading;
 using utils_libs.Abstractions;
 using utils_libs.Tools;
 
@@ -10,12 +12,13 @@ namespace board_libs
 {
     public class Board
     {
-        private int _tickRotateCounter;
+        DispatcherTimer _timer;
+        private bool _hasBegun;
 
         /// <summary>
         /// Dots in the maze
         /// </summary>
-        public int DotsLeft { get; set; }
+        public int DotsLeft { get; private set; }
 
         /// <summary>
         /// Represents the maze structure
@@ -25,7 +28,7 @@ namespace board_libs
         /// <summary>
         /// Represents the maze structure
         /// </summary>
-        public List<IBlock> Maze { get; private set; }
+        public List<Area> Maze { get; private set; }
 
         /// <summary>
         /// Represents the farest corner position 
@@ -47,15 +50,44 @@ namespace board_libs
         }
 
         /// <summary>
+        /// Manage key pressed events
+        /// </summary>
+        /// <param name="p"></param>
+        /// <param name="key"></param>
+        public void KeyPressedEvents(IPlayer p, Key key)
+        {
+            if (!DirectionType.ExistsWhitin(key)) return;
+            if (!_hasBegun
+                && (DirectionType.ToDirection(key).Equals(DirectionType.Left.Direction)
+                || DirectionType.ToDirection(key).Equals(DirectionType.Right.Direction)))
+            {
+                _hasBegun = true;
+                _timer.Start();
+                SetDirection(p, DirectionType.ToDirection(key));
+            }
+
+            SetDirection(p, DirectionType.ToDirection(key));
+        }
+
+        /// <summary>
+        /// Initialize all needed fields and properties
+        /// </summary>
+        public void InitializeTimer(EventHandler eventHandler)
+        {
+            _timer = new DispatcherTimer();
+            _timer.Tick += eventHandler;
+            _timer.Interval = new TimeSpan(10000);
+        }
+
+        /// <summary>
         /// Read a file in order to retreive a maze structure
         /// </summary>
         /// <param name="pathToFile"></param>
         private void CreateBoard(string pathToFile)
         {
             Grid = File.ReadLines(pathToFile).Select(l => l.ToCharArray().ToList()).ToList();
-            DotsLeft = Grid.Sum(l => l.Sum(c => c.Equals('·') || c.Equals('.') ? 1 : 0));
 
-            Maze = new List<IBlock>();
+            Maze = new List<Area>();
             int top = 0;
             int left = 0;
             foreach (List<char> line in Grid)
@@ -63,6 +95,7 @@ namespace board_libs
                 left = 0;
                 foreach (char c in line)
                 {
+                    if (c.Equals('·')) DotsLeft++;
                     Maze.Add(Placeblock(new Position { X = top, Y = left }, 20, c));
                     left += 20;
                 }
@@ -78,7 +111,7 @@ namespace board_libs
         /// <param name="size"></param>
         /// <param name="letter"></param>
         /// <returns></returns>
-        private IBlock Placeblock(IPosition position, int size, char letter)
+        private Area Placeblock(IPosition position, int size, char letter)
         {
             switch (letter)
             {
@@ -108,7 +141,7 @@ namespace board_libs
             {
                 p.SetDirection(direction);
                 p.UnsetWantedDirection();
-                _tickRotateCounter = 0;
+                p.TickCounter = 0;
             }
             else
             {
@@ -122,9 +155,9 @@ namespace board_libs
         /// <param name="p"></param>
         public void RetrySetDirectionAndMove(IPlayer p)
         {
-            if (_tickRotateCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
+            if (p.TickCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
             {
-                _tickRotateCounter++;
+                p.TickCounter++;
                 SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
             }
 
@@ -148,7 +181,6 @@ namespace board_libs
                 DoesWarp(p);
             }
         }
-
 
         /// <summary>
         /// When reaching an edge, teleport to the other side
