@@ -18,11 +18,9 @@ namespace Game_UI
     {
         #region Private fields
         Engine engine;
-        IPlayer _player;
-        Board _board;
-        PacmanSprite _pacmanSprite;
-        List<IBlock> _obstacles;
-        DebbugPac _debbug;
+        Board board;
+        PacmanSprite pacman;
+        DebbugPac debbug;
         #endregion
 
         #region init
@@ -33,6 +31,7 @@ namespace Game_UI
         {
             InitializeComponent();
             InitializeMaze();
+            InitializeEngine();
             InitializeDebbugMode();
         }
 
@@ -41,8 +40,17 @@ namespace Game_UI
         /// </summary>
         private void InitializeDebbugMode()
         {
-            _debbug = new DebbugPac();
-            playGround.Children.Add(_debbug);
+            debbug = new DebbugPac();
+            playGround.Children.Add(debbug);
+        }
+
+        /// <summary>
+        /// Initialize game engine
+        /// </summary>
+        private void InitializeEngine()
+        {
+            engine = new Engine();
+            engine.SubscribeEvent((sender, e) => LetItGo(pacman));
         }
 
         /// <summary>
@@ -51,34 +59,35 @@ namespace Game_UI
         /// </summary>
         private void InitializeMaze()
         {
-            var resourceName = ".\\maze1.txt";
-            _board = new Board(resourceName);
-            _obstacles = new List<IBlock>();
-            _player = new pacman_libs.Player();
-            engine = new Engine();
-            engine.SubscribeEvent((sender, e) => LetItGo(_player));
+            board = new Board(".\\maze1.txt");
+            List<IBlock> obstacles = new List<IBlock>();
+            List<Dot> dots = new List<Dot>();
+            pacman = new PacmanSprite(new pacman_libs.Player(), dots);
 
-            _pacmanSprite = new PacmanSprite(_player);
-            playGround.Children.Add(_pacmanSprite);
+            playGround.Children.Add(pacman);
 
-            foreach (Area block in _board.Maze)
+            foreach (Area block in board.Maze)
             {
                 var placedBlock = Placeblock(block);
                 if (block.Shape.Equals('c'))
                 {
-                    _player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
+                    pacman.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
                 }
-                _obstacles.Add(placedBlock);
+                if (block.Shape.Equals('·'))
+                {
+                    dots.Add((Dot)placedBlock);
+                }
+                obstacles.Add(placedBlock);
             }
-            this.SetValue(HeightProperty, (double)_board.Limits.X + 40);
-            this.SetValue(WidthProperty, (double)_board.Limits.Y + 40);
+            this.SetValue(HeightProperty, (double)board.Limits.X + 40);
+            this.SetValue(WidthProperty, (double)board.Limits.Y + 40);
 
-            canvasBorder.SetValue(HeightProperty, (double)_board.Limits.X);
-            canvasBorder.SetValue(WidthProperty, (double)_board.Limits.Y);
+            canvasBorder.SetValue(HeightProperty, (double)board.Limits.X);
+            canvasBorder.SetValue(WidthProperty, (double)board.Limits.Y);
 
-            _pacmanSprite.UpdatePosition();
+            pacman.UpdatePosition();
 
-            _obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
+            obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }
 
         /// <summary>
@@ -130,19 +139,19 @@ namespace Game_UI
             {
                 engine.HasBegun = true;
                 engine.Launch();
-                _board.FirstEntry(_player, e.Key);
+                board.FirstEntry(pacman.Player, e.Key);
             }
 
-            _board.KeyPressedEvents(_player, e.Key);
+            board.KeyPressedEvents(pacman.Player, e.Key);
         }
 
         /// <summary>
-        /// Allow a player to move if possible
+        /// Compute move for a player then render
         /// </summary>
         /// <param name="p">the pressed key</param>
-        private async void LetItGo(IPlayer p)
+        private async void LetItGo(IUIPLayer p)
         {
-            _board.RetrySetDirectionAndMove(p);
+            board.RetrySetDirectionAndMove(p.Player);
             await Render(p);
         }
 
@@ -151,18 +160,16 @@ namespace Game_UI
         /// </summary>
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
-        private async Task Render(IPlayer p)
+        private async Task Render(IUIPLayer p)
         {
-            _obstacles.ForEach(x => x.WillCollide(p));
-
-            if (p.Position.X != _pacmanSprite.lastPosition.X || p.Position.Y != _pacmanSprite.lastPosition.Y)
+            if (p.Player.Position.X != p.LastPosition.X || p.Player.Position.Y != p.LastPosition.Y)
             {
-                _pacmanSprite.UpdatePosition();
+                p.UpdatePosition();
             }
 
-            if (_debbug != null)
+            if (debbug != null)
             {
-                _debbug.debbug.Text = $"X : {p.Position.X} \nY : {p.Position.Y} \nLeft:{_board.DotsLeft}|Eaten:{p.DotsEaten}";
+                debbug.debbug.Text = $"X : {p.Player.Position.X} \nY : {p.Player.Position.Y} \nLeft:{board.DotsLeft}|Eaten:{p.Player.DotsEaten}";
             }
 
             await Task.Run(() => playGround.Refresh());

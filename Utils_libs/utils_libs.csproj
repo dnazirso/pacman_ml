@@ -44,6 +44,7 @@
   <ItemGroup>
     <Compile Include="Abstractions\IBlock.cs" />
     <Compile Include="Abstractions\IDirection.cs" />
+    <Compile Include="Abstractions\IUIPLayer.cs" />
     <Compile Include="Abstractions\IPlayer.cs" />
     <Compile Include="Abstractions\IPosition.cs" />
     <Compile Include="Directions\Down.cs" />

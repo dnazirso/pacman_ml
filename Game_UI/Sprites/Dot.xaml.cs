@@ -12,28 +12,21 @@ namespace Game_UI.Sprites
     /// </summary>
     public partial class Dot : UserControl, IBlock
     {
-        Area area { get; set; }
+        Area Area { get; set; }
         public Dot(Area area)
         {
             InitializeComponent();
-            this.area = area;
+            this.Area = area;
             SetValue(Canvas.LeftProperty, (double)area.Min.Y);
             SetValue(Canvas.TopProperty, (double)area.Min.X);
             SetValue(Canvas.WidthProperty, (double)area.Size);
             SetValue(Canvas.HeightProperty, (double)area.Size);
         }
-        public bool Collide(IPlayer p) => area.Collide(p);
-        public bool WillCollide(IPlayer p)
+        public bool Collide(IPlayer p) => Area.Collide(p);
+        public bool WillCollide(IPlayer p) => Area.WillCollide(p);
+        public async void EreaseDot(IPlayer p)
         {
-            if (Collide(p))
-            {
-                EreaseDot();
-            };
-            return area.WillCollide(p);
-        }
-        public async void EreaseDot()
-        {
-            if (dot.Children.Count > 0)
+            if (Collide(p) && dot.Children.Count > 0)
             {
                 dot.Children.Remove(dott);
                 await Task.Run(() => dot.Refresh());

@@ -1,4 +1,5 @@
 ﻿using Game_UI.Tools;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -10,16 +11,18 @@ namespace Game_UI.Sprites
     /// <summary>
     /// Interaction logic for Pacman.xaml
     /// </summary>
-    public partial class PacmanSprite : UserControl
+    public partial class PacmanSprite : UserControl, IUIPLayer
     {
         bool _toggle;
         int _tickMoveCounter;
-        public IPosition lastPosition { get; private set; }
-
-        IPlayer player { get; }
-        public PacmanSprite(IPlayer player)
+        readonly List<Dot> dots;
+        public IPosition LastPosition { get; set; }
+        public IPlayer Player { get; }
+        public PacmanSprite(IPlayer player, List<Dot> dots)
         {
-            this.player = player;
+            this.Player = player;
+            this.dots = dots;
+
             SetValue(WidthProperty, (double)40);
             SetValue(HeightProperty, (double)40);
 
@@ -30,31 +33,34 @@ namespace Game_UI.Sprites
 
         public void UpdatePosition()
         {
-            lastPosition = new Position { X = player.Position.X, Y = player.Position.Y };
-            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(player.Direction), 10, 10);
-            SetValue(Canvas.TopProperty, (double)player.Position.X);
-            SetValue(Canvas.LeftProperty, (double)player.Position.Y);
+            LastPosition = new Position { X = Player.Position.X, Y = Player.Position.Y };
+            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(Player.Direction), 10, 10);
+            SetValue(Canvas.TopProperty, (double)Player.Position.X);
+            SetValue(Canvas.LeftProperty, (double)Player.Position.Y);
 
-            _tickMoveCounter++;
-            if (_tickMoveCounter >= 5)
-            {
-                NominalAnimation();
-                _tickMoveCounter = 0;
-            }
+            NominalAnimation();
+            EreaseDots();
         }
+
+        private void EreaseDots() => dots.ForEach(x => x.EreaseDot(Player));
 
         public async void NominalAnimation()
         {
-            if (_toggle)
+            _tickMoveCounter++;
+            if (_tickMoveCounter >= 5)
             {
-                pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(Properties.Resources.mouthOpen));
+                if (_toggle)
+                {
+                    pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(Properties.Resources.mouthOpen));
+                }
+                else
+                {
+                    pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(Properties.Resources.mouthClose));
+                }
+                _toggle = !_toggle;
+                _tickMoveCounter = 0;
+                await Task.Run(() => pacBody.Refresh());
             }
-            else
-            {
-                pacMouth.SetValue(GeometryDrawing.GeometryProperty, Geometry.Parse(Properties.Resources.mouthClose));
-            }
-            _toggle = !_toggle;
-            await Task.Run(() => pacBody.Refresh());
         }
     }
 }
