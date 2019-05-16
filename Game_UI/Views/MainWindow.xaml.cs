@@ -2,6 +2,7 @@
 using board_libs.Models;
 using Game_UI.Sprites;
 using Game_UI.Tools;
+using pacman_libs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows;
@@ -62,7 +63,7 @@ namespace Game_UI
             board = new Board(".\\maze1.txt");
             List<IBlock> obstacles = new List<IBlock>();
             List<Dot> dots = new List<Dot>();
-            pacman = new PacmanSprite(new pacman_libs.Player(), dots);
+            pacman = new PacmanSprite(new Pacman(), dots);
 
             playGround.Children.Add(pacman);
 

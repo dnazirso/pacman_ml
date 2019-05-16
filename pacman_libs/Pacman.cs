@@ -4,7 +4,7 @@ using utils_libs.Tools;
 
 namespace pacman_libs
 {
-    public class Player : IPlayer
+    public class Pacman : IPlayer
     {
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
@@ -12,7 +12,7 @@ namespace pacman_libs
         public int TickCounter { get; set; }
         public int DotsEaten { get; set; }
 
-        public Player()
+        public Pacman()
         {
             this.Direction = new Right();
             this.Position = new Position();

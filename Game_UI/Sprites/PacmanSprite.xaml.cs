@@ -18,9 +18,9 @@ namespace Game_UI.Sprites
         readonly List<Dot> dots;
         public IPosition LastPosition { get; set; }
         public IPlayer Player { get; }
-        public PacmanSprite(IPlayer player, List<Dot> dots)
+        public PacmanSprite(IPlayer Player, List<Dot> dots)
         {
-            this.Player = player;
+            this.Player = Player;
             this.dots = dots;
 
             SetValue(WidthProperty, (double)40);
