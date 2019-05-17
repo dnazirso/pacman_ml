@@ -34,7 +34,7 @@ namespace Game_UI.Sprites
         public void UpdatePosition()
         {
             LastPosition = new Position { X = Player.Position.X, Y = Player.Position.Y };
-            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(Player.Direction), 10, 10);
+            pacBody.RenderTransform = new RotateTransform(DirectionType.ToAngle(Player.Direction), 15, 15);
             SetValue(Canvas.TopProperty, (double)Player.Position.X);
             SetValue(Canvas.LeftProperty, (double)Player.Position.Y);
 

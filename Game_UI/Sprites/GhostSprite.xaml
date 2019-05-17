@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Game_UI.Sprites"
              mc:Ignorable="d" 
              HorizontalAlignment="Center" VerticalAlignment="Center">
-    <Grid Name="ghostBody" Width="20" Height="20">
+    <Grid Name="ghostBody" Width="30" Height="30">
         <Image>
             <Image.Source>
                 <DrawingImage>
@@ -20,9 +20,9 @@
                 </DrawingImage>
             </Image.Source>
         </Image>
-        <Ellipse Fill="White" Stroke="Black" StrokeThickness="0.25" Margin="12,4,4,10" />
-        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" Margin="13,6,5,12" />
-        <Ellipse Fill="White" Stroke="Black" StrokeThickness="0.25"  Margin="4,4,12,10" />
-        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" Margin="5,6,13,12" />
+        <Ellipse Fill="White" Stroke="Black" StrokeThickness="0.25" Margin="17,7,6,13" />
+        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" Margin="20,11,7,16" />
+        <Ellipse Fill="White" Stroke="Black" StrokeThickness="0.25"  Margin="5,7,18,13" />
+        <Ellipse Fill="White" Stroke="Black" StrokeThickness="1" Margin="8,11,19,16" />
     </Grid>
 </UserControl>

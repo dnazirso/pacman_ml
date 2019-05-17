@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Game_UI.Sprites"
              mc:Ignorable="d" 
              HorizontalAlignment="Center" VerticalAlignment="Center">
-    <Image Name="pacBody" Width="20" Height="20">
+    <Image Name="pacBody" Width="30" Height="30">
         <Image.Source>
             <DrawingImage>
                 <DrawingImage.Drawing>
