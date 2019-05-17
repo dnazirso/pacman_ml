@@ -2,6 +2,7 @@
 using board_libs.Models;
 using Game_UI.Sprites;
 using Game_UI.Tools;
+using ghost_libs;
 using pacman_libs;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace Game_UI
         Engine engine;
         Board board;
         PacmanSprite pacman;
+        GhostSprite blinky;
         DebbugPac debbug;
         #endregion
 
@@ -60,12 +62,14 @@ namespace Game_UI
         /// </summary>
         private void InitializeMaze()
         {
-            board = new Board(".\\maze1.txt");
             List<IBlock> obstacles = new List<IBlock>();
             List<Dot> dots = new List<Dot>();
+            board = new Board(".\\maze1.txt");
             pacman = new PacmanSprite(new Pacman(), dots);
+            blinky = new GhostSprite(new Ghost());
 
             playGround.Children.Add(pacman);
+            playGround.Children.Add(blinky);
 
             foreach (Area block in board.Maze)
             {
@@ -73,6 +77,10 @@ namespace Game_UI
                 if (block.Shape.Equals('c'))
                 {
                     pacman.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
+                }
+                if (block.Shape.Equals('b'))
+                {
+                    blinky.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
                 }
                 if (block.Shape.Equals('·'))
                 {
@@ -87,6 +95,7 @@ namespace Game_UI
             canvasBorder.SetValue(WidthProperty, (double)board.Limits.Y);
 
             pacman.UpdatePosition();
+            blinky.UpdatePosition();
 
             obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }

@@ -66,6 +66,9 @@
     <Compile Include="Sprites\Dot.xaml.cs">
       <DependentUpon>Dot.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sprites\GhostSprite.xaml.cs">
+      <DependentUpon>GhostSprite.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Sprites\Obstacle.xaml.cs">
       <DependentUpon>Obstacle.xaml</DependentUpon>
     </Compile>
@@ -92,6 +95,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Sprites\Dot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sprites\GhostSprite.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -150,6 +157,7 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
+    <None Include="Resources\ghost.svg" />
     <None Include="Resources\pacmouthclose.svg" />
     <None Include="Resources\pacmouthopen.svg" />
     <None Include="Resources\pipeangle.svg" />
@@ -162,6 +170,10 @@
     <ProjectReference Include="..\board_libs\board_libs.csproj">
       <Project>{816BE275-6729-4BE8-867A-C256535D7F84}</Project>
       <Name>board_libs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ghost_libs\ghost_libs.csproj">
+      <Project>{4C13FE8C-1591-4CEC-AC07-8D0AF5E8852B}</Project>
+      <Name>ghost_libs</Name>
     </ProjectReference>
     <ProjectReference Include="..\pacman_libs\pacman_libs.csproj">
       <Project>{A7B44F5C-20A7-4003-9369-EFB0FDF512E2}</Project>
