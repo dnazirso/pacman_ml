@@ -1,5 +1,4 @@
-﻿using board_libs;
-using board_libs.Models;
+﻿using board_libs.Models;
 using Game_UI.Tools;
 using System.Threading.Tasks;
 using System.Windows.Controls;
@@ -24,9 +23,9 @@ namespace Game_UI.Sprites
         }
         public bool Collide(IPlayer p) => Area.Collide(p);
         public bool WillCollide(IPlayer p) => Area.WillCollide(p);
-        public async void EreaseDot(IPlayer p)
+        public async void EreaseDot(IPacman p)
         {
-            if (Collide(p) && dot.Children.Count > 0)
+            if (Area.EreaseDot(p) && dot.Children.Count > 0)
             {
                 dot.Children.Remove(dott);
                 await Task.Run(() => dot.Refresh());

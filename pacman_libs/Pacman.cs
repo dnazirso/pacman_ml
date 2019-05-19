@@ -4,7 +4,7 @@ using utils_libs.Tools;
 
 namespace pacman_libs
 {
-    public class Pacman : IPlayer
+    public class Pacman : IPacman
     {
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }

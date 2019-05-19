@@ -21,7 +21,7 @@ namespace Game_UI.Sprites
     /// <summary>
     /// Interaction logic for GhostSprite.xaml
     /// </summary>
-    public partial class GhostSprite : UserControl, IUIPLayer
+    public partial class GhostSprite : UserControl, IUIPayer
     {
         public IPosition LastPosition { get; set; }
         public IPlayer Player { get; }

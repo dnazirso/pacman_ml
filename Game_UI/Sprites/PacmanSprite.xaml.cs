@@ -11,7 +11,7 @@ namespace Game_UI.Sprites
     /// <summary>
     /// Interaction logic for Pacman.xaml
     /// </summary>
-    public partial class PacmanSprite : UserControl, IUIPLayer
+    public partial class PacmanSprite : UserControl, IUIPayer
     {
         bool _toggle;
         int _tickMoveCounter;
@@ -42,7 +42,7 @@ namespace Game_UI.Sprites
             EreaseDots();
         }
 
-        private void EreaseDots() => dots.ForEach(x => x.EreaseDot(Player));
+        private void EreaseDots() => dots.ForEach(x => x.EreaseDot((IPacman)Player));
 
         public async void NominalAnimation()
         {

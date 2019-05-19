@@ -159,7 +159,7 @@ namespace Game_UI
         /// Compute move for a player then render
         /// </summary>
         /// <param name="p">the pressed key</param>
-        private async void LetItGo(IUIPLayer p)
+        private async void LetItGo(IUIPayer p)
         {
             board.RetrySetDirectionAndMove(p.Player);
             await Render(p);
@@ -170,7 +170,7 @@ namespace Game_UI
         /// </summary>
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
-        private async Task Render(IUIPLayer p)
+        private async Task Render(IUIPayer p)
         {
             if (p.Player.Position.X != p.LastPosition.X || p.Player.Position.Y != p.LastPosition.Y)
             {
@@ -179,7 +179,7 @@ namespace Game_UI
 
             if (debbug != null)
             {
-                debbug.debbug.Text = $"X : {p.Player.Position.X} \nY : {p.Player.Position.Y} \nLeft:{board.DotsLeft}|Eaten:{p.Player.DotsEaten}";
+                debbug.debbug.Text = $"X : {pacman.Player.Position.X} \nY : {pacman.Player.Position.Y} \nLeft:{board.DotsLeft}|Eaten:{((IPacman)pacman.Player).DotsEaten}";
             }
 
             await Task.Run(() => playGround.Refresh());

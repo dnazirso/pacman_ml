@@ -10,7 +10,6 @@ namespace ghost_libs
         public IDirection WantedDirection { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public int TickCounter { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
         public int DotsEaten { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-
         public Ghost()
         {
             this.Direction = new Right();
@@ -19,7 +18,6 @@ namespace ghost_libs
         public void Move() => Position = Direction.Move(Position);
         public void SetDirection(IDirection direction) => this.Direction = direction;
         public void SetPosition(int x, int y) => Position = new Position() { X = x, Y = y };
-
         public void SetWantedDirection(IDirection wantedDirection)
         {
             throw new System.NotImplementedException();

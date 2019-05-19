@@ -56,18 +56,20 @@ namespace board_libs.Models
              && p.Position.Y > Min.Y - 10);
         }
 
-        public bool Collide(IPlayer p)
-        {
-            bool collide = (p.Position.X < Max.X
+        public bool Collide(IPlayer p) => 
+               (p.Position.X < Max.X
              && p.Position.X > Min.X
              && p.Position.Y < Max.Y
              && p.Position.Y > Min.Y);
-            if (Shape.Equals('·') && collide)
+
+        public bool EreaseDot(IPacman p)
+        {
+            if (Shape.Equals('·') && Collide(p))
             {
                 Shape = ' ';
                 p.DotsEaten++;
             }
-            return collide;
+            return Collide(p);
         }
     }
 }

@@ -5,7 +5,6 @@
         IDirection Direction { get; set; }
         IDirection WantedDirection { get; set; }
         IPosition Position { get; set; }
-        int DotsEaten { get; set; }
         int TickCounter { get; set; }
 
         void Move();
