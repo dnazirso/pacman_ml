@@ -159,7 +159,7 @@ namespace Game_UI
         /// Compute move for a player then render
         /// </summary>
         /// <param name="p">the pressed key</param>
-        private async void LetItGo(IUIPayer p)
+        private async void LetItGo(IUIPlayer p)
         {
             board.RetrySetDirectionAndMove(p.Player);
             await Render(p);
@@ -170,7 +170,7 @@ namespace Game_UI
         /// </summary>
         /// <param name="p">the player</param>
         /// <param name="key">the pressed key</param>
-        private async Task Render(IUIPayer p)
+        private async Task Render(IUIPlayer p)
         {
             if (p.Player.Position.X != p.LastPosition.X || p.Player.Position.Y != p.LastPosition.Y)
             {

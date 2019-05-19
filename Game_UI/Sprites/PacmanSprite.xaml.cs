@@ -11,7 +11,7 @@ namespace Game_UI.Sprites
     /// <summary>
     /// Interaction logic for Pacman.xaml
     /// </summary>
-    public partial class PacmanSprite : UserControl, IUIPayer
+    public partial class PacmanSprite : UserControl, IUIPlayer
     {
         bool _toggle;
         int _tickMoveCounter;
