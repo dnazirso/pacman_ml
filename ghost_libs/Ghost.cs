@@ -1,4 +1,5 @@
-﻿using utils_libs.Abstractions;
+﻿using System.Collections.Generic;
+using utils_libs.Abstractions;
 using utils_libs.Directions;
 
 namespace ghost_libs
@@ -24,6 +25,31 @@ namespace ghost_libs
         }
 
         public void UnsetWantedDirection()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void Move(List<List<IBlock>> blocks)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool WillCollide(List<List<IBlock>> blocks)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool WillCollide(List<List<IBlock>> blocks, IDirection direction)
         {
             throw new System.NotImplementedException();
         }

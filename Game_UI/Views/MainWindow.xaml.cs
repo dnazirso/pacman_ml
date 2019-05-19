@@ -71,22 +71,25 @@ namespace Game_UI
             playGround.Children.Add(pacman);
             playGround.Children.Add(blinky);
 
-            foreach (Area block in board.Maze)
+            foreach (List<IBlock> line in board.Maze)
             {
-                var placedBlock = Placeblock(block);
-                if (block.Shape.Equals('c'))
+                foreach (Area block in line)
                 {
-                    pacman.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
+                    var placedBlock = Placeblock(block);
+                    if (block.Shape.Equals('c'))
+                    {
+                        pacman.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
+                    }
+                    if (block.Shape.Equals('b'))
+                    {
+                        blinky.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
+                    }
+                    if (block.Shape.Equals('·'))
+                    {
+                        dots.Add((Dot)placedBlock);
+                    }
+                    obstacles.Add(placedBlock);
                 }
-                if (block.Shape.Equals('b'))
-                {
-                    blinky.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
-                }
-                if (block.Shape.Equals('·'))
-                {
-                    dots.Add((Dot)placedBlock);
-                }
-                obstacles.Add(placedBlock);
             }
             this.SetValue(HeightProperty, (double)board.Limits.X + 40);
             this.SetValue(WidthProperty, (double)board.Limits.Y + 40);
@@ -161,7 +164,7 @@ namespace Game_UI
         /// <param name="p">the pressed key</param>
         private async void LetItGo(IUIPlayer p)
         {
-            board.RetrySetDirectionAndMove(p.Player);
+            board.ComputeMoves(p.Player);
             await Render(p);
         }
 

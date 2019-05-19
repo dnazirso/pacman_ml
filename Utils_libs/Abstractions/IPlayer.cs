@@ -1,4 +1,6 @@
-﻿namespace utils_libs.Abstractions
+﻿using System.Collections.Generic;
+
+namespace utils_libs.Abstractions
 {
     public interface IPlayer
     {
@@ -6,10 +8,12 @@
         IDirection WantedDirection { get; set; }
         IPosition Position { get; set; }
         int TickCounter { get; set; }
-
         void Move();
-        void SetDirection(IDirection direction);
+        void Move(List<List<IBlock>> blocks);
+        bool WillCollide(List<List<IBlock>> blocks, IDirection direction);
+        void SetDirection(List<List<IBlock>> Maze, IDirection direction);
         void SetWantedDirection(IDirection wantedDirection);
+        void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction);
         void UnsetWantedDirection();
         void SetPosition(int x, int y);
     }

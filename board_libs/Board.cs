@@ -23,7 +23,7 @@ namespace board_libs
         /// <summary>
         /// Represents the maze structure
         /// </summary>
-        public List<Area> Maze { get; private set; }
+        public List<List<IBlock>> Maze { get; private set; }
 
         /// <summary>
         /// Represents the farest corner position 
@@ -77,18 +77,20 @@ namespace board_libs
         {
             Grid = File.ReadLines(pathToFile).Select(l => l.ToCharArray().ToList()).ToList();
 
-            Maze = new List<Area>();
+            Maze = new List<List<IBlock>>();
             int top = 0;
             int left = 0;
             foreach (List<char> line in Grid)
             {
+                var listOfArea = new List<IBlock>();
                 left = 0;
                 foreach (char c in line)
                 {
                     if (c.Equals('·')) DotsLeft++;
-                    Maze.Add(Placeblock(new Position { X = top, Y = left }, 20, c));
+                    listOfArea.Add(Placeblock(new Position { X = top, Y = left }, 20, c));
                     left += 20;
                 }
+                Maze.Add(listOfArea);
                 top += 20;
             }
             Limits = new Position { X = top, Y = left };
@@ -118,41 +120,18 @@ namespace board_libs
         /// <param name="direction">the wanted </param>
         public void SetDirection(IPlayer p, IDirection direction)
         {
-            IPlayer testPlayer = new Player
-            {
-                Direction = direction,
-                Position = new Position
-                {
-                    X = p.Position.X,
-                    Y = p.Position.Y
-                }
-            };
-            if (!Maze.Exists(x => x.WillCollide(testPlayer)))
-            {
-                p.SetDirection(direction);
-                p.UnsetWantedDirection();
-                p.TickCounter = 0;
-            }
-            else
-            {
-                p.SetWantedDirection(direction);
-            }
+            p.SetDirection(Maze, direction);
         }
 
         /// <summary>
         /// Retry to SetDirection if failed before and move
         /// </summary>
         /// <param name="p"></param>
-        public void RetrySetDirectionAndMove(IPlayer p)
+        public void ComputeMoves(IPlayer p)
         {
-            if (p.TickCounter < 20 && !p.WantedDirection.Equals(DirectionType.StandStill.Direction))
-            {
-                p.TickCounter++;
-                SetDirection(p, DirectionType.ToDirection(DirectionType.ToKey(p.WantedDirection)));
-            }
-
             CheckLimitsAndMove(p, DirectionType.ToKey(p.Direction));
         }
+
         /// <summary>
         /// Check if the next step is possible depending on the direction taken
         /// </summary>
@@ -161,13 +140,14 @@ namespace board_libs
         /// <returns>a boolean</returns>
         public void CheckLimitsAndMove(IPlayer p, Key key)
         {
-            if (!((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
+            if (
+             !((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
             || (p.Position.X > Limits.X && key.Equals(DirectionType.Down.Key))
             || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
             || (p.Position.Y > Limits.Y && key.Equals(DirectionType.Right.Key)))
-            && !Maze.Exists(x => x.WillCollide(p)))
+            )
             {
-                p.Move();
+                p.Move(Maze);
                 DoesWarp(p);
             }
         }

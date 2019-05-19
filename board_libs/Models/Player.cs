@@ -1,4 +1,5 @@
-﻿using utils_libs.Abstractions;
+﻿using System.Collections.Generic;
+using utils_libs.Abstractions;
 using utils_libs.Directions;
 using utils_libs.Tools;
 
@@ -28,6 +29,31 @@ namespace board_libs.Models
         public void UnsetWantedDirection()
         {
             WantedDirection = DirectionType.StandStill.Direction;
+        }
+
+        public void Move(List<List<IBlock>> blocks)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool WillCollide(List<List<IBlock>> blocks)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool WillCollide(List<List<IBlock>> blocks, IDirection direction)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
