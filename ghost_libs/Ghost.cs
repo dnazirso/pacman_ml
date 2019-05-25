@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using utils_libs.Abstractions;
 using utils_libs.Directions;
+using utils_libs.Tools;
 
 namespace ghost_libs
 {
@@ -8,50 +9,58 @@ namespace ghost_libs
     {
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
-        public IDirection WantedDirection { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public int TickCounter { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
-        public int DotsEaten { get => throw new System.NotImplementedException(); set => throw new System.NotImplementedException(); }
+        public IDirection WantedDirection { get; set; }
+        public int TickCounter { get; set; }
         public Ghost()
         {
             this.Direction = new Right();
             this.Position = new Position();
+            this.WantedDirection = DirectionType.StandStill.Direction;
         }
-        public void Move() => Position = Direction.Move(Position);
         public void SetDirection(IDirection direction) => this.Direction = direction;
         public void SetPosition(int x, int y) => Position = new Position() { X = x, Y = y };
-        public void SetWantedDirection(IDirection wantedDirection)
+        public void SetWantedDirection(IDirection wantedDirection) => WantedDirection = wantedDirection;
+        public void UnsetWantedDirection() => WantedDirection = DirectionType.StandStill.Direction;
+        public void Move() => Position = Direction.Move(Position);
+        public void Move(List<List<IBlock>> Maze)
         {
-            throw new System.NotImplementedException();
+            if (WillCollide(Maze, Direction)) return;
+            Move();
+            RetrySetDirectionAndMove(Maze, WantedDirection);
         }
-
-        public void UnsetWantedDirection()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void Move(List<List<IBlock>> blocks)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool WillCollide(List<List<IBlock>> blocks)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
-        {
-            throw new System.NotImplementedException();
-        }
-
         public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
         {
-            throw new System.NotImplementedException();
+            if (!WillCollide(Maze, direction))
+            {
+                SetDirection(direction);
+                UnsetWantedDirection();
+                TickCounter = 0;
+            }
+            else
+            {
+                SetWantedDirection(direction);
+            }
         }
-
-        public bool WillCollide(List<List<IBlock>> blocks, IDirection direction)
+        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
         {
-            throw new System.NotImplementedException();
+            if (TickCounter < 20 && !WantedDirection.Equals(DirectionType.StandStill.Direction))
+            {
+                TickCounter++;
+                SetDirection(Maze, WantedDirection);
+            }
+        }
+        public bool WillCollide(List<List<IBlock>> Maze, IDirection direction)
+        {
+            IPlayer testPlayer = new Ghost
+            {
+                Direction = direction,
+                Position = new Position
+                {
+                    X = Position.X,
+                    Y = Position.Y
+                }
+            };
+            return Maze.Exists(l => l.Exists(b => b.WillCollide(testPlayer)));
         }
     }
 }
