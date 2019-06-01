@@ -6,27 +6,29 @@ namespace board_libs.Models
     {
         public IPosition Min { get; }
         public IPosition Max { get; }
+        public IPosition Coord { get; }
         public int Size { get; }
         public bool IsBlocking { get; }
         public char Shape { get; private set; }
 
-        private Area(int xmin, int xmax, int ymin, int ymax, int size, bool isblocking, char shape)
+        private Area(int xmin, int xmax, int ymin, int ymax, IPosition coord, int size, bool isblocking, char shape)
         {
             Min = new Position { X = xmin, Y = ymin };
             Max = new Position { X = xmax, Y = ymax };
+            Coord = coord;
             Size = size;
             IsBlocking = isblocking;
             Shape = shape;
         }
 
-        public static Area CreateNew(IPosition upperLeft, int size, bool isBlocking, char shape)
+        public static Area CreateNew(IPosition upperLeft, IPosition coord, int size, bool isBlocking, char shape)
         {
             int Xmin = upperLeft.X;
             int Ymin = upperLeft.Y;
             int Xmax = upperLeft.X + size;
             int Ymax = upperLeft.Y + size;
 
-            return new Area(Xmin, Xmax, Ymin, Ymax, size, isBlocking, shape);
+            return new Area(Xmin, Xmax, Ymin, Ymax, coord, size, isBlocking, shape);
         }
 
         public bool WillCollide(IPlayer p)
@@ -56,7 +58,7 @@ namespace board_libs.Models
              && p.Position.Y > Min.Y - 10);
         }
 
-        public bool Collide(IPlayer p) => 
+        public bool Collide(IPlayer p) =>
                (p.Position.X < Max.X
              && p.Position.X > Min.X
              && p.Position.Y < Max.Y
@@ -71,5 +73,7 @@ namespace board_libs.Models
             }
             return Collide(p);
         }
+
+        public IPosition GetCoord() => Coord;
     }
 }

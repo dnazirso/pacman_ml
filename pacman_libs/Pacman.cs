@@ -12,6 +12,8 @@ namespace pacman_libs
         public IDirection WantedDirection { get; set; }
         public int TickCounter { get; set; }
         public int DotsEaten { get; set; }
+        public IPosition Coord { get; set; }
+
         public Pacman()
         {
             this.Direction = new Right();
@@ -61,7 +63,13 @@ namespace pacman_libs
                     Y = Position.Y
                 }
             };
-            return Maze.Exists(l => l.Exists(b => b.WillCollide(testPlayer)));
+
+            return Maze.Exists(line => line.Exists(col =>
+                 {
+                     Coord = col.GetCoord();
+                     return col.WillCollide(testPlayer);
+                 }
+            ));
         }
     }
 }

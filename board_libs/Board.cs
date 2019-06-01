@@ -80,14 +80,15 @@ namespace board_libs
             Maze = new List<List<IBlock>>();
             int top = 0;
             int left = 0;
-            foreach (List<char> line in Grid)
+            foreach (var line in Grid.Select((value, i) => new { value, i }))
             {
                 var listOfArea = new List<IBlock>();
                 left = 0;
-                foreach (char c in line)
+                foreach (var c in line.value.Select((value, i) => new { value, i }))
                 {
-                    if (c.Equals('·')) DotsLeft++;
-                    listOfArea.Add(Placeblock(new Position { X = top, Y = left }, 20, c));
+                    if (c.value.Equals('·')) DotsLeft++;
+                    var block = Placeblock(new Position { X = top, Y = left }, new Position { X = line.i, Y = c.i }, 20, c.value);
+                    listOfArea.Add(block);
                     left += 20;
                 }
                 Maze.Add(listOfArea);
@@ -103,14 +104,15 @@ namespace board_libs
         /// <param name="size"></param>
         /// <param name="letter"></param>
         /// <returns></returns>
-        private Area Placeblock(IPosition position, int size, char letter)
+        private Area Placeblock(IPosition position, IPosition coord, int size, char letter)
         {
             switch (letter)
             {
-                case 'c': return Area.CreateNew(position, size, false, letter);
-                case '·': return Area.CreateNew(position, size, false, letter);
-                case ' ': return Area.CreateNew(position, size, false, letter);
-                default: return Area.CreateNew(position, size, true, letter);
+                case 'c': return Area.CreateNew(position, coord, size, false, letter);
+                case 'b': return Area.CreateNew(position, coord, size, false, letter);
+                case '·': return Area.CreateNew(position, coord, size, false, letter);
+                case ' ': return Area.CreateNew(position, coord, size, false, letter);
+                default: return Area.CreateNew(position, coord, size, true, letter);
             }
         }
 

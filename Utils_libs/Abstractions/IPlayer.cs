@@ -7,6 +7,7 @@ namespace utils_libs.Abstractions
         IDirection Direction { get; set; }
         IDirection WantedDirection { get; set; }
         IPosition Position { get; set; }
+        IPosition Coord { get; set; }
         int TickCounter { get; set; }
         void Move();
         void Move(List<List<IBlock>> blocks);

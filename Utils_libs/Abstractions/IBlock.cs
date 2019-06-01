@@ -4,5 +4,6 @@
     {
         bool Collide(IPlayer p);
         bool WillCollide(IPlayer p);
+        IPosition GetCoord();
     }
 }

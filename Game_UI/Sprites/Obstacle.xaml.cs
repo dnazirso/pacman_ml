@@ -21,5 +21,6 @@ namespace Game_UI.Sprites
         }
         public bool Collide(IPlayer p) => area.Collide(p);
         public bool WillCollide(IPlayer p) => area.WillCollide(p);
+        public IPosition GetCoord() => area.Coord;
     }
 }
