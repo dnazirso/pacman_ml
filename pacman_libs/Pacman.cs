@@ -16,18 +16,33 @@ namespace pacman_libs
 
         public Pacman()
         {
+            Initialize();
+        }
+
+        public Pacman(IPosition coord)
+        {
+            this.Coord = coord;
+            Initialize();
+        }
+
+        private void Initialize()
+        {
             this.Direction = new Right();
             this.Position = new Position();
             this.WantedDirection = DirectionType.StandStill.Direction;
         }
+
         public void Move() => Position = Direction.Move(Position);
+
         public void Move(List<List<IBlock>> Maze)
         {
             if (WillCollide(Maze, Direction)) return;
             Move();
             RetrySetDirectionAndMove(Maze, WantedDirection);
         }
+
         public void SetDirection(IDirection direction) => this.Direction = direction;
+
         public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
         {
             if (!WillCollide(Maze, direction))
@@ -41,6 +56,7 @@ namespace pacman_libs
                 SetWantedDirection(direction);
             }
         }
+
         public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
         {
             if (TickCounter < 20 && !WantedDirection.Equals(DirectionType.StandStill.Direction))
@@ -49,9 +65,13 @@ namespace pacman_libs
                 SetDirection(Maze, WantedDirection);
             }
         }
+
         public void SetPosition(int x, int y) => Position = new Position() { X = x, Y = y };
+
         public void SetWantedDirection(IDirection wantedDirection) => WantedDirection = wantedDirection;
+
         public void UnsetWantedDirection() => WantedDirection = DirectionType.StandStill.Direction;
+
         public bool WillCollide(List<List<IBlock>> Maze, IDirection direction)
         {
             IPlayer testPlayer = new Pacman

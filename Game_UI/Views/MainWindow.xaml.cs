@@ -68,11 +68,13 @@ namespace Game_UI
             List<Dot> dots = new List<Dot>();
             board = new Board(".\\maze1.txt");
 
-            pacman = new PacmanSprite(new Pacman(), dots);
-            blinky = new GhostSprite(new Ghost(pacman.Player, board.Grid));
+            var pacmanViewModel = new Pacman();
 
-            playGround.Children.Add(pacman);
-            playGround.Children.Add(blinky);
+            this.SetValue(HeightProperty, (double)board.Limits.X + 40);
+            this.SetValue(WidthProperty, (double)board.Limits.Y + 40);
+
+            canvasBorder.SetValue(HeightProperty, (double)board.Limits.X);
+            canvasBorder.SetValue(WidthProperty, (double)board.Limits.Y);
 
             foreach (List<IBlock> line in board.Maze)
             {
@@ -81,13 +83,18 @@ namespace Game_UI
                     var placedBlock = Placeblock(block);
                     if (block.Shape.Equals('c'))
                     {
+                        pacmanViewModel.Coord = block.Coord;
+                        pacman = new PacmanSprite(pacmanViewModel, dots);
                         pacman.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
-                        pacman.Player.Coord = block.Coord;
+                        pacman.UpdatePosition();
+                        playGround.Children.Add(pacman);
                     }
                     if (block.Shape.Equals('b'))
                     {
+                        blinky = new GhostSprite(new Ghost(pacmanViewModel, block.Coord, board.Grid));
                         blinky.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
-                        blinky.Player.Coord = block.Coord;
+                        blinky.UpdatePosition();
+                        playGround.Children.Add(blinky);
                     }
                     if (block.Shape.Equals('·'))
                     {
@@ -96,14 +103,6 @@ namespace Game_UI
                     obstacles.Add(placedBlock);
                 }
             }
-            this.SetValue(HeightProperty, (double)board.Limits.X + 40);
-            this.SetValue(WidthProperty, (double)board.Limits.Y + 40);
-
-            canvasBorder.SetValue(HeightProperty, (double)board.Limits.X);
-            canvasBorder.SetValue(WidthProperty, (double)board.Limits.Y);
-
-            pacman.UpdatePosition();
-            blinky.UpdatePosition();
 
             obstacles.ForEach(obstacle => playGround.Children.Add((UIElement)obstacle));
         }
