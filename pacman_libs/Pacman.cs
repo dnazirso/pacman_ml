@@ -7,6 +7,8 @@ namespace pacman_libs
 {
     public class Pacman : IPacman
     {
+        private IPosition prevCoord { get; set; }
+        private List<List<IBlock>> Maze { get; set; }
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
         public IDirection WantedDirection { get; set; }
@@ -21,7 +23,14 @@ namespace pacman_libs
 
         public Pacman(IPosition coord)
         {
-            this.Coord = coord;
+            this.Coord = new Position { X = coord.X, Y = coord.Y };
+            prevCoord = new Position { X = coord.X, Y = coord.Y };
+            Initialize();
+        }
+
+        public Pacman(List<List<IBlock>> maze)
+        {
+            this.Maze = maze;
             Initialize();
         }
 
@@ -29,42 +38,11 @@ namespace pacman_libs
         {
             this.Direction = new Right();
             this.Position = new Position();
+            this.prevCoord = new Position();
             this.WantedDirection = DirectionType.StandStill.Direction;
         }
 
-        public void Move() => Position = Direction.Move(Position);
-
-        public void Move(List<List<IBlock>> Maze)
-        {
-            if (WillCollide(Maze, Direction)) return;
-            Move();
-            RetrySetDirectionAndMove(Maze, WantedDirection);
-        }
-
         public void SetDirection(IDirection direction) => this.Direction = direction;
-
-        public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
-        {
-            if (!WillCollide(Maze, direction))
-            {
-                SetDirection(direction);
-                UnsetWantedDirection();
-                TickCounter = 0;
-            }
-            else
-            {
-                SetWantedDirection(direction);
-            }
-        }
-
-        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
-        {
-            if (TickCounter < 20 && !WantedDirection.Equals(DirectionType.StandStill.Direction))
-            {
-                TickCounter++;
-                SetDirection(Maze, WantedDirection);
-            }
-        }
 
         public void SetPosition(int x, int y) => Position = new Position() { X = x, Y = y };
 
@@ -72,7 +50,39 @@ namespace pacman_libs
 
         public void UnsetWantedDirection() => WantedDirection = DirectionType.StandStill.Direction;
 
-        public bool WillCollide(List<List<IBlock>> Maze, IDirection direction)
+        public void MoveCoord(IDirection direction) => direction.Move(Coord);
+
+        public void Move()
+        {
+            if (WillCollide(Direction)) return;
+            Direction.Move(Position);
+            RetrySetDirectionAndMove(WantedDirection);
+        }
+
+        public void TrySetDirection(IDirection direction)
+        {
+            if (WillCollide(direction))
+            {
+                SetWantedDirection(direction);
+            }
+            else
+            {
+                SetDirection(direction);
+                UnsetWantedDirection();
+                TickCounter = 0;
+            }
+        }
+
+        public void RetrySetDirectionAndMove(IDirection direction)
+        {
+            if (TickCounter < 20 && !WantedDirection.Equals(DirectionType.StandStill.Direction))
+            {
+                TickCounter++;
+                TrySetDirection(WantedDirection);
+            }
+        }
+
+        public bool WillCollide(IDirection direction)
         {
             IPlayer testPlayer = new Pacman
             {
@@ -84,10 +94,18 @@ namespace pacman_libs
                 }
             };
 
+            prevCoord.Y = Coord.Y;
+            prevCoord.X = Coord.X;
             return Maze.Exists(line => line.Exists(col =>
                  {
-                     Coord = col.GetCoord();
-                     return col.WillCollide(testPlayer);
+                     var willcollide = col.WillCollide(testPlayer);
+                     var coord = col.GetCoord();
+                     if (col.Overlap(testPlayer) && (coord.X != prevCoord.X || coord.Y != coord.Y))
+                     {
+                         Coord.X = coord.X;
+                         Coord.Y = coord.Y;
+                     }
+                     return willcollide;
                  }
             ));
         }

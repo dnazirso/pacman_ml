@@ -64,6 +64,12 @@ namespace board_libs.Models
              && p.Position.Y < Max.Y
              && p.Position.Y > Min.Y);
 
+        public bool Overlap(IPlayer p) =>
+               (p.Position.X < Max.X + 11
+             && p.Position.X > Min.X - 11
+             && p.Position.Y < Max.Y + 11
+             && p.Position.Y > Min.Y - 11);
+
         public bool EreaseDot(IPacman p)
         {
             if (Shape.Equals('·') && Collide(p))

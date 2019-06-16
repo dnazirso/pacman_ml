@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Input;
 using utils_libs;
 using utils_libs.Abstractions;
-using Position = board_libs.Models.Position;
 
 namespace Game_UI
 {
@@ -68,7 +67,7 @@ namespace Game_UI
             List<Dot> dots = new List<Dot>();
             board = new Board(".\\maze1.txt");
 
-            var pacmanViewModel = new Pacman();
+            var pacmanViewModel = new Pacman(board.Maze);
 
             this.SetValue(HeightProperty, (double)board.Limits.X + 40);
             this.SetValue(WidthProperty, (double)board.Limits.Y + 40);
@@ -91,7 +90,7 @@ namespace Game_UI
                     }
                     if (block.Shape.Equals('b'))
                     {
-                        blinky = new GhostSprite(new Ghost(pacmanViewModel, block.Coord, board.Grid));
+                        blinky = new GhostSprite(new Ghost(pacmanViewModel, block.Coord, board.Grid, board.Maze));
                         blinky.Player.SetPosition(block.Min.X + 10, block.Min.Y + 20);
                         blinky.UpdatePosition();
                         playGround.Children.Add(blinky);
@@ -152,14 +151,11 @@ namespace Game_UI
                 Application.Current.Shutdown();
             }
 
-            if (!engine.HasBegun)
-            {
-                engine.HasBegun = true;
-                engine.Launch();
-                board.FirstEntry(pacman.Player, e.Key);
-            }
-
             board.KeyPressedEvents(pacman.Player, e.Key);
+
+            if (engine.HasBegun) return;
+            engine.HasBegun = true;
+            engine.Launch();
         }
 
         /// <summary>

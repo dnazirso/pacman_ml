@@ -10,11 +10,11 @@ namespace utils_libs.Abstractions
         IPosition Coord { get; set; }
         int TickCounter { get; set; }
         void Move();
-        void Move(List<List<IBlock>> blocks);
-        bool WillCollide(List<List<IBlock>> blocks, IDirection direction);
-        void SetDirection(List<List<IBlock>> Maze, IDirection direction);
+        bool WillCollide(IDirection direction);
+        void SetDirection(IDirection direction);
         void SetWantedDirection(IDirection wantedDirection);
-        void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction);
+        void TrySetDirection(IDirection direction);
+        void RetrySetDirectionAndMove(IDirection direction);
         void UnsetWantedDirection();
         void SetPosition(int x, int y);
     }

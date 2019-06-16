@@ -32,5 +32,6 @@ namespace Game_UI.Sprites
             }
         }
         public IPosition GetCoord() => area.Coord;
+        public bool Overlap(IPlayer p) => area.Overlap(p);
     }
 }

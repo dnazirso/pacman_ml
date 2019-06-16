@@ -9,16 +9,18 @@ namespace ghost_libs
     {
         private int TickCounterRandom;
         private IDirection Direction { get; }
-        private IPosition Coord { get; }
+        private Ghost Self { get; }
         private IPlayer target { get; }
         private List<List<char>> grid { get; }
+        public List<List<IBlock>> Maze { get; }
 
-        internal GhostAI(IPosition Coord, IDirection Direction, IPlayer target, List<List<char>> grid)
+        internal GhostAI(Ghost Self, IDirection Direction, IPlayer target, List<List<char>> grid, List<List<IBlock>> Maze)
         {
-            this.Coord = Coord;
+            this.Self = Self;
             this.Direction = Direction;
             this.target = target;
             this.grid = grid;
+            this.Maze = Maze;
         }
 
         public IDirection RandomDirection()
@@ -49,7 +51,7 @@ namespace ghost_libs
 
         public IDirection ComputePath()
         {
-            var attempt = FindPath(DirectionType.StandStill.Direction, new Ghost());
+            var attempt = FindPath(DirectionType.StandStill.Direction, Self);
 
             return attempt.parent != null
                 ? attempt.parent.Direction
@@ -58,7 +60,7 @@ namespace ghost_libs
 
         private Ghost FindPath(IDirection direction, Ghost store, int depth = 0)
         {
-            var ghost = new Ghost(new Position { X = Coord.X, Y = Coord.Y }, store, direction);
+            var ghost = new Ghost(new Position { X = store.Coord.X, Y = store.Coord.Y }, store, direction);
 
             while (!direction.Equals(DirectionType.StandStill.Direction)
                 && (grid[ghost.Coord.X][ghost.Coord.Y].Equals('·')
@@ -76,14 +78,14 @@ namespace ghost_libs
 
             depth++;
 
-            List<Ghost> reduced = reduceGhosts(store, depth);
+            List<Ghost> reduced = ReduceGhosts(store, depth);
 
             reduced.Sort(CompareGhosts());
 
             return FindPath(DirectionType.Right.Direction, reduced[3], depth);
         }
 
-        private List<Ghost> reduceGhosts(Ghost store, int depth)
+        private List<Ghost> ReduceGhosts(Ghost store, int depth)
         {
             var up = FindPath(DirectionType.Up.Direction, store, depth);
             var down = FindPath(DirectionType.Down.Direction, store, depth);

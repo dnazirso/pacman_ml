@@ -32,27 +32,22 @@ namespace board_libs.Models
             WantedDirection = DirectionType.StandStill.Direction;
         }
 
-        public void Move(List<List<IBlock>> blocks)
+        public bool WillCollide()
         {
             throw new System.NotImplementedException();
         }
 
-        public bool WillCollide(List<List<IBlock>> blocks)
+        public void RetrySetDirectionAndMove(IDirection direction)
         {
             throw new System.NotImplementedException();
         }
 
-        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
+        public bool WillCollide(IDirection direction)
         {
             throw new System.NotImplementedException();
         }
 
-        public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public bool WillCollide(List<List<IBlock>> blocks, IDirection direction)
+        public void TrySetDirection(IDirection direction)
         {
             throw new System.NotImplementedException();
         }

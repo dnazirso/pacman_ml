@@ -45,31 +45,6 @@ namespace board_libs
         }
 
         /// <summary>
-        /// Manage key pressed events
-        /// </summary>
-        /// <param name="p"></param>
-        /// <param name="key"></param>
-        public void KeyPressedEvents(IPlayer p, Key key)
-        {
-            if (!DirectionType.ExistsWhitin(key)) return;
-            SetDirection(p, DirectionType.ToDirection(key));
-        }
-
-        /// <summary>
-        /// First keyboard event that lauch the game
-        /// </summary>
-        /// <param name="p"></param>
-        /// <param name="key"></param>
-        public void FirstEntry(IPlayer p, Key key)
-        {
-            if ((DirectionType.ToDirection(key).Equals(DirectionType.Left.Direction)
-                || DirectionType.ToDirection(key).Equals(DirectionType.Right.Direction)))
-            {
-                SetDirection(p, DirectionType.ToDirection(key));
-            }
-        }
-
-        /// <summary>
         /// Read a file in order to retreive a maze structure
         /// </summary>
         /// <param name="pathToFile"></param>
@@ -117,48 +92,31 @@ namespace board_libs
         }
 
         /// <summary>
-        /// Set the direction to the player
+        /// Manage key pressed events
         /// </summary>
-        /// <param name="direction">the wanted </param>
-        public void SetDirection(IPlayer p, IDirection direction)
+        /// <param name="p"></param>
+        /// <param name="key"></param>
+        public void KeyPressedEvents(IPlayer p, Key key)
         {
-            p.SetDirection(Maze, direction);
+            if (!DirectionType.ExistsWhitin(key)) return;
+            p.TrySetDirection(DirectionType.ToDirection(key));
         }
 
         /// <summary>
         /// Retry to SetDirection if failed before and move
         /// </summary>
-        /// <param name="p"></param>
+        /// <param name="p">the player</param>
         public void ComputeMoves(IPlayer p)
         {
-            CheckLimitsAndMove(p, DirectionType.ToKey(p.Direction));
-        }
-
-        /// <summary>
-        /// Check if the next step is possible depending on the direction taken
-        /// </summary>
-        /// <param name="p">the player</param>
-        /// <param name="key">the pressed key</param>
-        /// <returns>a boolean</returns>
-        public void CheckLimitsAndMove(IPlayer p, Key key)
-        {
-            if (
-             !((p.Position.X < 0 && key.Equals(DirectionType.Up.Key))
-            || (p.Position.X > Limits.X && key.Equals(DirectionType.Down.Key))
-            || (p.Position.Y < 0 && key.Equals(DirectionType.Left.Key))
-            || (p.Position.Y > Limits.Y && key.Equals(DirectionType.Right.Key)))
-            )
-            {
-                p.Move(Maze);
-                DoesWarp(p);
-            }
+            p.Move();
+            DoesWarp(p);
         }
 
         /// <summary>
         /// When reaching an edge, teleport to the other side
         /// </summary>
-        /// <param name="p"></param>
-        public void DoesWarp(IPlayer p)
+        /// <param name="p">the player</param>
+        private void DoesWarp(IPlayer p)
         {
             if (p.Position.Y > Limits.Y)
             {
@@ -167,6 +125,14 @@ namespace board_libs
             if (p.Position.Y < 0)
             {
                 p.SetPosition(p.Position.X, Limits.Y);
+            }
+            if (p.Position.X > Limits.X)
+            {
+                p.SetPosition(0, p.Position.Y);
+            }
+            if (p.Position.X < 0)
+            {
+                p.SetPosition(Limits.X, p.Position.Y);
             }
         }
     }

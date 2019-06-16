@@ -7,12 +7,14 @@ namespace ghost_libs
 {
     public class Ghost : IPlayer
     {
+        private IPosition prevCoord { get; set; }
         internal IPlayer parent { get; set; }
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
         public IDirection WantedDirection { get; set; }
         public int TickCounter { get; set; }
         public IPosition Coord { get; set; }
+        private List<List<IBlock>> Maze { get; }
         private GhostAI ghostAI { get; set; }
 
         /// <summary>
@@ -41,17 +43,19 @@ namespace ghost_libs
         /// </summary>
         /// <param name="target"></param>
         /// <param name="grid"></param>
-        public Ghost(IPlayer target, IPosition Coord, List<List<char>> grid)
+        public Ghost(IPlayer target, IPosition Coord, List<List<char>> grid, List<List<IBlock>> maze)
         {
             Initialize();
             this.Coord = Coord;
-            ghostAI = new GhostAI(this.Coord, this.Direction, target, grid);
+            this.Maze = maze;
+            ghostAI = new GhostAI(this, this.Direction, target, grid, maze);
         }
 
         private void Initialize()
         {
             this.Direction = new Right();
             this.Position = new Position();
+            this.prevCoord = new Position();
             this.WantedDirection = DirectionType.StandStill.Direction;
         }
 
@@ -63,42 +67,40 @@ namespace ghost_libs
 
         public void UnsetWantedDirection() => WantedDirection = DirectionType.StandStill.Direction;
 
-        public void Move() => Position = Direction.Move(Position);
+        public void MoveCoord(IDirection direction) => direction.Move(Coord);
 
-        public void MoveCoord(IDirection direction) => Coord = direction.Move(Position);
-
-        public void Move(List<List<IBlock>> Maze)
+        public void Move()
         {
             SetDirection(ghostAI.ComputePath());
-            if (WillCollide(Maze, Direction)) return;
-            Move();
-            RetrySetDirectionAndMove(Maze, WantedDirection);
+            if (WillCollide(Direction)) return;
+            Direction.Move(Position);
+            RetrySetDirectionAndMove(WantedDirection);
         }
 
-        public void SetDirection(List<List<IBlock>> Maze, IDirection direction)
+        public void TrySetDirection(IDirection direction)
         {
-            if (!WillCollide(Maze, direction))
+            if (WillCollide(direction))
+            {
+                SetWantedDirection(direction);
+            }
+            else
             {
                 SetDirection(direction);
                 UnsetWantedDirection();
                 TickCounter = 0;
             }
-            else
-            {
-                SetWantedDirection(direction);
-            }
         }
 
-        public void RetrySetDirectionAndMove(List<List<IBlock>> Maze, IDirection direction)
+        public void RetrySetDirectionAndMove(IDirection direction)
         {
             if (TickCounter < 20 && !WantedDirection.Equals(DirectionType.StandStill.Direction))
             {
                 TickCounter++;
-                SetDirection(Maze, WantedDirection);
+                TrySetDirection(WantedDirection);
             }
         }
 
-        public bool WillCollide(List<List<IBlock>> Maze, IDirection direction)
+        public bool WillCollide(IDirection direction)
         {
             IPlayer testPlayer = new Ghost
             {
@@ -110,10 +112,18 @@ namespace ghost_libs
                 }
             };
 
+            prevCoord.Y = Coord.Y;
+            prevCoord.X = Coord.X;
             return Maze.Exists(line => line.Exists(col =>
             {
-                Coord = col.GetCoord();
-                return col.WillCollide(testPlayer);
+                var willcollide = col.WillCollide(testPlayer);
+                var coord = col.GetCoord();
+                if (col.Overlap(testPlayer) && (coord.X != prevCoord.X || coord.Y != coord.Y))
+                {
+                    Coord.X = coord.X;
+                    Coord.Y = coord.Y;
+                }
+                return willcollide;
             }
             ));
         }
