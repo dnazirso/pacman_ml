@@ -13,6 +13,7 @@ namespace ghost_libs
         private IPlayer target { get; }
         private List<List<char>> grid { get; }
         public List<List<IBlock>> Maze { get; }
+        internal List<List<DirectionSolution>> Solutions { get; private set; }
 
         internal GhostAI(Ghost Self, IDirection Direction, IPlayer target, List<List<char>> grid, List<List<IBlock>> Maze)
         {
@@ -25,37 +26,72 @@ namespace ghost_libs
 
         public IDirection RandomDirection()
         {
-            TickCounterRandom++;
-            IDirection direction = DirectionType.StandStill.Direction;
+            IDirection direction;
 
-            if (TickCounterRandom > 30)
+            Random rand = new Random();
+
+            var n = rand.Next(1, 4);
+            switch (n)
             {
-                TickCounterRandom = 0;
-                Random rand = new Random();
-
-                var n = rand.Next(1, 4);
-                switch (n)
-                {
-                    case 1: direction = DirectionType.Up.Direction; break;
-                    case 2: direction = DirectionType.Down.Direction; break;
-                    case 3: direction = DirectionType.Right.Direction; break;
-                    case 4: direction = DirectionType.Left.Direction; break;
-                    default: return DirectionType.StandStill.Direction;
-                }
+                case 1: direction = DirectionType.Up.Direction; break;
+                case 2: direction = DirectionType.Down.Direction; break;
+                case 3: direction = DirectionType.Right.Direction; break;
+                case 4: direction = DirectionType.Left.Direction; break;
+                default: return DirectionType.StandStill.Direction;
             }
 
-            if (!direction.Equals(Direction) && !direction.Equals(DirectionType.StandStill.Direction)) return direction;
+            return direction;
+        }
 
-            return Direction;
+        internal void ComputeAllSolutions()
+        {
+            var solutions = new List<List<DirectionSolution>>();
+            int left = 0, top = 0;
+            foreach (var line in grid)
+            {
+                left = 0;
+                var selfPosition = new Position { X = top, Y = left };
+                var dirsolist = new List<DirectionSolution>();
+                foreach (var col in line)
+                {
+                    var gidOfSolutions = new List<List<DirectionSolution>>();
+                    dirsolist.Add(new DirectionSolution { GridOfSolutions = ComputeAllTargetPostions() });
+                    left += 1;
+                }
+                solutions.Add(dirsolist);
+                top += 1;
+            }
+            this.Solutions = solutions;
+        }
+
+        private List<List<IDirectionSolution>> ComputeAllTargetPostions()
+        {
+            var gidOfSolutions = new List<List<IDirectionSolution>>();
+            int left = 0, top = 0;
+            foreach (var line in grid)
+            {
+                left = 0;
+                var targetPosition = new Position { X = top, Y = left };
+                var dirsolist = new List<IDirectionSolution>();
+                foreach (var col in line)
+                {
+                    dirsolist.Add(new DirectionSolution { Solution = RandomDirection() });
+                    left += 1;
+                }
+                gidOfSolutions.Add(dirsolist);
+                top += 1;
+            }
+            return gidOfSolutions;
         }
 
         public IDirection ComputePath()
         {
-            var attempt = FindPath(DirectionType.StandStill.Direction, Self);
-
-            return attempt.parent != null
-                ? attempt.parent.Direction
-                : attempt.Direction;
+            var solution = Solutions[Self.Coord.X][Self.Coord.Y].GridOfSolutions[target.Coord.X][target.Coord.Y].Solution;
+            if (!solution.Equals(Self.Direction))
+            {
+                return solution;
+            }
+            return Direction;
         }
 
         private Ghost FindPath(IDirection direction, Ghost store, int depth = 0)
