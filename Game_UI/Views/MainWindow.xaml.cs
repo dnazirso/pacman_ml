@@ -182,7 +182,11 @@ namespace Game_UI
 
             if (debbug != null)
             {
-                debbug.debbug.Text = $"X : {pacman.Player.Position.X} \nY : {pacman.Player.Position.Y} \nLeft:{board.DotsLeft}|Eaten:{((IPacman)pacman.Player).DotsEaten}";
+                debbug.debbug.Text =
+                    $"X : {pacman.Player.Position.X}  Y : {pacman.Player.Position.Y} " +
+                    $"\nx : {pacman.Player.Coord.X}  y : {pacman.Player.Coord.Y} " +
+                    $"\nLeft:{board.DotsLeft}|Eaten:{((IPacman)pacman.Player).DotsEaten}"
+                    ;
             }
 
             await Task.Run(() => playGround.Refresh());
