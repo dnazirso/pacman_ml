@@ -71,7 +71,7 @@ namespace ghost_libs
 
             if (!direction.Equals(DirectionType.StandStill.Direction)) store = ghost;
 
-            if (ghost.Coord.Equals(target.Coord) || depth > 3)
+            if ((ghost.Coord.X.Equals(target.Coord.X) && ghost.Coord.Y.Equals(target.Coord.Y)) || depth > 3)
             {
                 return store;
             }

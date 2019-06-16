@@ -7,7 +7,6 @@ namespace pacman_libs
 {
     public class Pacman : IPacman
     {
-        private IPosition prevCoord { get; set; }
         private List<List<IBlock>> Maze { get; set; }
         public IDirection Direction { get; set; }
         public IPosition Position { get; set; }
@@ -24,7 +23,6 @@ namespace pacman_libs
         public Pacman(IPosition coord)
         {
             this.Coord = new Position { X = coord.X, Y = coord.Y };
-            prevCoord = new Position { X = coord.X, Y = coord.Y };
             Initialize();
         }
 
@@ -38,7 +36,6 @@ namespace pacman_libs
         {
             this.Direction = new Right();
             this.Position = new Position();
-            this.prevCoord = new Position();
             this.WantedDirection = DirectionType.StandStill.Direction;
         }
 
@@ -94,13 +91,11 @@ namespace pacman_libs
                 }
             };
 
-            prevCoord.Y = Coord.Y;
-            prevCoord.X = Coord.X;
             return Maze.Exists(line => line.Exists(col =>
                  {
                      var willcollide = col.WillCollide(testPlayer);
                      var coord = col.GetCoord();
-                     if (col.Overlap(testPlayer) && (coord.X != prevCoord.X || coord.Y != coord.Y))
+                     if (col.Overlap(testPlayer))
                      {
                          Coord.X = coord.X;
                          Coord.Y = coord.Y;
