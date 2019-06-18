@@ -132,6 +132,8 @@ namespace Game_UI
 
                 case '·': return new Dot(block);
 
+                case '•': return new Dot(block);
+
                 default: return new Blank(block);
             }
         }

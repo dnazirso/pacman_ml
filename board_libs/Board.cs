@@ -86,6 +86,7 @@ namespace board_libs
                 case 'c': return Area.CreateNew(position, coord, size, false, letter);
                 case 'b': return Area.CreateNew(position, coord, size, false, letter);
                 case '·': return Area.CreateNew(position, coord, size, false, letter);
+                case '•': return Area.CreateNew(position, coord, size, false, letter);
                 case ' ': return Area.CreateNew(position, coord, size, false, letter);
                 default: return Area.CreateNew(position, coord, size, true, letter);
             }

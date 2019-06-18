@@ -20,7 +20,18 @@ namespace Game_UI.Sprites
             SetValue(Canvas.TopProperty, (double)area.Min.X);
             SetValue(Canvas.WidthProperty, (double)area.Size);
             SetValue(Canvas.HeightProperty, (double)area.Size);
+            BuildGitDot();
         }
+
+        private void BuildGitDot()
+        {
+            if (area.Shape.Equals('•'))
+            {
+                dott.SetValue(HeightProperty, dott.Height * 3);
+                dott.SetValue(WidthProperty, dott.Width * 3);
+            }
+        }
+
         public bool Collide(IPlayer p) => area.Collide(p);
         public bool WillCollide(IPlayer p) => area.WillCollide(p);
         public async void EreaseDot(IPacman p)
