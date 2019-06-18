@@ -95,7 +95,7 @@ namespace Game_UI
                         blinky.UpdatePosition();
                         playGround.Children.Add(blinky);
                     }
-                    if (block.Shape.Equals('·'))
+                    if (block.Shape.Equals('·') || block.Shape.Equals('•'))
                     {
                         dots.Add((Dot)placedBlock);
                     }

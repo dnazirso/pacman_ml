@@ -77,6 +77,11 @@ namespace board_libs.Models
                 Shape = ' ';
                 p.DotsEaten++;
             }
+            if (Shape.Equals('•') && Collide(p))
+            {
+                Shape = ' ';
+                p.DotsEaten++;
+            }
             return Collide(p);
         }
 
