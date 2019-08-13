@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System;
+using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace Game_UI.Views
@@ -42,6 +44,16 @@ namespace Game_UI.Views
         private void LaunchGame(object sender, KeyEventArgs e)
         {
             if (e.Key == Key.Enter) LaunchGame();
+        }
+
+        /// <summary>
+        /// Avoid TaskCanceledException on closing the application during process
+        /// by closing all active threads
+        /// </summary>
+        /// <param name="e"></param>
+        protected override void OnClosing(CancelEventArgs e)
+        {
+            Environment.Exit(0);
         }
     }
 }
