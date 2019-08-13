@@ -34,19 +34,18 @@ namespace ghost_libs
         /// Ghost instancited within its sprite
         /// </summary>
         /// <param name="target"></param>
-        /// <param name="grid"></param>
-        public Ghost(IPlayer target, Position Coord, List<List<char>> grid, List<List<IBlock>> Maze)
+        /// <param name="Grid"></param>
+        public Ghost(IPlayer target, Position Coord, List<List<char>> Grid, List<List<IBlock>> Maze)
         {
             Initialize();
             this.Coord = Coord;
             this.Maze = Maze;
-            ghostAI = new GhostAI(this, this.Direction, target, grid, Maze);
-            ghostAI.ComputeAllSolutions();
+            ghostAI = new GhostAI(this, this.Direction, target, Grid, Maze);
         }
 
         public override void Move()
         {
-            SetDirection(ghostAI.ComputePath());
+            SetDirection(ghostAI.GetDirectionSolution());
             if (WillCollide(Direction)) return;
             Position = Direction.Move(Position);
             RetrySetDirectionAndMove(WantedDirection);

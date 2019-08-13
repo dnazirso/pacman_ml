@@ -11,17 +11,19 @@ namespace ghost_libs
         private IDirection Direction { get; }
         private Ghost Self { get; }
         private IPlayer target { get; }
-        private List<List<char>> grid { get; }
+        private List<List<char>> Grid { get; }
         public List<List<IBlock>> Maze { get; }
         internal List<List<DirectionSolution>> Solutions { get; private set; }
 
-        internal GhostAI(Ghost Self, IDirection Direction, IPlayer target, List<List<char>> grid, List<List<IBlock>> Maze)
+        internal GhostAI(Ghost Self, IDirection Direction, IPlayer target, List<List<char>> Grid, List<List<IBlock>> Maze)
         {
             this.Self = Self;
             this.Direction = Direction;
             this.target = target;
-            this.grid = grid;
+            this.Grid = Grid;
             this.Maze = Maze;
+
+            ComputeAllSolutions();
         }
 
         public IDirection RandomDirection()
@@ -43,11 +45,13 @@ namespace ghost_libs
             return direction;
         }
 
-        internal void ComputeAllSolutions()
+        public IDirection GetDirectionSolution() => Solutions[Self.Coord.X][Self.Coord.Y].GridOfSolutions[target.Coord.X][target.Coord.Y].Solution;
+
+        private void ComputeAllSolutions()
         {
             var solutions = new List<List<DirectionSolution>>();
             int left = 0, top = 0;
-            foreach (var line in grid)
+            foreach (var line in Grid)
             {
                 left = 0;
                 var selfPosition = new Position { X = top, Y = left };
@@ -68,7 +72,7 @@ namespace ghost_libs
         {
             var gidOfSolutions = new List<List<IDirectionSolution>>();
             int left = 0, top = 0;
-            foreach (var line in grid)
+            foreach (var line in Grid)
             {
                 left = 0;
                 var targetPosition = new Position { X = top, Y = left };
@@ -84,23 +88,13 @@ namespace ghost_libs
             return gidOfSolutions;
         }
 
-        public IDirection ComputePath()
-        {
-            var solution = Solutions[Self.Coord.X][Self.Coord.Y].GridOfSolutions[target.Coord.X][target.Coord.Y].Solution;
-            if (!solution.Equals(Self.Direction))
-            {
-                return solution;
-            }
-            return Direction;
-        }
-
         private Ghost FindPath(IDirection direction, Ghost store, int depth = 0)
         {
             var ghost = new Ghost(new Position { X = store.Coord.X, Y = store.Coord.Y }, store, direction);
 
             while (!direction.Equals(DirectionType.StandStill.Direction)
-                && (grid[ghost.Coord.X][ghost.Coord.Y].Equals('·')
-                 || grid[ghost.Coord.X][ghost.Coord.Y].Equals(' ')))
+                && (Grid[ghost.Coord.X][ghost.Coord.Y].Equals('·')
+                 || Grid[ghost.Coord.X][ghost.Coord.Y].Equals(' ')))
             {
                 ghost.MoveCoord(direction);
             }
