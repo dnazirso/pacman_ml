@@ -45,18 +45,21 @@
     <Compile Include="Abstractions\IBlock.cs" />
     <Compile Include="Abstractions\IDirection.cs" />
     <Compile Include="Abstractions\IPacman.cs" />
+    <Compile Include="Abstractions\IPosition.cs" />
     <Compile Include="Abstractions\IUIPlayer.cs" />
     <Compile Include="Abstractions\IPlayer.cs" />
-    <Compile Include="Abstractions\IPosition.cs" />
+    <Compile Include="Abstractions\PlayerBase.cs" />
     <Compile Include="Directions\Down.cs" />
     <Compile Include="Directions\Left.cs" />
     <Compile Include="Directions\Right.cs" />
     <Compile Include="Directions\StandStill.cs" />
     <Compile Include="Directions\Up.cs" />
     <Compile Include="Engine.cs" />
+    <Compile Include="Models\Position.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tools\DirectionType.cs" />
     <Compile Include="Tools\EnumerationBase.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

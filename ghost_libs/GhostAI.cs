@@ -7,7 +7,6 @@ namespace ghost_libs
 {
     internal class GhostAI
     {
-        private int TickCounterRandom;
         private IDirection Direction { get; }
         private Ghost Self { get; }
         private IPlayer target { get; }

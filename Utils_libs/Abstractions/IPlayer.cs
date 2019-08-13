@@ -8,7 +8,7 @@ namespace utils_libs.Abstractions
         IDirection WantedDirection { get; set; }
         IPosition Position { get; set; }
         IPosition Coord { get; set; }
-        int TickCounter { get; set; }
+        List<List<IBlock>> Maze { get; set; }
         void Move();
         bool WillCollide(IDirection direction);
         void SetDirection(IDirection direction);
