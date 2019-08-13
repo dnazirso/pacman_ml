@@ -45,7 +45,6 @@
     <Compile Include="Abstractions\IBlock.cs" />
     <Compile Include="Abstractions\IDirection.cs" />
     <Compile Include="Abstractions\IPacman.cs" />
-    <Compile Include="Abstractions\IPosition.cs" />
     <Compile Include="Abstractions\IUIPlayer.cs" />
     <Compile Include="Abstractions\IPlayer.cs" />
     <Compile Include="Abstractions\PlayerBase.cs" />

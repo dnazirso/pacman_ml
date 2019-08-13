@@ -41,7 +41,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Position.cs" />
     <Compile Include="Pacman.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

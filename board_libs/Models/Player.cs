@@ -1,5 +1,6 @@
 ﻿using utils_libs.Abstractions;
 using utils_libs.Directions;
+using utils_libs.Models;
 
 namespace board_libs.Models
 {

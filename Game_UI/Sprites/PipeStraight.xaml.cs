@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using System.Windows.Media;
 using utils_libs.Abstractions;
+using utils_libs.Models;
 
 namespace Game_UI.Sprites
 {
@@ -30,7 +31,7 @@ namespace Game_UI.Sprites
         }
         public bool Collide(IPlayer p) => area.Collide(p);
         public bool WillCollide(IPlayer p) => area.WillCollide(p);
-        public IPosition GetCoord() => area.Coord;
+        public Position GetCoord() => area.Coord;
         public bool Overlap(IPlayer p) => area.Overlap(p);
     }
 }

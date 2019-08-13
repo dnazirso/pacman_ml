@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using utils_libs.Models;
 
 namespace utils_libs.Abstractions
 {
@@ -6,8 +7,8 @@ namespace utils_libs.Abstractions
     {
         IDirection Direction { get; set; }
         IDirection WantedDirection { get; set; }
-        IPosition Position { get; set; }
-        IPosition Coord { get; set; }
+        Position Position { get; set; }
+        Position Coord { get; set; }
         List<List<IBlock>> Maze { get; set; }
         void Move();
         bool WillCollide(IDirection direction);

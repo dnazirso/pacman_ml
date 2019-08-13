@@ -1,17 +1,18 @@
 ﻿using utils_libs.Abstractions;
+using utils_libs.Models;
 
 namespace board_libs.Models
 {
     public class Area : IBlock
     {
-        public IPosition Min { get; }
-        public IPosition Max { get; }
-        public IPosition Coord { get; }
+        public Position Min { get; }
+        public Position Max { get; }
+        public Position Coord { get; }
         public int Size { get; }
         public bool IsBlocking { get; }
         public char Shape { get; private set; }
 
-        private Area(int xmin, int xmax, int ymin, int ymax, IPosition coord, int size, bool isblocking, char shape)
+        private Area(int xmin, int xmax, int ymin, int ymax, Position coord, int size, bool isblocking, char shape)
         {
             Min = new Position { X = xmin, Y = ymin };
             Max = new Position { X = xmax, Y = ymax };
@@ -21,7 +22,7 @@ namespace board_libs.Models
             Shape = shape;
         }
 
-        public static Area CreateNew(IPosition upperLeft, IPosition coord, int size, bool isBlocking, char shape)
+        public static Area CreateNew(Position upperLeft, Position coord, int size, bool isBlocking, char shape)
         {
             int Xmin = upperLeft.X;
             int Ymin = upperLeft.Y;
@@ -85,6 +86,6 @@ namespace board_libs.Models
             return Collide(p);
         }
 
-        public IPosition GetCoord() => Coord;
+        public Position GetCoord() => Coord;
     }
 }

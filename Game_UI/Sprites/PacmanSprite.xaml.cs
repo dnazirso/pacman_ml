@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using utils_libs.Abstractions;
+using utils_libs.Models;
 using utils_libs.Tools;
 
 namespace Game_UI.Sprites
@@ -16,7 +17,7 @@ namespace Game_UI.Sprites
         bool _toggle;
         int _tickMoveCounter;
         readonly List<Dot> dots;
-        public IPosition LastPosition { get; set; }
+        public Position LastPosition { get; set; }
         public IPlayer Player { get; }
         public PacmanSprite(IPlayer Player, List<Dot> dots)
         {

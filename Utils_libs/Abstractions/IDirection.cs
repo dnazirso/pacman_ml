@@ -1,7 +1,9 @@
-﻿namespace utils_libs.Abstractions
+﻿using utils_libs.Models;
+
+namespace utils_libs.Abstractions
 {
     public interface IDirection
     {
-        IPosition Move(IPosition position);
+        Position Move(Position position);
     }
 }

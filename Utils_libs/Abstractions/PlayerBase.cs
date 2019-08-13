@@ -8,10 +8,10 @@ namespace utils_libs.Abstractions
     public abstract class PlayerBase : IPlayer
     {
         public IDirection Direction { get; set; }
-        public IPosition Position { get; set; }
+        public Position Position { get; set; }
         public IDirection WantedDirection { get; set; }
         public int TickCounter { get; set; }
-        public IPosition Coord { get; set; }
+        public Position Coord { get; set; }
         public List<List<IBlock>> Maze { get; set; }
 
         public PlayerBase()
@@ -39,7 +39,7 @@ namespace utils_libs.Abstractions
         public virtual void Move()
         {
             if (WillCollide(Direction)) return;
-            Direction.Move(Position);
+            Position = Direction.Move(Position);
             RetrySetDirectionAndMove(WantedDirection);
         }
 
@@ -83,8 +83,7 @@ namespace utils_libs.Abstractions
                 var coord = col.GetCoord();
                 if (col.Overlap(testPlayer))
                 {
-                    Coord.X = coord.X;
-                    Coord.Y = coord.Y;
+                    Coord = new Position { X = coord.X, Y = coord.Y };
                 }
                 return willcollide;
             }

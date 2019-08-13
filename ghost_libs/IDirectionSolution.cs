@@ -1,11 +1,12 @@
 ﻿using utils_libs.Abstractions;
+using utils_libs.Models;
 
 namespace ghost_libs
 {
     public interface IDirectionSolution
     {
-        IPosition Self { get; set; }
+        Position Self { get; set; }
         IDirection Solution { get; set; }
-        IPosition Target { get; set; }
+        Position Target { get; set; }
     }
 }

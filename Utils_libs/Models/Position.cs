@@ -1,8 +1,6 @@
-﻿using utils_libs.Abstractions;
-
-namespace utils_libs.Models
+﻿namespace utils_libs.Models
 {
-    public struct Position : IPosition
+    public struct Position
     {
         public int X { get; set; }
         public int Y { get; set; }

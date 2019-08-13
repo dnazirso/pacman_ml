@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using pacman_libs;
 using utils_libs.Directions;
+using utils_libs.Models;
 
 namespace pacman_libs_tests
 {

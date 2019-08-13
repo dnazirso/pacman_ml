@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using utils_libs.Abstractions;
+using utils_libs.Models;
 
 namespace ghost_libs
 {
@@ -22,7 +23,7 @@ namespace ghost_libs
         /// <param name="Coord"></param>
         /// <param name="parent"></param>
         /// <param name="Direction"></param>
-        internal Ghost(IPosition Coord, Ghost parent, IDirection Direction)
+        internal Ghost(Position Coord, Ghost parent, IDirection Direction)
         {
             this.Direction = Direction;
             this.Coord = Coord;
@@ -34,7 +35,7 @@ namespace ghost_libs
         /// </summary>
         /// <param name="target"></param>
         /// <param name="grid"></param>
-        public Ghost(IPlayer target, IPosition Coord, List<List<char>> grid, List<List<IBlock>> Maze)
+        public Ghost(IPlayer target, Position Coord, List<List<char>> grid, List<List<IBlock>> Maze)
         {
             Initialize();
             this.Coord = Coord;
@@ -47,7 +48,7 @@ namespace ghost_libs
         {
             SetDirection(ghostAI.ComputePath());
             if (WillCollide(Direction)) return;
-            Direction.Move(Position);
+            Position = Direction.Move(Position);
             RetrySetDirectionAndMove(WantedDirection);
         }
     }

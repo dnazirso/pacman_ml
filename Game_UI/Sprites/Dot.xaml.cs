@@ -3,6 +3,7 @@ using Game_UI.Tools;
 using System.Threading.Tasks;
 using System.Windows.Controls;
 using utils_libs.Abstractions;
+using utils_libs.Models;
 
 namespace Game_UI.Sprites
 {
@@ -42,7 +43,7 @@ namespace Game_UI.Sprites
                 await Task.Run(() => dot.Refresh());
             }
         }
-        public IPosition GetCoord() => area.Coord;
+        public Position GetCoord() => area.Coord;
         public bool Overlap(IPlayer p) => area.Overlap(p);
     }
 }

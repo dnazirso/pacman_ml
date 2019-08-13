@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Windows.Input;
 using utils_libs.Abstractions;
+using utils_libs.Models;
 using utils_libs.Tools;
 
 namespace board_libs
@@ -79,7 +80,7 @@ namespace board_libs
         /// <param name="size"></param>
         /// <param name="letter"></param>
         /// <returns></returns>
-        private Area Placeblock(IPosition position, IPosition coord, int size, char letter)
+        private Area Placeblock(Position position, Position coord, int size, char letter)
         {
             switch (letter)
             {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Media;
 using utils_libs.Abstractions;
+using utils_libs.Models;
 using utils_libs.Tools;
 
 namespace Game_UI.Sprites
@@ -12,7 +13,7 @@ namespace Game_UI.Sprites
     /// </summary>
     public partial class GhostSprite : UserControl, IUIPlayer
     {
-        public IPosition LastPosition { get; set; }
+        public Position LastPosition { get; set; }
         public IPlayer Player { get; }
         public GhostSprite(IPlayer Player)
         {
