@@ -1,32 +1,27 @@
-﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using pacman_libs;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using utils_libs.Directions;
 using utils_libs.Models;
 
 namespace pacman_libs_tests
 {
     [TestClass]
-    public class Pacman_tests
+    public class Pacman_tests : Pacman_tests_base
     {
         [TestMethod]
         public void Pacman_has_a_direction()
         {
-            var pacman = new Pacman();
             Assert.IsNotNull(pacman.Direction);
         }
 
         [TestMethod]
         public void Pacman_has_a_position()
         {
-            var pacman = new Pacman();
             Assert.IsNotNull(pacman.Position);
         }
 
         [TestMethod]
-        public void Pacman_can_move_to_the_left()
+        public void Pacman_can_move_leftward()
         {
-            var pacman = new Pacman();
             var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Left());
             pacman.Move();
@@ -35,9 +30,8 @@ namespace pacman_libs_tests
         }
 
         [TestMethod]
-        public void Pacman_can_move_to_the_right()
+        public void Pacman_can_move_rightward()
         {
-            var pacman = new Pacman();
             var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Right());
             pacman.Move();
@@ -48,7 +42,6 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_move_upward()
         {
-            var pacman = new Pacman();
             var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Up());
             pacman.Move();
@@ -59,7 +52,6 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_move_downward()
         {
-            var pacman = new Pacman();
             var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new Down());
             pacman.Move();
@@ -70,7 +62,6 @@ namespace pacman_libs_tests
         [TestMethod]
         public void Pacman_can_stand_still()
         {
-            var pacman = new Pacman();
             var inital_place = new Position { X = pacman.Position.X, Y = pacman.Position.Y };
             pacman.SetDirection(new StandStill());
             pacman.Move();
