@@ -6,7 +6,9 @@ namespace ghost_libs
 {
     public class Ghost : PlayerBase
     {
-        internal IPlayer parent { get; set; }
+        /// <summary>
+        /// Represent the ghost interligence
+        /// </summary>
         private GhostAI ghostAI { get; set; }
 
         /// <summary>
@@ -15,19 +17,6 @@ namespace ghost_libs
         public Ghost()
         {
             Initialize();
-        }
-
-        /// <summary>
-        /// AI dummy ghost for path computing
-        /// </summary>
-        /// <param name="Coord"></param>
-        /// <param name="parent"></param>
-        /// <param name="Direction"></param>
-        internal Ghost(Position Coord, Ghost parent, IDirection Direction)
-        {
-            this.Direction = Direction;
-            this.Coord = Coord;
-            this.parent = parent;
         }
 
         /// <summary>
@@ -40,7 +29,7 @@ namespace ghost_libs
             Initialize();
             this.Coord = Coord;
             this.Maze = Maze;
-            ghostAI = new GhostAI(this, this.Direction, target, Grid, Maze);
+            ghostAI = new GhostAI(this, target, Grid);
         }
 
         public override void Move()

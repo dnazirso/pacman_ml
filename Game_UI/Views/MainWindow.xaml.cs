@@ -185,9 +185,14 @@ namespace Game_UI
             if (debbug != null)
             {
                 debbug.debbug.Text =
-                    $"X : {pacman.Player.Position.X}  Y : {pacman.Player.Position.Y} " +
+                    $"Pacman :" +
+                    $"\nX : {pacman.Player.Position.X}  Y : {pacman.Player.Position.Y} " +
                     $"\nx : {pacman.Player.Coord.X}  y : {pacman.Player.Coord.Y} " +
-                    $"\nLeft:{board.DotsLeft}|Eaten:{((IPacman)pacman.Player).DotsEaten}"
+                    $"\nLeft:{board.DotsLeft - ((IPacman)pacman.Player).DotsEaten}|Eaten:{((IPacman)pacman.Player).DotsEaten}" +
+                    $"\n" +
+                    $"\nBlinky :" +
+                    $"\nX : {blinky.Player.Position.X}  Y : {blinky.Player.Position.Y} " +
+                    $"\nx : {blinky.Player.Coord.X}  y : {blinky.Player.Coord.Y} "
                     ;
             }
 

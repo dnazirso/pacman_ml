@@ -44,8 +44,8 @@
     <Compile Include="DirectionSolution.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="GhostAI.cs" />
-    <Compile Include="IDirectionSolution.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SelfCoords.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\pacman_libs\pacman_libs.csproj">

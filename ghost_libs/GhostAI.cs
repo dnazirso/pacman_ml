@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using utils_libs.Abstractions;
 using utils_libs.Models;
 using utils_libs.Tools;
@@ -8,22 +9,18 @@ namespace ghost_libs
 {
     internal class GhostAI
     {
-        private IDirection Direction { get; }
         private Ghost Self { get; }
         private IPlayer target { get; }
+        private List<List<SelfCoords>> FromHere { get; set; }
         private List<List<char>> Grid { get; }
-        public List<List<IBlock>> Maze { get; }
-        internal List<List<DirectionSolution>> Solutions { get; private set; }
 
-        internal GhostAI(Ghost Self, IDirection Direction, IPlayer target, List<List<char>> Grid, List<List<IBlock>> Maze)
+        internal GhostAI(Ghost Self, IPlayer target, List<List<char>> Grid)
         {
             this.Self = Self;
-            this.Direction = Direction;
             this.target = target;
             this.Grid = Grid;
-            this.Maze = Maze;
 
-            ComputeAllSolutions();
+            ComputeDirectionForEachTiles();
         }
 
         public IDirection RandomDirection()
@@ -45,104 +42,145 @@ namespace ghost_libs
             return direction;
         }
 
-        public IDirection GetDirectionSolution() => Solutions[Self.Coord.X][Self.Coord.Y].GridOfSolutions[target.Coord.X][target.Coord.Y].Solution;
-
-        private void ComputeAllSolutions()
+        public IDirection GetDirectionSolution()
         {
-            var solutions = new List<List<DirectionSolution>>();
-            int left = 0, top = 0;
-            foreach (var line in Grid)
+            IDirection solution = FromHere[Self.Coord.X][Self.Coord.Y].ToTarget[target.Coord.X][target.Coord.Y];
+            return solution;
+        }
+        private void ComputeDirectionForEachTiles()
+        {
+            var solutions = new List<List<SelfCoords>>();
+
+            int left = 0;
+            int top = 0;
+
+            foreach (List<char> line in Grid)
             {
-                left = 0;
-                var selfPosition = new Position { X = top, Y = left };
-                var dirsolist = new List<DirectionSolution>();
+                List<SelfCoords> listSolutions = new List<SelfCoords>();
+
                 foreach (var col in line)
                 {
-                    var gidOfSolutions = new List<List<DirectionSolution>>();
-                    dirsolist.Add(new DirectionSolution { GridOfSolutions = ComputeAllTargetPostions() });
-                    left += 1;
+                    Position g = new Position { X = top, Y = left };
+                    listSolutions.Add(new SelfCoords { ToTarget = ComputeAllTargetPostions(g) });
+                    left++;
                 }
-                solutions.Add(dirsolist);
-                top += 1;
+
+                solutions.Add(listSolutions);
+                top++;
+                left = 0;
             }
-            this.Solutions = solutions;
+
+            this.FromHere = solutions;
         }
 
-        private List<List<IDirectionSolution>> ComputeAllTargetPostions()
+        private List<List<IDirection>> ComputeAllTargetPostions(Position g)
         {
-            var gidOfSolutions = new List<List<IDirectionSolution>>();
-            int left = 0, top = 0;
-            foreach (var line in Grid)
+            var solutions = new List<List<IDirection>>();
+
+            int left = 0;
+            int top = 0;
+
+            foreach (List<char> line in Grid)
             {
-                left = 0;
-                var targetPosition = new Position { X = top, Y = left };
-                var dirsolist = new List<IDirectionSolution>();
+
+                List<IDirection> listDirections = new List<IDirection>();
+
                 foreach (var col in line)
                 {
-                    dirsolist.Add(new DirectionSolution { Solution = RandomDirection() });
-                    left += 1;
+                    Position p = new Position { X = top, Y = left };
+                    listDirections.Add(ComputeDirection(g, p));
+                    left++;
                 }
-                gidOfSolutions.Add(dirsolist);
-                top += 1;
-            }
-            return gidOfSolutions;
-        }
 
-        private Ghost FindPath(IDirection direction, Ghost store, int depth = 0)
-        {
-            var ghost = new Ghost(new Position { X = store.Coord.X, Y = store.Coord.Y }, store, direction);
-
-            while (!direction.Equals(DirectionType.StandStill.Direction)
-                && (Grid[ghost.Coord.X][ghost.Coord.Y].Equals('·')
-                 || Grid[ghost.Coord.X][ghost.Coord.Y].Equals(' ')))
-            {
-                ghost.MoveCoord(direction);
+                solutions.Add(listDirections);
+                top++;
+                left = 0;
             }
 
-            if (!direction.Equals(DirectionType.StandStill.Direction)) store = ghost;
+            return solutions;
+        }
 
-            if ((ghost.Coord.X.Equals(target.Coord.X) && ghost.Coord.Y.Equals(target.Coord.Y)) || depth > 3)
+        /// <summary>
+        /// Search a solution regarding target and self positions
+        /// </summary>
+        /// <param name="g"></param>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private IDirection ComputeDirection(Position g, Position p)
+        {
+            if (IsComputablePath(Grid[p.X][p.Y]) == false || IsComputablePath(Grid[g.X][g.Y]) == false)
             {
-                return store;
+                return DirectionType.StandStill.Direction;
             }
 
-            depth++;
+            List<DirectionSolution> possibilities = CheckPossibilities(g, p);
+            List<DirectionSolution> orderdSolutions = possibilities.OrderBy(possibility => possibility.distance).ToList();
 
-            List<Ghost> reduced = ReduceGhosts(store, depth);
-
-            reduced.Sort(CompareGhosts());
-
-            return FindPath(DirectionType.Right.Direction, reduced[3], depth);
+            return orderdSolutions[orderdSolutions.Count / 2].Solution;
         }
 
-        private List<Ghost> ReduceGhosts(Ghost store, int depth)
+        /// <summary>
+        /// Check if a path is computable comparing shapes
+        /// </summary>
+        /// <param name="Shape"></param>
+        /// <returns></returns>
+        private bool IsComputablePath(char Shape)
         {
-            var up = FindPath(DirectionType.Up.Direction, store, depth);
-            var down = FindPath(DirectionType.Down.Direction, store, depth);
-            var left = FindPath(DirectionType.Left.Direction, store, depth);
-            var right = FindPath(DirectionType.Right.Direction, store, depth);
-
-            List<Ghost> reduced = new List<Ghost> {
-                up,
-                down,
-                left,
-                right,
-            };
-            return reduced;
-        }
-
-        private Comparison<Ghost> CompareGhosts()
-        {
-            return (a, b) =>
+            switch (Shape)
             {
-                var ax = a.Coord.X - target.Coord.X;
-                var ay = a.Coord.Y - target.Coord.Y;
-                var bx = b.Coord.X - target.Coord.X;
-                var by = b.Coord.Y - target.Coord.Y;
-                if (bx * bx + by * by < ax * ax + ay * ax) return 1;
-                if (bx * bx + by * by > ax * ax + ay * ax) return -1;
-                return 0;
-            };
+                case '╔':
+                case '╗':
+                case '╝':
+                case '╚':
+                case '#':
+                case '║':
+                case '═':
+                case '-': return false;
+
+                default: return true;
+            }
+        }
+
+        /// <summary>
+        /// Sort possible Solutions
+        /// </summary>
+        /// <param name="g"></param>
+        /// <returns></returns>
+        private List<DirectionSolution> CheckPossibilities(Position g, Position p)
+        {
+            List<DirectionSolution> directions = new List<DirectionSolution>();
+
+            if ((g.X + 1 < Grid.Count) && IsComputablePath(Grid[g.X + 1][g.Y]))
+            {
+                DirectionSolution solution = new DirectionSolution { distance = ComputeDistance(g.X + 1, g.Y, p.X, p.Y), Solution = DirectionType.Up.Direction };
+                directions.Add(solution);
+            }
+
+            if ((g.Y + 1 < Grid[g.X].Count) && IsComputablePath(Grid[g.X][g.Y + 1]))
+            {
+                DirectionSolution solution = new DirectionSolution { distance = ComputeDistance(g.X, g.Y + 1, p.X, p.Y), Solution = DirectionType.Right.Direction };
+                directions.Add(solution);
+            }
+
+            if (g.X != 0 && IsComputablePath(Grid[g.X - 1][g.Y]))
+            {
+                DirectionSolution solution = new DirectionSolution { distance = ComputeDistance(g.X - 1, g.Y, p.X, p.Y), Solution = DirectionType.Down.Direction };
+                directions.Add(solution);
+            }
+
+            if (g.Y != 0 && IsComputablePath(Grid[g.X][g.Y - 1]))
+            {
+                DirectionSolution solution = new DirectionSolution { distance = ComputeDistance(g.X, g.Y - 1, p.X, p.Y), Solution = DirectionType.Left.Direction };
+                directions.Add(solution);
+            }
+
+            return directions;
+        }
+
+        private int ComputeDistance(int xa, int ya, int xb, int yb)
+        {
+            int distance = (xb - xa) * (xb - xa) + (yb - ya) * (yb - ya);
+            return distance;
         }
     }
 }
