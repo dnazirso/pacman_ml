@@ -62,7 +62,7 @@ namespace board_libs
                 left = 0;
                 foreach (var c in line.value.Select((value, i) => new { value, i }))
                 {
-                    if (c.value.Equals('·')) DotsLeft++;
+                    if (c.value.Equals('·') || c.value.Equals('•')) DotsLeft++;
                     var block = Placeblock(new Position { X = top, Y = left }, new Position { X = line.i, Y = c.i }, 20, c.value);
                     listOfArea.Add(block);
                     left += 20;
