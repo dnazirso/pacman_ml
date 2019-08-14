@@ -66,6 +66,9 @@
     <Compile Include="Sprites\Dot.xaml.cs">
       <DependentUpon>Dot.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Sprites\GhostHouseGate.xaml.cs">
+      <DependentUpon>GhostHouseGate.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Sprites\GhostSprite.xaml.cs">
       <DependentUpon>GhostSprite.xaml</DependentUpon>
     </Compile>
@@ -94,6 +97,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Sprites\Dot.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Sprites\GhostHouseGate.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

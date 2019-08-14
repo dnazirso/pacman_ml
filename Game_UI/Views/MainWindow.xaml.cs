@@ -128,7 +128,7 @@ namespace Game_UI
                 case '║':
                 case '═': return new PipeStraight(block);
 
-                case '-': return new Blank(block);
+                case '-': return new GhostHouseGate(block);
 
                 case '·': return new Dot(block);
 

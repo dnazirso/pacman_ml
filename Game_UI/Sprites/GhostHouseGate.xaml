@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Game_UI.Sprites.PipeStraight"
+﻿<UserControl x:Class="Game_UI.Sprites.GhostHouseGate"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:Game_UI.Sprites"
              mc:Ignorable="d" 
              d:DesignHeight="20" d:DesignWidth="20">
-    <Grid Name="pipe_obstacle" Height="20" Width="20">
-        <Rectangle Height="20" VerticalAlignment="Center" Fill="Blue" HorizontalAlignment="Center" Width="10"/>
+    <Grid Name="gate" Height="20" Width="20">
+        <Rectangle Height="20" VerticalAlignment="Center" Fill="White" HorizontalAlignment="Center" Width="5"/>
     </Grid>
 </UserControl>
