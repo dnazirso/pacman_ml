@@ -37,7 +37,7 @@ namespace ghost_libs
             SetDirection(ghostAI.GetDirectionSolution());
             if (WillCollide(Direction)) return;
             Position = Direction.Move(Position);
-            RetrySetDirectionAndMove(WantedDirection);
+            RetrySetDirection(WantedDirection);
         }
     }
 }

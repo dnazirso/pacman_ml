@@ -40,7 +40,7 @@ namespace utils_libs.Abstractions
         {
             if (WillCollide(Direction)) return;
             Position = Direction.Move(Position);
-            RetrySetDirectionAndMove(WantedDirection);
+            RetrySetDirection(WantedDirection);
         }
 
         public void TrySetDirection(IDirection direction)
@@ -57,7 +57,7 @@ namespace utils_libs.Abstractions
             }
         }
 
-        public void RetrySetDirectionAndMove(IDirection direction)
+        public void RetrySetDirection(IDirection direction)
         {
             if (TickCounter < 20 && !WantedDirection.Equals(DirectionType.StandStill.Direction))
             {

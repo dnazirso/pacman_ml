@@ -15,7 +15,7 @@ namespace utils_libs.Abstractions
         void SetDirection(IDirection direction);
         void SetWantedDirection(IDirection wantedDirection);
         void TrySetDirection(IDirection direction);
-        void RetrySetDirectionAndMove(IDirection direction);
+        void RetrySetDirection(IDirection direction);
         void UnsetWantedDirection();
         void SetPosition(int x, int y);
     }

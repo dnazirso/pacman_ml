@@ -116,7 +116,7 @@ namespace ghost_libs
             List<DirectionSolution> possibilities = CheckPossibilities(g, p);
             List<DirectionSolution> orderdSolutions = possibilities.OrderBy(possibility => possibility.distance).ToList();
 
-            return orderdSolutions[orderdSolutions.Count / 2].Solution;
+            return orderdSolutions[0].Solution;
         }
 
         /// <summary>
@@ -162,13 +162,13 @@ namespace ghost_libs
                 directions.Add(solution);
             }
 
-            if (g.X != 0 && IsComputablePath(Grid[g.X - 1][g.Y]))
+            if (g.X > 0 && IsComputablePath(Grid[g.X - 1][g.Y]))
             {
                 DirectionSolution solution = new DirectionSolution { distance = ComputeDistance(g.X - 1, g.Y, p.X, p.Y), Solution = DirectionType.Down.Direction };
                 directions.Add(solution);
             }
 
-            if (g.Y != 0 && IsComputablePath(Grid[g.X][g.Y - 1]))
+            if (g.Y > 0 && IsComputablePath(Grid[g.X][g.Y - 1]))
             {
                 DirectionSolution solution = new DirectionSolution { distance = ComputeDistance(g.X, g.Y - 1, p.X, p.Y), Solution = DirectionType.Left.Direction };
                 directions.Add(solution);
@@ -177,9 +177,9 @@ namespace ghost_libs
             return directions;
         }
 
-        private int ComputeDistance(int xa, int ya, int xb, int yb)
+        private float ComputeDistance(int xa, int ya, int xb, int yb)
         {
-            int distance = (xb - xa) * (xb - xa) + (yb - ya) * (yb - ya);
+            float distance = ((xb - xa) * (xb - xa) + (yb - ya) * (yb - ya)) ^ (1 / 2);
             return distance;
         }
     }
